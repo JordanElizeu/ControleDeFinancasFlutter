@@ -11,7 +11,7 @@ Widget navigationBar() {
             onTap: (index) {
               HomeController.pageController.jumpToPage(index);
             },
-            currentIndex: HomeController.pageController?.page?.round() ?? 0,
+            currentIndex: HomeController.pageController?.page?.round() ?? 1,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Histórico'),
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
