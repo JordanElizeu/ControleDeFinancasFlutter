@@ -7,7 +7,7 @@ Widget textInformative({
   FontWeight fontWeight,
 }) {
   return Padding(
-    padding: const EdgeInsets.only(top: 40.0),
+    padding: const EdgeInsets.only(top: 20.0),
     child: Container(
       alignment: Alignment.centerLeft,
       child: Text(

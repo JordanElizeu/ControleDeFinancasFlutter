@@ -91,6 +91,15 @@ class PageInitial extends StatelessWidget {
                           text: "Transações",
                         ),
                       ],
+                    ),
+                    Card(
+                      color: Colors.white54,
+                      child: ListTile(
+                        title: Container(
+                          alignment: Alignment.center,
+                          child: Text('Anotações'),
+                        ),
+                      ),
                     )
                   ],
                 ),
