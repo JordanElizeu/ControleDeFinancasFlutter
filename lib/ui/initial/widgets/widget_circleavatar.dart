@@ -13,7 +13,7 @@ Widget circleAvatar({@required IconData iconData, @required String text}) {
             size: 40.0,
             color: Colors.black54,
           ),
-          radius: 40.0,
+          radius: 35.0,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),

@@ -11,7 +11,7 @@ class PageInitial extends StatelessWidget {
       builder: (_, constraints) {
         return Container(
           color: Colors.white,
-          child: Column(
+          child: ListView(
             children: [
               Container(
                 color: Colors.purple,
@@ -77,11 +77,12 @@ class PageInitial extends StatelessWidget {
                         fontSize: 27.0,
                         fontWeight: FontWeight.w400),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         circleAvatar(
-                            iconData: Icons.arrow_circle_up_rounded,
-                            text: "Depositar"),
+                          iconData: Icons.arrow_circle_up_rounded,
+                          text: "Depositar",
+                        ),
                         circleAvatar(
                           iconData: Icons.arrow_circle_down,
                           text: "Retirar",
@@ -90,17 +91,44 @@ class PageInitial extends StatelessWidget {
                           iconData: Icons.assessment_outlined,
                           text: "Transações",
                         ),
+                        circleAvatar(
+                          iconData: Icons.wysiwyg_outlined,
+                          text: "Anotações",
+                        ),
                       ],
                     ),
                     Card(
                       color: Colors.white54,
-                      child: ListTile(
-                        title: Container(
-                          alignment: Alignment.center,
-                          child: Text('Anotações'),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Despesas'),
+                                Icon(Icons.arrow_drop_down_circle_outlined)
+                              ],
+                            ),
+                          ),
+                      ),
+                    ),
+                    textInformative(
+                        text: 'Despesas 09/10/2021', fontSize: 22.0),
+                    textInformative(
+                        text: 'R\$ 0',
+                        fontSize: 27.0,
+                        fontWeight: FontWeight.w400),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text('Editar'),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )
