@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:app_financeiro/ui/initial/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/initial/widgets/widget_textinformative.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class PageInitial extends StatelessWidget {
               Container(
                 color: Colors.purple,
                 width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.30,
+                height: constraints.maxHeight * 0.25,
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
@@ -51,7 +51,18 @@ class PageInitial extends StatelessWidget {
                           )
                         ],
                       ),
-                      textInformative(text: 'Olá, user', fontSize: 20.0)
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            'Olá, user',
+                            style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -60,17 +71,10 @@ class PageInitial extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        textInformative(text: 'Conta', fontSize: 20.0),
-                        Icon(Icons.arrow_forward)
-                      ],
-                    ),
+                    textInformative(text: 'Conta', fontSize: 22.0),
                     textInformative(
                         text: 'R\$ 0',
-                        fontSize: 25.0,
+                        fontSize: 27.0,
                         fontWeight: FontWeight.w400),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -79,7 +83,13 @@ class PageInitial extends StatelessWidget {
                             iconData: Icons.arrow_circle_up_rounded,
                             text: "Depositar"),
                         circleAvatar(
-                            iconData: Icons.arrow_circle_down, text: "Retirar"),
+                          iconData: Icons.arrow_circle_down,
+                          text: "Retirar",
+                        ),
+                        circleAvatar(
+                          iconData: Icons.assessment_outlined,
+                          text: "Transações",
+                        ),
                       ],
                     )
                   ],
@@ -91,20 +101,4 @@ class PageInitial extends StatelessWidget {
       },
     );
   }
-}
-
-Widget circleAvatar({@required IconData iconData, @required String text}) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 40.0),
-    child: Column(
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.black12,
-          child: Icon(iconData,size: 40.0,color: Colors.black54,),
-          radius: 40.0,
-        ),
-        Text(text)
-      ],
-    ),
-  );
 }
