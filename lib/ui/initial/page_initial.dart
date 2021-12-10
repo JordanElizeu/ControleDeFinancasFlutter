@@ -1,139 +1,120 @@
 import 'dart:ui';
+import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/ui/initial/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/initial/widgets/widget_textinformative.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PageInitial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
-        return Container(
-          color: Colors.white,
-          child: ListView(
-            children: [
-              Container(
-                color: Colors.purple,
-                width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.25,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return GetBuilder(
+          init: InitialController(),
+          builder: (InitialController initialController) {
+            return Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  Container(
+                    color: Colors.purple,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight * 0.25,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
                         children: [
-                          CircleAvatar(
-                            radius: 25.0,
-                            child: Icon(
-                              Icons.person_outline,
-                              size: 25,
-                            ),
-                          ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
+                              CircleAvatar(
+                                radius: 25.0,
                                 child: Icon(
-                                  Icons.remove_red_eye_outlined,
-                                  color: Colors.white,
+                                  Icons.person_outline,
+                                  size: 25,
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Icon(
-                                  Icons.info_rounded,
-                                  color: Colors.white,
-                                ),
-                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: initialController.changeIconDataEye,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Icon(
+                                        initialController.getIconData,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Icon(
+                                      Icons.info_rounded,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
+                          ),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              child: Text(
+                                'Olá, ${initialController.getUserName()}',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
                           )
                         ],
                       ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.bottomLeft,
-                          child: Text(
-                            'Olá, user',
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    textInformative(text: 'Conta', fontSize: 22.0),
-                    textInformative(
-                        text: 'R\$ 0',
-                        fontSize: 27.0,
-                        fontWeight: FontWeight.w400),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
                       children: [
-                        circleAvatar(
-                          iconData: Icons.arrow_circle_up_rounded,
-                          text: "Depositar",
+                        textInformative(text: 'Conta', fontSize: 22.0),
+                        Visibility(
+                          visible: initialController.moneyVisible,
+                          child: textInformative(
+                              text: initialController.getFormattedValorTotal,
+                              fontSize: 27.0,
+                              fontWeight: FontWeight.w400),
                         ),
-                        circleAvatar(
-                          iconData: Icons.arrow_circle_down,
-                          text: "Retirar",
-                        ),
-                        circleAvatar(
-                          iconData: Icons.assessment_outlined,
-                          text: "Transações",
-                        ),
-                        circleAvatar(
-                          iconData: Icons.wysiwyg_outlined,
-                          text: "Anotações",
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            circleAvatar(
+                              iconData: Icons.arrow_circle_up_rounded,
+                              text: "Depositar",
+                            ),
+                            circleAvatar(
+                              iconData: Icons.arrow_circle_down,
+                              text: "Retirar",
+                            ),
+                            circleAvatar(
+                              iconData: Icons.assessment_outlined,
+                              text: "Transações",
+                            ),
+                            circleAvatar(
+                              iconData: Icons.wysiwyg_outlined,
+                              text: "Anotações",
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Card(
-                      color: Colors.white54,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Despesas'),
-                                Icon(Icons.arrow_drop_down_circle_outlined)
-                              ],
-                            ),
-                          ),
-                      ),
-                    ),
-                    textInformative(
-                        text: 'Despesas 09/10/2021', fontSize: 22.0),
-                    textInformative(
-                        text: 'R\$ 0',
-                        fontSize: 27.0,
-                        fontWeight: FontWeight.w400),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Editar'),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  )
+                ],
+              ),
+            );
+          },
         );
       },
     );
