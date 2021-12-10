@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 Widget textInformative({
   required String text,
   required double fontSize,
+  Color? backgroundColor,
+  Color? textColor,
   FontWeight? fontWeight,
 }) {
   return Padding(
@@ -15,7 +17,8 @@ Widget textInformative({
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,
-          color: Colors.black
+          color: textColor?? Colors.black,
+          backgroundColor: backgroundColor?? Colors.transparent
         ),
       ),
     ),

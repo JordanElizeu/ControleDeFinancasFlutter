@@ -16,76 +16,14 @@ class PageInitial extends StatelessWidget {
         return GetBuilder(
           init: InitialController(),
           builder: (InitialController initialController) {
-            return Container(
-              color: Colors.white,
-              child: ListView(
-                children: [
-                  Container(
-                    color: Colors.purple,
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight * 0.25,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CircleAvatar(
-                                radius: 25.0,
-                                child: Icon(
-                                  Icons.person_outline,
-                                  size: 25,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  InkWell(
-                                    onTap: initialController.changeIconDataEye,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Icon(
-                                        initialController.getIconData,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Icon(
-                                      Icons.info_rounded,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Olá, ${initialController.getUserName()}',
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  _cardCircleButtons(initialController: initialController),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: textInformative(text: 'Últimas atualizações', fontSize: 22.0),
-                    ),
-                  )
-                ],
-              ),
+            return ListView(
+              children: [
+                _containerWithInformationOfAccount(
+                    constraints: constraints,
+                    initialController: initialController),
+                _cardCircleButtons(initialController: initialController),
+                _cardLastModifications()
+              ],
             );
           },
         );
@@ -94,20 +32,97 @@ class PageInitial extends StatelessWidget {
   }
 }
 
-Widget _cardCircleButtons({required InitialController initialController}){
+Widget _containerWithInformationOfAccount(
+    {required BoxConstraints constraints,
+    required InitialController initialController}) {
+  return Container(
+    color: Colors.purple,
+    width: constraints.maxWidth,
+    height: constraints.maxHeight * 0.25,
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: 25.0,
+                child: const Icon(
+                  Icons.person_outline,
+                  size: 25,
+                ),
+              ),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: initialController.changeIconDataEye,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Icon(
+                        initialController.getIconData,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: const Icon(
+                      Icons.info_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'Olá, ${initialController.getUserName()}',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _cardLastModifications() {
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          textInformative(text: 'Últimas atualizações', fontSize: 22.0),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _cardCircleButtons({required InitialController initialController}) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
           textInformative(text: 'Conta', fontSize: 22.0),
-          Visibility(
-            visible: initialController.moneyVisible,
-            child: textInformative(
-                text: initialController.getFormattedValorTotal,
-                fontSize: 27.0,
-                fontWeight: FontWeight.w400),
-          ),
+          textInformative(
+              text: initialController.getFormattedValorTotal,
+              fontSize: 27.0,
+              backgroundColor: initialController.moneyVisible
+                  ? Colors.transparent
+                  : Colors.black26,
+              textColor:
+                  initialController.moneyVisible ? null : Colors.transparent,
+              fontWeight: FontWeight.w400),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
