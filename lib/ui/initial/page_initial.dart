@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PageInitial extends StatelessWidget {
+  const PageInitial({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -75,40 +77,11 @@ class PageInitial extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        textInformative(text: 'Conta', fontSize: 22.0),
-                        Visibility(
-                          visible: initialController.moneyVisible,
-                          child: textInformative(
-                              text: initialController.getFormattedValorTotal,
-                              fontSize: 27.0,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            circleAvatar(
-                              iconData: Icons.arrow_circle_up_rounded,
-                              text: "Depositar",
-                            ),
-                            circleAvatar(
-                              iconData: Icons.arrow_circle_down,
-                              text: "Retirar",
-                            ),
-                            circleAvatar(
-                              iconData: Icons.assessment_outlined,
-                              text: "Transações",
-                            ),
-                            circleAvatar(
-                              iconData: Icons.wysiwyg_outlined,
-                              text: "Anotações",
-                            ),
-                          ],
-                        ),
-                      ],
+                  _cardCircleButtons(initialController: initialController),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: textInformative(text: 'Últimas atualizações', fontSize: 22.0),
                     ),
                   )
                 ],
@@ -119,4 +92,45 @@ class PageInitial extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _cardCircleButtons({required InitialController initialController}){
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          textInformative(text: 'Conta', fontSize: 22.0),
+          Visibility(
+            visible: initialController.moneyVisible,
+            child: textInformative(
+                text: initialController.getFormattedValorTotal,
+                fontSize: 27.0,
+                fontWeight: FontWeight.w400),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              circleAvatar(
+                iconData: Icons.arrow_circle_up_rounded,
+                text: "Depositar",
+              ),
+              circleAvatar(
+                iconData: Icons.arrow_circle_down,
+                text: "Retirar",
+              ),
+              circleAvatar(
+                iconData: Icons.assessment_outlined,
+                text: "Transações",
+              ),
+              circleAvatar(
+                iconData: Icons.wysiwyg_outlined,
+                text: "Anotações",
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }

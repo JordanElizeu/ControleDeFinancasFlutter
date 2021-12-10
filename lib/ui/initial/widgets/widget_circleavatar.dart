@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget circleAvatar({@required IconData iconData, @required String text}) {
+Widget circleAvatar({required IconData iconData, required String text}) {
   return Padding(
     padding: const EdgeInsets.only(top: 40.0),
     child: Column(
