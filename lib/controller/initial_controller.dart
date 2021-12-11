@@ -19,8 +19,12 @@ class InitialController extends GetxController {
     return formatter.format(_valorTotal);
   }
 
-  set setValorTotal(double value) {
+  set incrementValorTotal(double value) {
     _valorTotal += value;
+    update();
+  }
+  set decrementValorTotal(double value) {
+    _valorTotal -= value;
     update();
   }
 

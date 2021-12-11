@@ -14,7 +14,7 @@ class WithdrawMoneyController extends GetxController{
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
   void incrementMoney({required double valor}) {
-    InitialController().setValorTotal = valor;
+    InitialController().decrementValorTotal = valor;
   }
 
   void saveDeposit(){

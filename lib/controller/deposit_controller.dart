@@ -14,7 +14,7 @@ class DepositMoneyController extends GetxController{
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
   void incrementMoney({required double valor}) {
-    InitialController().setValorTotal = valor;
+    InitialController().incrementValorTotal = valor;
   }
 
   void saveDeposit(){
@@ -24,7 +24,7 @@ class DepositMoneyController extends GetxController{
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      InitialController().setValorTotal = double.parse(_formatValueMoney());
+      InitialController().incrementValorTotal = double.parse(_formatValueMoney());
     }
   }
 

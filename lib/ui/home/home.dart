@@ -1,4 +1,4 @@
-import 'package:app_financeiro/ui/initial/page_initial.dart';
+import 'package:app_financeiro/ui/home/widgets/page_initial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

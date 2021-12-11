@@ -1,6 +1,6 @@
 import 'package:app_financeiro/ui/deposit_money/deposit_money.dart';
 import 'package:app_financeiro/ui/home/home.dart';
-import 'package:app_financeiro/ui/initial/page_initial.dart';
+import 'package:app_financeiro/ui/home/widgets/page_initial.dart';
 import 'package:app_financeiro/ui/withdraw_money/withdraw_money.dart';
 import 'app_routes.dart';
 

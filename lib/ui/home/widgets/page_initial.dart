@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
-import 'package:app_financeiro/ui/initial/widgets/widget_circleavatar.dart';
-import 'package:app_financeiro/ui/initial/widgets/widget_textinformative.dart';
+import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
+import 'package:app_financeiro/ui/home/widgets/widget_textinformative.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
