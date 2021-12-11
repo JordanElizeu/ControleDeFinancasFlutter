@@ -1,4 +1,6 @@
 import 'package:app_financeiro/controller/deposit_controller.dart';
+import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
+import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +11,7 @@ class Deposit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Depositar valor em conta'),
-      ),
+      appBar: appBar(title: 'Depositar valor em conta'),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,10 +22,9 @@ class Deposit extends StatelessWidget {
                 children: [
                   Form(
                     key: IncrementMoneyController.formKeyFieldTitle,
-                    child: _textField(
+                    child: textField(
                         label: 'Título',
                         icon: Icons.wysiwyg,
-                        moneyInputFormatter: null,
                         controller:
                             IncrementMoneyController.textEditingControllerTitle,
                         globalKey: IncrementMoneyController.formKeyFieldTitle,
@@ -35,10 +34,9 @@ class Deposit extends StatelessWidget {
                   ),
                   Form(
                     key: IncrementMoneyController.formKeyFieldDesc,
-                    child: _textField(
+                    child: textField(
                         icon: Icons.chat,
                         label: 'Descrição',
-                        moneyInputFormatter: null,
                         controller:
                             IncrementMoneyController.textEditingControllerDesc,
                         globalKey: IncrementMoneyController.formKeyFieldDesc,
@@ -48,7 +46,7 @@ class Deposit extends StatelessWidget {
                   ),
                   Form(
                     key: IncrementMoneyController.formKeyFieldMoney,
-                    child: _textField(
+                    child: textField(
                         label: 'Valor a depositar',
                         textAlign: TextAlign.center,
                         textInputType: TextInputType.number,
@@ -90,36 +88,4 @@ class Deposit extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget _textField(
-    {required String label,
-    required IconData icon,
-    required GlobalKey<FormState> globalKey,
-    double? fontSize,
-    required MoneyInputFormatter? moneyInputFormatter,
-    required TextEditingController controller,
-    required Function(String text) function,
-    TextAlign? textAlign,
-    TextInputType? textInputType}) {
-  return TextFormField(
-    style: TextStyle(fontSize: fontSize ?? 16.0),
-    textAlign: textAlign ?? TextAlign.left,
-    controller: controller,
-    keyboardType: textInputType,
-    onChanged: (value) {
-      IncrementMoneyController().showErrorFieldText(globalKey);
-    },
-    decoration: InputDecoration(
-      label: Text(label),
-      icon: Icon(icon),
-    ),
-    inputFormatters: [
-      moneyInputFormatter ?? FilteringTextInputFormatter.singleLineFormatter
-    ],
-    validator: (text) {
-      print(text);
-      return function(text!);
-    },
-  );
 }

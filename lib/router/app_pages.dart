@@ -1,4 +1,4 @@
-import 'package:app_financeiro/ui/deposit/deposit.dart';
+import 'package:app_financeiro/ui/deposit_money/deposit_money.dart';
 import 'package:app_financeiro/ui/home/home.dart';
 import 'package:app_financeiro/ui/initial/page_initial.dart';
 import 'app_routes.dart';

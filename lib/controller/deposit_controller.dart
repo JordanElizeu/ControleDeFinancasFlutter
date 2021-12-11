@@ -25,7 +25,7 @@ class IncrementMoneyController extends GetxController {
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      //method to save deposit
+      //method to save deposit_money
     }
   }
 
@@ -61,10 +61,5 @@ class IncrementMoneyController extends GetxController {
       return false;
     }
     return true;
-  }
-
-  void showErrorFieldText(GlobalKey<FormState> globalKey) {
-    final FormState? formRegisterValidated = globalKey.currentState;
-    formRegisterValidated!.validate();
   }
 }
