@@ -154,9 +154,14 @@ Widget _cardCircleButtons(
                 iconData: Icons.assessment_outlined,
                 text: "Transações",
               ),
-              circleAvatar(
-                iconData: Icons.wysiwyg_outlined,
-                text: "Anotações",
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.ANNOTATIONS);
+                },
+                child: circleAvatar(
+                  iconData: Icons.wysiwyg_outlined,
+                  text: "Anotações",
+                ),
               ),
             ],
           ),
