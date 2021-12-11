@@ -150,9 +150,14 @@ Widget _cardCircleButtons(
                   text: "Retirar",
                 ),
               ),
-              circleAvatar(
-                iconData: Icons.assessment_outlined,
-                text: "Transações",
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
+                },
+                child: circleAvatar(
+                  iconData: Icons.assessment_outlined,
+                  text: "Transações",
+                ),
               ),
               InkWell(
                 onTap: () {

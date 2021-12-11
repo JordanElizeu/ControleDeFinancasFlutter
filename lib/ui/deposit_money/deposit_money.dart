@@ -11,7 +11,7 @@ class DepositMoney extends StatelessWidget {
     final DepositMoneyController _depositMoneyController =
         DepositMoneyController();
     return Scaffold(
-      appBar: appBar(title: 'Depositar valor em conta'),
+      appBar: appBar(title: 'Depositar dinheiro'),
       body: FormToWithdrawAndDeposit(
               globalKeyTitle: DepositMoneyController.formKeyFieldTitle,
               globalKeyMoney: DepositMoneyController.formKeyFieldMoney,
@@ -33,7 +33,7 @@ class DepositMoney extends StatelessWidget {
               },
               labelFieldMoney: 'Valor a depositar',
               functionButtonConfirm: () {
-                return _depositMoneyController.saveDeposit();
+                return _depositMoneyController.confirmDeposit();
               })
           .formsToWithdrawAndDeposit(),
     );

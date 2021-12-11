@@ -1,3 +1,4 @@
+import 'package:app_financeiro/ui/annotations/widgets/createannotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,24 @@ class Annotations extends StatelessWidget {
         actions: [
           Container(
             child: ElevatedButton(
-              onPressed: () {
-
+              onPressed: (){
+                alertDialogCreateAnnotation(function: () {}, context: context);
               },
               child: Icon(Icons.message),
             ),
+          )
+        ],
+      ),
+      body: ListView(
+        children: [
+          Column(
+            children: [
+              ListTile(
+                title: Text('Minha primeira anotação'),
+                subtitle: Text('descrição da primeira anotação'),
+              ),
+              Text('Valor: R\$ 2500,00')
+            ],
           )
         ],
       ),

@@ -17,7 +17,7 @@ class DepositMoneyController extends GetxController{
     InitialController().incrementValorTotal = valor;
   }
 
-  void saveDeposit(){
+  void confirmDeposit(){
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
