@@ -4,13 +4,15 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class InitialController extends GetxController {
-  double _valorTotal = 0;
-  IconData _iconData = Icons.remove_red_eye;
+  static double _valorTotal = 0;
+  IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
 
   bool get moneyVisible => _moneyVisible;
 
   IconData get getIconData => _iconData;
+
+  double get valorTotal => _valorTotal;
 
   String get getFormattedValorTotal {
     NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
@@ -28,11 +30,11 @@ class InitialController extends GetxController {
   void changeIconDataEye() {
     switch(_moneyVisible){
       case true:
-        _iconData = Icons.remove_red_eye_outlined;
+        _iconData = Icons.visibility;
         _moneyVisible = false;
         break;
       case false:
-        _iconData = Icons.remove_red_eye;
+        _iconData = Icons.visibility_off;
         _moneyVisible = true;
         break;
     }

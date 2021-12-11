@@ -1,15 +1,18 @@
-import 'package:app_financeiro/ui/home/widgets/widget_body.dart';
-import 'package:app_financeiro/ui/home/widgets/widget_navigationbar.dart';
+import 'package:app_financeiro/ui/initial/page_initial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: bodyHome()
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Finances Everyday'),
       ),
+      body: Container(
+        child: PageInitial(),
+      )
     );
   }
 }

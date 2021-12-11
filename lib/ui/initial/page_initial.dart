@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:app_financeiro/controller/initial_controller.dart';
+import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/initial/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/initial/widgets/widget_textinformative.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,8 @@ class PageInitial extends StatelessWidget {
                 _containerWithInformationOfAccount(
                     constraints: constraints,
                     initialController: initialController),
-                _cardCircleButtons(initialController: initialController),
+                _cardCircleButtons(
+                    initialController: initialController, context: context),
                 _cardLastModifications()
               ],
             );
@@ -107,7 +109,9 @@ Widget _cardLastModifications() {
   );
 }
 
-Widget _cardCircleButtons({required InitialController initialController}) {
+Widget _cardCircleButtons(
+    {required InitialController initialController,
+    required BuildContext context}) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(20.0),
@@ -126,9 +130,14 @@ Widget _cardCircleButtons({required InitialController initialController}) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              circleAvatar(
-                iconData: Icons.arrow_circle_up_rounded,
-                text: "Depositar",
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.INCREMENT_MONEY);
+                },
+                child: circleAvatar(
+                  iconData: Icons.arrow_circle_up_rounded,
+                  text: "Depositar",
+                ),
               ),
               circleAvatar(
                 iconData: Icons.arrow_circle_down,
