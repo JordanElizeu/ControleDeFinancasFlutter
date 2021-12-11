@@ -9,27 +9,29 @@ import 'package:get/get.dart';
 
 class PageInitial extends StatelessWidget {
   const PageInitial({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return GetBuilder(
-          init: InitialController(),
-          builder: (InitialController initialController) {
-            return ListView(
-              children: [
-                _containerWithInformationOfAccount(
-                    constraints: constraints,
-                    initialController: initialController),
-                _cardCircleButtons(
-                    initialController: initialController, context: context),
-                _cardLastModifications()
-              ],
-            );
-          },
-        );
-      },
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (_, constraints) {
+          return GetBuilder(
+            init: InitialController(),
+            builder: (InitialController initialController) {
+              return SingleChildScrollView(
+                  child: Column(
+                children: [
+                  _containerWithInformationOfAccount(
+                      constraints: constraints,
+                      initialController: initialController),
+                  _cardCircleButtons(
+                      initialController: initialController, context: context),
+                  _cardLastModifications()
+                ],
+              ));
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -139,9 +141,14 @@ Widget _cardCircleButtons(
                   text: "Depositar",
                 ),
               ),
-              circleAvatar(
-                iconData: Icons.arrow_circle_down,
-                text: "Retirar",
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.DECREMENT_MONEY);
+                },
+                child: circleAvatar(
+                  iconData: Icons.arrow_circle_down,
+                  text: "Retirar",
+                ),
               ),
               circleAvatar(
                 iconData: Icons.assessment_outlined,

@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'initial_controller.dart';
 
-class DepositMoneyController extends GetxController{
+class WithdrawMoneyController extends GetxController{
   static TextEditingController textEditingControllerMoney =
-      TextEditingController();
+  TextEditingController();
   static TextEditingController textEditingControllerTitle =
-      TextEditingController();
+  TextEditingController();
   static TextEditingController textEditingControllerDesc =
-      TextEditingController();
+  TextEditingController();
   static GlobalKey<FormState> formKeyFieldTitle = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
@@ -52,10 +52,10 @@ class DepositMoneyController extends GetxController{
 
   bool _validateValueMoney(String text) {
     String formatToString = text
-          .replaceAll(' ', '')
-          .replaceAll('R\$', '')
-          .replaceAll('.', '')
-          .replaceAll(',', '.');
+        .replaceAll(' ', '')
+        .replaceAll('R\$', '')
+        .replaceAll('.', '')
+        .replaceAll(',', '.');
     final double formatToDouble = double.parse(formatToString);
     if (formatToDouble <= 0.0) {
       return false;
