@@ -20,7 +20,8 @@ class InitialController extends GetxController {
   }
 
   set setValorTotal(double value) {
-    _valorTotal = value;
+    _valorTotal += value;
+    update();
   }
 
   String getUserName() {

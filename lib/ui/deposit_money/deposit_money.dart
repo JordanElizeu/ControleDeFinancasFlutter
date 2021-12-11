@@ -23,16 +23,18 @@ class DepositMoney extends StatelessWidget {
               textEditingControllerTitle:
                   DepositMoneyController.textEditingControllerTitle,
               functionValidateMoney: (String text) {
-                return _depositMoneyController.validateFieldFormTextMoney(text);
+                return _depositMoneyController.validateFieldFormTextMoney();
               },
               functionValidateDesc: (String text) {
-                return _depositMoneyController.validateFieldFormTextDesc(text);
+                return _depositMoneyController.validateFieldFormTextDesc();
               },
               functionValidateTitle: (String text) {
-                return _depositMoneyController.validateFieldFormTextTitle(text);
+                return _depositMoneyController.validateFieldFormTextTitle();
               },
               labelFieldMoney: 'Valor a depositar',
-              functionButtonConfirm: () {})
+              functionButtonConfirm: () {
+                return _depositMoneyController.saveDeposit();
+              })
           .formsToWithdrawAndDeposit(),
     );
   }

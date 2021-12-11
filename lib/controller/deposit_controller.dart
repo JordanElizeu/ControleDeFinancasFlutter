@@ -21,45 +21,48 @@ class DepositMoneyController extends GetxController{
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
-
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      //method to save deposit_money
+      InitialController().setValorTotal = double.parse(_formatValueMoney());
     }
   }
 
-  String? validateFieldFormTextMoney(String text) {
-    if (!_validateValueMoney(text)) {
+  String? validateFieldFormTextMoney() {
+    if (!_validateValueMoney()) {
       return 'Preencha um valor correto';
     }
     return null;
   }
 
-  String? validateFieldFormTextTitle(String text) {
-    if (text.isEmpty) {
+  String? validateFieldFormTextTitle() {
+    if (textEditingControllerTitle.text.isEmpty) {
       return 'Preencha um título';
     }
     return null;
   }
 
-  String? validateFieldFormTextDesc(String text) {
-    if (text.isEmpty) {
+  String? validateFieldFormTextDesc() {
+    if (textEditingControllerDesc.text.isEmpty) {
       return 'Preencha uma descrição';
     }
     return null;
   }
 
-  bool _validateValueMoney(String text) {
-    String formatToString = text
-          .replaceAll(' ', '')
-          .replaceAll('R\$', '')
-          .replaceAll('.', '')
-          .replaceAll(',', '.');
+  bool _validateValueMoney() {
+    String formatToString = _formatValueMoney();
     final double formatToDouble = double.parse(formatToString);
     if (formatToDouble <= 0.0) {
       return false;
     }
     return true;
+  }
+
+  String _formatValueMoney(){
+    return textEditingControllerMoney.text
+        .replaceAll(' ', '')
+        .replaceAll('R\$', '')
+        .replaceAll('.', '')
+        .replaceAll(',', '.');
   }
 }

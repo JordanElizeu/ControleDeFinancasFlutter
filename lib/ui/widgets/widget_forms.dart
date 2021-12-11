@@ -14,7 +14,7 @@ class FormToWithdrawAndDeposit {
   final Function(String text) functionValidateTitle;
   final Function(String text) functionValidateDesc;
   final Function(String text) functionValidateMoney;
-  final Function functionButtonConfirm;
+  final void Function() functionButtonConfirm;
   final String labelFieldMoney;
 
   FormToWithdrawAndDeposit({
@@ -83,9 +83,7 @@ class FormToWithdrawAndDeposit {
                     child: Container(
                       width: 150,
                       child: ElevatedButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: functionButtonConfirm,
                         child: const Text('Confirmar'),
                       ),
                     ),
