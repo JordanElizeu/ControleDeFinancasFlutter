@@ -1,3 +1,4 @@
+import 'package:app_financeiro/data/provider/provider_transactions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'initial_controller.dart';
@@ -25,6 +26,7 @@ class DepositMoneyController extends GetxController{
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       InitialController().incrementValorTotal = double.parse(_formatValueMoney());
+      ProviderTransactions().addDeposit(quantityMoney: double.parse(_formatValueMoney()));
     }
   }
 

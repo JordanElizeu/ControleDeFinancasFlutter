@@ -1,7 +1,15 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class ProviderTransactions{
 
-  void addDeposit(){
+  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
 
+  void addDeposit({required double quantityMoney}){
+    _databaseReference.child('AppFinancas')
+        .child('Account')
+        .child('Finances')
+        .child('money')
+        .set(quantityMoney);
   }
 
   void makingWithdraw(){

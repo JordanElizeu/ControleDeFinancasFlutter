@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:app_financeiro/controller/controller.dart';
 import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
@@ -134,7 +134,7 @@ Widget _cardCircleButtons(
             children: [
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.INCREMENT_MONEY);
+                  Controller().pageTransition(context: context, route: Routes.INCREMENT_MONEY);
                 },
                 child: circleAvatar(
                   iconData: Icons.arrow_circle_up_rounded,
@@ -143,7 +143,7 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.DECREMENT_MONEY);
+                  Controller().pageTransition(context: context, route: Routes.DECREMENT_MONEY);
                 },
                 child: circleAvatar(
                   iconData: Icons.arrow_circle_down,
@@ -152,7 +152,7 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.TRANSACTIONS);
+                  Controller().pageTransition(context: context, route: Routes.TRANSACTIONS);
                 },
                 child: circleAvatar(
                   iconData: Icons.assessment_outlined,
@@ -161,7 +161,7 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.ANNOTATIONS);
+                  Controller().pageTransition(context: context, route: Routes.ANNOTATIONS);
                 },
                 child: circleAvatar(
                   iconData: Icons.wysiwyg_outlined,
