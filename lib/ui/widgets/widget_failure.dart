@@ -57,13 +57,13 @@ class FailureDialog extends StatelessWidget {
 
 alertDialogViewFailure(
     {required BuildContext context,
-    required Function() function,
+     Function()? function,
     required String titleError}) async {
   await showDialog(
     context: context,
     builder: (contextDialog) {
       return FailureDialog(
-        functionButton: function,
+        functionButton: function?? (){},
         titleError: titleError,
       );
     },

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "178228973083",
+    "firebase_url": "https://controledefinancas-6d280-default-rtdb.firebaseio.com",
+    "project_id": "controledefinancas-6d280",
+    "storage_bucket": "controledefinancas-6d280.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178228973083:android:aa2f08441d3560afb532be",
+        "android_client_info": {
+          "package_name": "com.example.app_financeiro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178228973083-a9h4fbeu43ck535otfojuk5stei7jqau.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.app_financeiro",
+            "certificate_hash": "a76aad6cd478cf35364f07c4e95978e16b68188e"
+          }
+        },
+        {
+          "client_id": "178228973083-f364d6fc6a2gthb4p5uhan5fm92vobmk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4mIjgjszbOLwHXt2Xu-U3G35CQbf2DSQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178228973083-f364d6fc6a2gthb4p5uhan5fm92vobmk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

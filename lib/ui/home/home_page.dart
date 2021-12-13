@@ -7,30 +7,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PageInitial extends StatelessWidget {
-  const PageInitial({Key? key}) : super(key: key);
+class PageHome extends StatelessWidget {
+  const PageHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: LayoutBuilder(
-        builder: (_, constraints) {
-          return GetBuilder(
-            init: InitialController(),
-            builder: (InitialController initialController) {
-              return SingleChildScrollView(
-                  child: Column(
-                children: [
-                  _containerWithInformationOfAccount(
-                      constraints: constraints,
-                      initialController: initialController),
-                  _cardCircleButtons(
-                      initialController: initialController, context: context),
-                  _cardLastModifications()
-                ],
-              ));
-            },
-          );
-        },
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (_, constraints) {
+            return GetBuilder(
+              init: InitialController(),
+              builder: (InitialController initialController) {
+                return SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    _containerWithInformationOfAccount(
+                        constraints: constraints,
+                        initialController: initialController),
+                    _cardCircleButtons(
+                        initialController: initialController, context: context),
+                    _cardLastModifications()
+                  ],
+                ));
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -134,7 +136,8 @@ Widget _cardCircleButtons(
             children: [
               InkWell(
                 onTap: () {
-                  Controller().pageTransition(context: context, route: Routes.INCREMENT_MONEY);
+                  Controller().pageTransition(
+                      context: context, route: Routes.INCREMENT_MONEY);
                 },
                 child: circleAvatar(
                   iconData: Icons.arrow_circle_up_rounded,
@@ -143,7 +146,8 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Controller().pageTransition(context: context, route: Routes.DECREMENT_MONEY);
+                  Controller().pageTransition(
+                      context: context, route: Routes.DECREMENT_MONEY);
                 },
                 child: circleAvatar(
                   iconData: Icons.arrow_circle_down,
@@ -152,7 +156,8 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Controller().pageTransition(context: context, route: Routes.TRANSACTIONS);
+                  Controller().pageTransition(
+                      context: context, route: Routes.TRANSACTIONS);
                 },
                 child: circleAvatar(
                   iconData: Icons.assessment_outlined,
@@ -161,7 +166,8 @@ Widget _cardCircleButtons(
               ),
               InkWell(
                 onTap: () {
-                  Controller().pageTransition(context: context, route: Routes.ANNOTATIONS);
+                  Controller().pageTransition(
+                      context: context, route: Routes.ANNOTATIONS);
                 },
                 child: circleAvatar(
                   iconData: Icons.wysiwyg_outlined,

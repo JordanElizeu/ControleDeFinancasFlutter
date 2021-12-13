@@ -1,4 +1,4 @@
-import 'package:app_financeiro/data/provider/provider_transactions.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_transactions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'initial_controller.dart';

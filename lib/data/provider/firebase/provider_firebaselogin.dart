@@ -1,4 +1,5 @@
 import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/data/provider/firebase_exceptions/firebase_exceptions.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 class ProviderLoginFirebase {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void signInWithFirebase(
+  Future<String?> signInWithFirebase(
     String email,
     String password,
     BuildContext context,
@@ -18,7 +19,10 @@ class ProviderLoginFirebase {
                 route: Routes.HOME,
                 context: context,
               ));
-    } on FirebaseAuthException catch (exception) {}
+    } on FirebaseAuthException catch (exception) {
+      return ProviderFirebaseExceptions().handleFirebaseLoginWithCredentialsException(
+          exceptionMessage: exception);
+    }
   }
 
   void createFirebaseUser(
@@ -26,15 +30,27 @@ class ProviderLoginFirebase {
     String password,
     BuildContext context,
   ) async {
-    try{
+    try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => Controller().finishAndPageTransition(
-        route: Routes.LOGIN,
-        context: context,
-      ));
-    }on FirebaseAuthException catch(exception){
+                route: Routes.LOGIN,
+                context: context,
+              ));
+    } on FirebaseAuthException catch (exception) {
+      ProviderFirebaseExceptions()
+          .handleFirebaseCreateUserWithEmailAndPasswordException(
+              exceptionMessage: exception);
+    }
+  }
 
+  void forgotPassword(String email){
+    try{
+      _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch(exception){
+      ProviderFirebaseExceptions()
+          .handleFirebaseSendPasswordResetEmailException(
+          exceptionMessage: exception);
     }
   }
 }

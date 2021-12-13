@@ -33,10 +33,12 @@ dependencies:
   flutter_multi_formatter: ^2.4.4
   firebase_auth:
   firebase_database:
-  firebase:
   firebase_core:
   google_sign_in:
   sign_button: ^2.0.2
+  animated_text_kit: ^4.2.1
+  flutter_login: ^3.0.0
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:
@@ -54,8 +56,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  #assets:
-  #  - assets/images/logotipo.png
+  assets:
+    - assets/images/foguete.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
