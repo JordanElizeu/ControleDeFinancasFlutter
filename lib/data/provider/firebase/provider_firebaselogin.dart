@@ -25,30 +25,27 @@ class ProviderLoginFirebase {
     }
   }
 
-  void createFirebaseUser(
+  Future<String?> createFirebaseUser(
     String email,
     String password,
     BuildContext context,
   ) async {
     try {
-      await _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) => Controller().finishAndPageTransition(
-                route: Routes.LOGIN,
-                context: context,
-              ));
+      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      return null;
     } on FirebaseAuthException catch (exception) {
-      ProviderFirebaseExceptions()
+      return ProviderFirebaseExceptions()
           .handleFirebaseCreateUserWithEmailAndPasswordException(
               exceptionMessage: exception);
     }
   }
 
-  void forgotPassword(String email){
+  Future<String?> forgotPassword(String email) async{
     try{
-      _auth.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email);
+      return null;
     } on FirebaseAuthException catch(exception){
-      ProviderFirebaseExceptions()
+      return ProviderFirebaseExceptions()
           .handleFirebaseSendPasswordResetEmailException(
           exceptionMessage: exception);
     }

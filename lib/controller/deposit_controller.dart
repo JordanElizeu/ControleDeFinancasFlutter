@@ -1,7 +1,6 @@
 import 'package:app_financeiro/data/provider/firebase/provider_transactions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'initial_controller.dart';
 
 class DepositMoneyController extends GetxController{
   static TextEditingController textEditingControllerMoney =
@@ -14,10 +13,6 @@ class DepositMoneyController extends GetxController{
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  void incrementMoney({required double valor}) {
-    InitialController().incrementValorTotal = valor;
-  }
-
   void confirmDeposit(){
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
@@ -25,7 +20,6 @@ class DepositMoneyController extends GetxController{
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      InitialController().incrementValorTotal = double.parse(_formatValueMoney());
       ProviderTransactions().addDeposit(quantityMoney: double.parse(_formatValueMoney()));
     }
   }

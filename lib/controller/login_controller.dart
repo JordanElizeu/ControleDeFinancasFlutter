@@ -12,15 +12,15 @@ class LoginController extends GetxController {
 
   LoginController(this._context);
 
-  bool userIsOn(){
-    if(_auth.currentUser != null){
+  bool userIsOn() {
+    if (_auth.currentUser != null) {
       print(_auth.currentUser!.displayName);
       return true;
     }
     return false;
   }
 
-  Future<String?> signInGoogle() async{
+  Future<String?> signInGoogle() async {
     return await RepositoryGoogleConnection().signInGoogle(_context);
   }
 
@@ -33,15 +33,14 @@ class LoginController extends GetxController {
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
-      RepositoryFirebaseLogin()
+      return RepositoryFirebaseLogin()
           .signUpFirebase(_context, data.name!, data.password!);
     });
   }
 
   Future<String?> forgotPasswordFirebase(String email) {
     return Future.delayed(loginTime).then((_) {
-      RepositoryFirebaseLogin()
-          .forgotPasswordFirebase(_context, email);
+      return RepositoryFirebaseLogin().forgotPasswordFirebase(_context, email);
     });
   }
 }

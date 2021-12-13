@@ -24,17 +24,19 @@ class WithdrawMoney extends StatelessWidget {
                   WithdrawMoneyController.textEditingControllerTitle,
               functionValidateMoney: (String text) {
                 return _withdrawMoneyController
-                    .validateFieldFormTextMoney(text);
+                    .validateFieldFormTextMoney();
               },
               functionValidateDesc: (String text) {
-                return _withdrawMoneyController.validateFieldFormTextDesc(text);
+                return _withdrawMoneyController.validateFieldFormTextDesc();
               },
               functionValidateTitle: (String text) {
                 return _withdrawMoneyController
-                    .validateFieldFormTextTitle(text);
+                    .validateFieldFormTextTitle();
               },
               labelFieldMoney: 'Valor a sacar',
-              functionButtonConfirm: (){})
+              functionButtonConfirm: (){
+                return WithdrawMoneyController().confirmMoneyWithdraw(context);
+              })
           .formsToWithdrawAndDeposit(),
     );
   }

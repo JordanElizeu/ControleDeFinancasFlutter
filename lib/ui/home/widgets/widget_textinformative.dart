@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget textInformative({
-  required String text,
+  required String? text,
   required double fontSize,
   Color? backgroundColor,
   Color? textColor,
@@ -13,7 +13,7 @@ Widget textInformative({
     child: Container(
       alignment: Alignment.centerLeft,
       child: Text(
-        text,
+        text?? '',
         style: TextStyle(
           fontSize: fontSize,
           fontWeight: fontWeight,

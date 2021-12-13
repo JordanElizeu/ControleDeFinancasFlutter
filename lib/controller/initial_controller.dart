@@ -1,3 +1,4 @@
+import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class InitialController extends GetxController {
-  static double _valorTotal = 0;
   IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
 
@@ -13,27 +13,16 @@ class InitialController extends GetxController {
 
   IconData get getIconData => _iconData;
 
-  double get valorTotal => _valorTotal;
-
-  String get getFormattedValorTotal {
+  Future<String> getMoneyInFirebase() async{
     NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
-    return formatter.format(_valorTotal);
-  }
-
-  set incrementValorTotal(double value) {
-    _valorTotal += value;
-    update();
-  }
-  set decrementValorTotal(double value) {
-    _valorTotal -= value;
-    update();
+    return formatter.format(double.parse(await RepositoryTransactions().getQuantityMoney()));
   }
 
   String? getUserName() {
     return FirebaseAuth.instance.currentUser!.displayName;
   }
 
-  void changeIconDataEye() {
+  void changeIconDataEyeOfMoney() {
     switch(_moneyVisible){
       case true:
         _iconData = Icons.visibility;

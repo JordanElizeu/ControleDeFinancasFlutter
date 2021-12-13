@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 class ViewFailure extends StatelessWidget {
   final String buttonText = 'Confirmar';
   final String titleError;
+  final String messageError;
   final Function() functionButton;
 
-  ViewFailure({required this.functionButton, required this.titleError});
+  ViewFailure(
+      {required this.functionButton,
+      required this.titleError,
+      required this.messageError});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Aconteceu um erro'),
+      title: Text(titleError),
       content: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -20,7 +24,7 @@ class ViewFailure extends StatelessWidget {
           children: [
             Icon(Icons.cloud_off),
             Text(
-              titleError,
+              messageError,
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -41,9 +45,11 @@ class ViewFailure extends StatelessWidget {
 class FailureDialog extends StatelessWidget {
   final Function() functionButton;
   final String titleError;
+  final String messageError;
   FailureDialog({
     required this.functionButton,
     required this.titleError,
+    required this.messageError,
   });
 
   @override
@@ -51,20 +57,23 @@ class FailureDialog extends StatelessWidget {
     return ViewFailure(
       functionButton: functionButton,
       titleError: titleError,
+      messageError: messageError,
     );
   }
 }
 
 alertDialogViewFailure(
     {required BuildContext context,
-     Function()? function,
+    required String messageError,
+    Function()? function,
     required String titleError}) async {
   await showDialog(
     context: context,
     builder: (contextDialog) {
       return FailureDialog(
-        functionButton: function?? (){},
+        functionButton: function ?? () {},
         titleError: titleError,
+        messageError: messageError,
       );
     },
   );

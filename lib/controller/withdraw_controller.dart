@@ -1,23 +1,19 @@
+import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'initial_controller.dart';
 
-class WithdrawMoneyController extends GetxController{
+class WithdrawMoneyController extends GetxController {
   static TextEditingController textEditingControllerMoney =
-  TextEditingController();
+      TextEditingController();
   static TextEditingController textEditingControllerTitle =
-  TextEditingController();
+      TextEditingController();
   static TextEditingController textEditingControllerDesc =
-  TextEditingController();
+      TextEditingController();
   static GlobalKey<FormState> formKeyFieldTitle = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  void incrementMoney({required double valor}) {
-    InitialController().decrementValorTotal = valor;
-  }
-
-  void saveDeposit(){
+  void confirmMoneyWithdraw(BuildContext context) {
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
@@ -25,38 +21,43 @@ class WithdrawMoneyController extends GetxController{
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      //method to save deposit_money
+      double moneyWithdraw = double.parse(formatMoneyValueInField());
+      RepositoryTransactions().moneyWithdraw(moneyWithdraw, context);
     }
   }
 
-  String? validateFieldFormTextMoney(String text) {
-    if (!_validateValueMoney(text)) {
+  String? validateFieldFormTextMoney() {
+    if (!_validateValueMoney()) {
       return 'Preencha um valor correto';
     }
     return null;
   }
 
-  String? validateFieldFormTextTitle(String text) {
-    if (text.isEmpty) {
+  String? validateFieldFormTextTitle() {
+    if (textEditingControllerTitle.text.isEmpty) {
       return 'Preencha um título';
     }
     return null;
   }
 
-  String? validateFieldFormTextDesc(String text) {
-    if (text.isEmpty) {
+  String? validateFieldFormTextDesc() {
+    if (textEditingControllerDesc.text.isEmpty) {
       return 'Preencha uma descrição';
     }
     return null;
   }
 
-  bool _validateValueMoney(String text) {
-    String formatToString = text
+  String formatMoneyValueInField(){
+    String formatToString = textEditingControllerMoney.text
         .replaceAll(' ', '')
         .replaceAll('R\$', '')
         .replaceAll('.', '')
         .replaceAll(',', '.');
-    final double formatToDouble = double.parse(formatToString);
+    return formatToString;
+  }
+
+  bool _validateValueMoney() {
+    final double formatToDouble = double.parse(formatMoneyValueInField());
     if (formatToDouble <= 0.0) {
       return false;
     }
