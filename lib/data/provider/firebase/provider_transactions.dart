@@ -1,6 +1,5 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/deposit_controller.dart';
 import 'package:app_financeiro/controller/withdraw_controller.dart';
-import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -30,6 +29,7 @@ class ProviderTransactions {
           title: title,
           description: description,
           isDeposit: true);
+      DepositMoneyController(context).clearFields();
       return true;
     } catch (exception) {
       alertDialogViewFailure(
@@ -117,8 +117,7 @@ class ProviderTransactions {
             quantityMoney: moneyWithdraw,
             title: title,
             description: description);
-        WithdrawMoneyController().clearFields();
-        Controller().pageTransition(route: Routes.HOME, context: context);
+        WithdrawMoneyController(context).clearFields();
         return true;
       } catch (exception) {
         alertDialogViewFailure(

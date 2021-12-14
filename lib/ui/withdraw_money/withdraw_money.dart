@@ -9,7 +9,7 @@ class WithdrawMoney extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WithdrawMoneyController _withdrawMoneyController =
-        WithdrawMoneyController();
+        WithdrawMoneyController(context);
     return Scaffold(
       appBar: appBar(title: 'Sacar dinheiro'),
       body: FormToWithdrawAndDeposit(
@@ -35,7 +35,7 @@ class WithdrawMoney extends StatelessWidget {
               },
               labelFieldMoney: 'Valor a sacar',
               functionButtonConfirm: () async{
-                return await WithdrawMoneyController().confirmMoneyWithdraw(context);
+                return await _withdrawMoneyController.confirmMoneyWithdraw();
               })
           .formsToWithdrawAndDeposit(),
     );

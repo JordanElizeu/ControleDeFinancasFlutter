@@ -6,17 +6,17 @@ class RepositoryTransactions {
 
   RepositoryTransactions(this._context);
 
-  Future<String> getQuantityMoney() async {
+  Future<String> repositoryGetQuantityMoney() async {
     return await ProviderTransactions().getAvailableMoney();
   }
 
-  Future<bool?> moneyWithdraw(
+  Future<bool?> repositoryMoneyWithdraw(
       double value, String title, String description) async {
     return await ProviderTransactions().moneyWithdraw(
         moneyWithdraw: value, context: _context, title: title, description: description);
   }
 
-  Future<bool?> depositMoney(
+  Future<bool?> repositoryDepositMoney(
       {required double quantityMoney,
       required String title,
       required String desc}) async {
@@ -27,7 +27,7 @@ class RepositoryTransactions {
         context: _context);
   }
 
-  Future<Map<dynamic, dynamic>> getAllTransactions() async {
+  Future<Map<dynamic, dynamic>> repositoryGetAllTransactions() async {
     return await ProviderTransactions().getAllTransactions();
   }
 }

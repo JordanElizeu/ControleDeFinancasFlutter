@@ -12,11 +12,12 @@ class Transactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(title: 'Transações'),
-        body: FutureBuilder(
-          future: TransactionController().getAllTransactions(context),
-          builder: (BuildContext context,
-              AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+      appBar: appBar(title: 'Transações'),
+      body: FutureBuilder(
+        future: TransactionController(context).getAllTransactions(),
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+          if (snapshot.hasData) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
                 return error404();
@@ -27,8 +28,13 @@ class Transactions extends StatelessWidget {
               case ConnectionState.done:
                 return _listTile(snapshot);
             }
-          },
-        ));
+          } else if (snapshot.hasError) {
+            return error404(title: 'Não houve transações');
+          }
+          return progress();
+        },
+      ),
+    );
   }
 
   Widget _listTile(AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
@@ -36,7 +42,8 @@ class Transactions extends StatelessWidget {
       itemCount: snapshot.data!.length,
       itemBuilder: (BuildContext context, index) {
         return Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+              left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
           child: Column(
             children: [
               Card(
@@ -52,10 +59,9 @@ class Transactions extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           snapshot.data!.values.toList().asMap()[index]
-                          ['title'],
+                              ['title'],
                           style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
+                              fontWeight: FontWeight.w700, color: Colors.white),
                         ),
                       ),
                     ],
@@ -69,7 +75,7 @@ class Transactions extends StatelessWidget {
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      '${InitialController().formatMoney(snapshot.data!.values.toList().asMap()[index]['money'])}',
+                      '${InitialController(context).formatMoney(snapshot.data!.values.toList().asMap()[index]['money'])}',
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: snapshot.data!.values.toList().asMap()[index]

@@ -8,8 +8,8 @@ class DepositMoney extends StatelessWidget {
   const DepositMoney({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final DepositMoneyController _depositMoneyController =
-        DepositMoneyController();
+    final DepositMoneyController depositMoneyController =
+        DepositMoneyController(context);
     return Scaffold(
       appBar: appBar(title: 'Depositar dinheiro'),
       body: FormToWithdrawAndDeposit(
@@ -23,17 +23,17 @@ class DepositMoney extends StatelessWidget {
               textEditingControllerTitle:
                   DepositMoneyController.textEditingControllerTitle,
               functionValidateMoney: (String text) {
-                return _depositMoneyController.validateFieldFormTextMoney();
+                return depositMoneyController.validateFieldFormTextMoney();
               },
               functionValidateDesc: (String text) {
-                return _depositMoneyController.validateFieldFormTextDesc();
+                return depositMoneyController.validateFieldFormTextDesc();
               },
               functionValidateTitle: (String text) {
-                return _depositMoneyController.validateFieldFormTextTitle();
+                return depositMoneyController.validateFieldFormTextTitle();
               },
               labelFieldMoney: 'Valor a depositar',
               functionButtonConfirm: () {
-                return _depositMoneyController.confirmDeposit(context);
+                return depositMoneyController.confirmDeposit();
               })
           .formsToWithdrawAndDeposit(),
     );

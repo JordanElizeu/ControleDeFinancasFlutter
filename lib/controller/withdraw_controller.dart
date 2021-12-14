@@ -1,8 +1,15 @@
 import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
+import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'controller.dart';
 
 class WithdrawMoneyController extends GetxController {
+
+  final BuildContext _context;
+
+  WithdrawMoneyController(this._context);
+
   static TextEditingController textEditingControllerMoney =
       TextEditingController();
   static TextEditingController textEditingControllerTitle =
@@ -13,7 +20,7 @@ class WithdrawMoneyController extends GetxController {
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  Future<bool?> confirmMoneyWithdraw(BuildContext context) async {
+  Future<bool?> confirmMoneyWithdraw() async {
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
@@ -22,7 +29,7 @@ class WithdrawMoneyController extends GetxController {
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(formatMoneyValueInField());
-      return await RepositoryTransactions(context).moneyWithdraw(moneyWithdraw,
+      return await RepositoryTransactions(_context).repositoryMoneyWithdraw(moneyWithdraw,
           textEditingControllerTitle.text, textEditingControllerDesc.text);
     }
   }
@@ -31,6 +38,7 @@ class WithdrawMoneyController extends GetxController {
     textEditingControllerMoney.text = '';
     textEditingControllerTitle.text = '';
     textEditingControllerDesc.text = '';
+    Controller(_context).pageTransition(route: Routes.HOME);
     update();
   }
 

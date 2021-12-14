@@ -2,24 +2,24 @@ import 'package:app_financeiro/data/provider/firebase/provider_firebaselogin.dar
 import 'package:flutter/cupertino.dart';
 
 class RepositoryFirebaseLogin {
-  Future<String?> signUpFirebase(
+  Future<String?> repositorySignUpFirebase(
       BuildContext context, String email, String password, String name) async {
     return await ProviderLoginFirebase()
-        .createFirebaseUser(email, password, name, context);
+        .providerCreateFirebaseUser(email, password, name, context);
   }
 
-  Future<String> getNameIfUserIsFromFirebase() async {
-    return await ProviderLoginFirebase().getNameIfUserIsFromFirebase();
+  Future<String> repositoryGetNameIfUserIsFromFirebase() async {
+    return await ProviderLoginFirebase().providerGetNameIfUserIsFromFirebase();
   }
 
-  Future<String?> signInFirebase(
+  Future<String?> repositorySignInFirebase(
       BuildContext context, String email, String password) async {
     return await ProviderLoginFirebase()
-        .signInWithFirebase(email, password, context);
+        .providerSignInWithFirebase(email, password, context);
   }
 
-  Future<String?> forgotPasswordFirebase(
+  Future<String?> repositoryForgotPasswordFirebase(
       BuildContext context, String email) async {
-    return await ProviderLoginFirebase().forgotPassword(email);
+    return await ProviderLoginFirebase().providerForgotPassword(email);
   }
 }

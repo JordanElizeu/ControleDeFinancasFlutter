@@ -21,7 +21,6 @@ class WidgetLogin extends StatelessWidget {
           additionalSignupFields: [
             UserFormField(
                 keyName: 'name',
-                defaultValue: '',
                 icon: Icon(Icons.person),
                 displayName: 'Name',
                 userType: LoginUserType.name),
@@ -36,8 +35,8 @@ class WidgetLogin extends StatelessWidget {
             ),
           ],
           onSubmitAnimationCompleted: () {
-            Controller()
-                .finishAndPageTransition(route: Routes.HOME, context: context);
+            Controller(context)
+                .finishAndPageTransition(route: Routes.HOME);
           },
           onRecoverPassword: LoginController(context).forgotPasswordFirebase,
         ),

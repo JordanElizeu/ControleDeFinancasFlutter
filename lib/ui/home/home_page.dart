@@ -15,16 +15,14 @@ class PageHome extends StatelessWidget {
   const PageHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    InitialController initialController = InitialController(context);
+    Controller controller = Controller(context);
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Image.asset('assets/images/foguete.png'),
-          onPressed: () {},
-        ),
         body: LayoutBuilder(
           builder: (_, constraints) {
             return GetBuilder(
-              init: InitialController(),
+              init: initialController,
               builder: (InitialController initialController) {
                 return SingleChildScrollView(
                   child: Column(
@@ -33,9 +31,60 @@ class PageHome extends StatelessWidget {
                           constraints: constraints,
                           initialController: initialController,
                           context: context),
-                      _cardCircleButtons(
-                          initialController: initialController,
-                          context: context),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              textInformative(text: 'Conta', fontSize: 22.0),
+                              _cardCircleButtons(
+                                  initialController: initialController,
+                                  context: context),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      controller.pageTransition(route: Routes.INCREMENT_MONEY);
+                                    },
+                                    child: circleAvatar(
+                                      iconData: Icons.arrow_circle_up_rounded,
+                                      text: "Depositar",
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      controller.pageTransition(route: Routes.DECREMENT_MONEY);
+                                    },
+                                    child: circleAvatar(
+                                      iconData: Icons.arrow_circle_down,
+                                      text: "Retirar",
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      controller.pageTransition(route: Routes.TRANSACTIONS);
+                                    },
+                                    child: circleAvatar(
+                                      iconData: Icons.assessment_outlined,
+                                      text: "Transações",
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      controller.pageTransition(route: Routes.ANNOTATIONS);
+                                    },
+                                    child: circleAvatar(
+                                      iconData: Icons.wysiwyg_outlined,
+                                      text: "Anotações",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       _cardLastModifications(context)
                     ],
                   ),
@@ -115,11 +164,11 @@ Widget _containerWithInformationOfAccount(
 
 Widget _cardLastModifications(BuildContext context) {
   return FutureBuilder(
-    future: InitialController().getMoneyInFirebase(context),
+    future: InitialController(context).getMoneyInFirebase(),
     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
       return Card(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 20.0),
           child: Column(
             children: [
               textInformative(
@@ -137,82 +186,43 @@ Widget _cardCircleButtons(
     {required InitialController initialController,
     required BuildContext context}) {
   return FutureBuilder(
-    future: InitialController().getMoneyInFirebase(context),
+    future: InitialController(context).getMoneyInFirebase(),
     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-      switch (snapshot.connectionState) {
-        case ConnectionState.waiting:
-          return progress();
-        case ConnectionState.done:
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  textInformative(text: 'Conta', fontSize: 22.0),
-                  textInformative(
-                      text: snapshot.data,
-                      fontSize: 27.0,
-                      backgroundColor: initialController.moneyVisible
-                          ? Colors.transparent
-                          : Colors.black26,
-                      textColor: initialController.moneyVisible
-                          ? null
-                          : Colors.transparent,
-                      fontWeight: FontWeight.w400),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Controller().pageTransition(
-                              context: context, route: Routes.INCREMENT_MONEY);
-                        },
-                        child: circleAvatar(
-                          iconData: Icons.arrow_circle_up_rounded,
-                          text: "Depositar",
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Controller().pageTransition(
-                              context: context, route: Routes.DECREMENT_MONEY);
-                        },
-                        child: circleAvatar(
-                          iconData: Icons.arrow_circle_down,
-                          text: "Retirar",
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Controller().pageTransition(
-                              context: context, route: Routes.TRANSACTIONS);
-                        },
-                        child: circleAvatar(
-                          iconData: Icons.assessment_outlined,
-                          text: "Transações",
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Controller().pageTransition(
-                              context: context, route: Routes.ANNOTATIONS);
-                        },
-                        child: circleAvatar(
-                          iconData: Icons.wysiwyg_outlined,
-                          text: "Anotações",
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        case ConnectionState.none:
-          return error404();
-        case ConnectionState.active:
-          return progress();
+      if (snapshot.data != null) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return progress();
+          case ConnectionState.done:
+            return _widgetCircularCard(
+                context: context,
+                initialController: initialController,
+                snapshot: snapshot);
+          case ConnectionState.none:
+            return error404();
+          case ConnectionState.active:
+            return progress();
+        }
       }
+      return progress();
     },
+  );
+}
+
+Widget _widgetCircularCard(
+    {required InitialController initialController,
+    required BuildContext context,
+    required AsyncSnapshot<String> snapshot}) {
+  return Column(
+    children: [
+      textInformative(
+          text: snapshot.data,
+          fontSize: 27.0,
+          backgroundColor: initialController.moneyVisible
+              ? Colors.transparent
+              : Colors.black26,
+          textColor:
+              initialController.moneyVisible ? null : Colors.transparent,
+          fontWeight: FontWeight.w400),
+    ],
   );
 }

@@ -9,7 +9,7 @@ class ProviderLoginFirebase {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
 
-  Future<String?> signInWithFirebase(
+  Future<String?> providerSignInWithFirebase(
     String email,
     String password,
     BuildContext context,
@@ -17,9 +17,8 @@ class ProviderLoginFirebase {
     try {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => Controller().finishAndPageTransition(
+          .then((value) => Controller(context).finishAndPageTransition(
                 route: Routes.HOME,
-                context: context,
               ));
     } on FirebaseAuthException catch (exception) {
       return ProviderFirebaseExceptions().handleFirebaseLoginWithCredentialsException(
@@ -27,14 +26,14 @@ class ProviderLoginFirebase {
     }
   }
 
-  Future<String> getNameIfUserIsFromFirebase() async {
+  Future<String> providerGetNameIfUserIsFromFirebase() async {
     DatabaseReference _databaseReference = FirebaseDatabase.instance
         .ref('AppFinancas/${_auth.currentUser!.uid}/Account');
     DatabaseEvent event = await _databaseReference.once();
     return event.snapshot.child('name').value.toString();
   }
 
-  Future<String?> createFirebaseUser(
+  Future<String?> providerCreateFirebaseUser(
     String email,
     String password,
     String name,
@@ -62,7 +61,7 @@ class ProviderLoginFirebase {
     }
   }
 
-  Future<String?> forgotPassword(String email) async{
+  Future<String?> providerForgotPassword(String email) async{
     try{
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch(exception){

@@ -5,7 +5,7 @@ class ViewFailure extends StatelessWidget {
   final String buttonText = 'Confirmar';
   final String titleError;
   final String messageError;
-  final Function() functionButton;
+  final Function()? functionButton;
 
   ViewFailure(
       {required this.functionButton,
@@ -36,14 +36,16 @@ class ViewFailure extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(buttonText),
             ),
-            onPressed: functionButton)
+            onPressed: functionButton?? (){
+              Navigator.pop(context);
+            })
       ],
     );
   }
 }
 
 class FailureDialog extends StatelessWidget {
-  final Function() functionButton;
+  final Function()? functionButton;
   final String titleError;
   final String messageError;
   FailureDialog({

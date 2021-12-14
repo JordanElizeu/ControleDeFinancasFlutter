@@ -1,8 +1,16 @@
 import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
+import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import 'controller.dart';
+
 class DepositMoneyController extends GetxController {
+
+  final BuildContext _context;
+
+  DepositMoneyController(this._context);
+
   static TextEditingController textEditingControllerMoney =
       TextEditingController();
   static TextEditingController textEditingControllerTitle =
@@ -13,18 +21,26 @@ class DepositMoneyController extends GetxController {
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  Future<bool?> confirmDeposit(BuildContext context) async{
+  Future<bool?> confirmDeposit() async{
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      return await RepositoryTransactions(context).depositMoney(
+      return await RepositoryTransactions(_context).repositoryDepositMoney(
           quantityMoney: double.parse(_formatValueMoney()),
           desc: textEditingControllerDesc.text,
           title: textEditingControllerTitle.text);
     }
+  }
+
+  void clearFields() {
+    textEditingControllerMoney.text = '';
+    textEditingControllerTitle.text = '';
+    textEditingControllerDesc.text = '';
+    Controller(_context).pageTransition(route: Routes.HOME);
+    update();
   }
 
   String? validateFieldFormTextMoney() {

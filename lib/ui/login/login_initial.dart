@@ -69,7 +69,7 @@ class Login extends StatelessWidget {
                                         new BorderRadius.circular(30.0)))),
                         child: Text('Acessar minha conta'),
                         onPressed: () {
-                          Controller().finishAndPageTransition(route: Routes.LOGIN, context: context);
+                          Controller(context).finishAndPageTransition(route: Routes.LOGIN);
                         },
                       ),
                     ),

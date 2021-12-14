@@ -13,6 +13,7 @@ class CreateAnnotations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AnnotationsController annotationsController = AnnotationsController(context);
     return AlertDialog(
       title: const Text('Criar anotação'),
       content: Column(
@@ -30,7 +31,7 @@ class CreateAnnotations extends StatelessWidget {
                   globalKey: AnnotationsController.formKeyFieldTitle,
                   controller: AnnotationsController.textEditingControllerTitle,
                   function: (String text) {
-                    AnnotationsController().validateFieldFormTextTitle();
+                    annotationsController.validateFieldFormTextTitle();
                   }),
             ),
           ),
@@ -45,7 +46,7 @@ class CreateAnnotations extends StatelessWidget {
                   controller:
                       AnnotationsController.textEditingControllerAnnotation,
                   function: (String text) {
-                    AnnotationsController().validateFieldFormTextAnnotation();
+                    annotationsController.validateFieldFormTextAnnotation();
                   }),
             ),
           ),
@@ -69,9 +70,7 @@ class AnnotationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CreateAnnotations(
-      functionButton: functionButton,
-    );
+    return CreateAnnotations(functionButton: functionButton,);
   }
 }
 

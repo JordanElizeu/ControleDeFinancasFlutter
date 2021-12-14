@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 class RepositoryGoogleConnection{
 
-  Future<String?> signInGoogle(BuildContext context) async{
+  Future<String?> repositorySignInGoogle(BuildContext context) async{
     return await ProviderGoogleConnection().signInWithGoogle(context: context);
   }
 }

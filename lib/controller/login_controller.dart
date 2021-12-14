@@ -25,30 +25,30 @@ class LoginController extends GetxController {
 
   void logoutAccount() async{
     await FirebaseAuth.instance.signOut();
-    Controller().finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: _context);
+    Controller(_context).finishAndPageTransition(route: Routes.LOGIN_INITIAL);
   }
 
   Future<String?> signInGoogle() async {
-    return await RepositoryGoogleConnection().signInGoogle(_context);
+    return await RepositoryGoogleConnection().repositorySignInGoogle(_context);
   }
 
   Future<String?> signInFirebase(LoginData data) {
     return Future.delayed(loginTime).then((_) {
       return RepositoryFirebaseLogin()
-          .signInFirebase(_context, data.name, data.password);
+          .repositorySignInFirebase(_context, data.name, data.password);
     });
   }
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
       return RepositoryFirebaseLogin()
-          .signUpFirebase(_context, data.name!, data.password!, data.additionalSignupData!['name'].toString());
+          .repositorySignUpFirebase(_context, data.name!, data.password!, data.additionalSignupData!['name'].toString());
     });
   }
 
   Future<String?> forgotPasswordFirebase(String email) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin().forgotPasswordFirebase(_context, email);
+      return RepositoryFirebaseLogin().repositoryForgotPasswordFirebase(_context, email);
     });
   }
 }
