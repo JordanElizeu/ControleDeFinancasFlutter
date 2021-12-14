@@ -83,10 +83,3 @@ class Login extends StatelessWidget {
     );
   }
 }
-
-// SignInButton(
-// buttonType: ButtonType.google,
-// onPressed: () {
-// LoginController().signInGoogle(context: context);
-// },
-// )

@@ -18,7 +18,14 @@ class WidgetLogin extends StatelessWidget {
           onLogin: _loginController.signInFirebase,
           onSignup: _loginController.signUpFirebase,
           logoTag: 'assets/images/foguete.png',
-          loginAfterSignUp: true,
+          additionalSignupFields: [
+            UserFormField(
+                keyName: 'name',
+                defaultValue: '',
+                icon: Icon(Icons.person),
+                displayName: 'Name',
+                userType: LoginUserType.name),
+          ],
           loginProviders: [
             LoginProvider(
               icon: FontAwesomeIcons.google,
@@ -29,7 +36,8 @@ class WidgetLogin extends StatelessWidget {
             ),
           ],
           onSubmitAnimationCompleted: () {
-              Controller().finishAndPageTransition(route: Routes.HOME, context: context);
+            Controller()
+                .finishAndPageTransition(route: Routes.HOME, context: context);
           },
           onRecoverPassword: LoginController(context).forgotPasswordFirebase,
         ),

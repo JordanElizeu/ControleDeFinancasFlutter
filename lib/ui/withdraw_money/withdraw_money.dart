@@ -34,8 +34,8 @@ class WithdrawMoney extends StatelessWidget {
                     .validateFieldFormTextTitle();
               },
               labelFieldMoney: 'Valor a sacar',
-              functionButtonConfirm: (){
-                return WithdrawMoneyController().confirmMoneyWithdraw(context);
+              functionButtonConfirm: () async{
+                return await WithdrawMoneyController().confirmMoneyWithdraw(context);
               })
           .formsToWithdrawAndDeposit(),
     );

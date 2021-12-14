@@ -33,7 +33,7 @@ class DepositMoney extends StatelessWidget {
               },
               labelFieldMoney: 'Valor a depositar',
               functionButtonConfirm: () {
-                return _depositMoneyController.confirmDeposit();
+                return _depositMoneyController.confirmDeposit(context);
               })
           .formsToWithdrawAndDeposit(),
     );

@@ -13,7 +13,7 @@ class WithdrawMoneyController extends GetxController {
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  void confirmMoneyWithdraw(BuildContext context) {
+  Future<bool?> confirmMoneyWithdraw(BuildContext context) async {
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
@@ -22,8 +22,16 @@ class WithdrawMoneyController extends GetxController {
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(formatMoneyValueInField());
-      RepositoryTransactions().moneyWithdraw(moneyWithdraw, context);
+      return await RepositoryTransactions(context).moneyWithdraw(moneyWithdraw,
+          textEditingControllerTitle.text, textEditingControllerDesc.text);
     }
+  }
+
+  void clearFields() {
+    textEditingControllerMoney.text = '';
+    textEditingControllerTitle.text = '';
+    textEditingControllerDesc.text = '';
+    update();
   }
 
   String? validateFieldFormTextMoney() {
@@ -47,7 +55,7 @@ class WithdrawMoneyController extends GetxController {
     return null;
   }
 
-  String formatMoneyValueInField(){
+  String formatMoneyValueInField() {
     String formatToString = textEditingControllerMoney.text
         .replaceAll(' ', '')
         .replaceAll('R\$', '')

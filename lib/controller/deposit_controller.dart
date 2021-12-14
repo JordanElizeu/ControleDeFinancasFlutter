@@ -1,8 +1,8 @@
-import 'package:app_financeiro/data/provider/firebase/provider_transactions.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class DepositMoneyController extends GetxController{
+class DepositMoneyController extends GetxController {
   static TextEditingController textEditingControllerMoney =
       TextEditingController();
   static TextEditingController textEditingControllerTitle =
@@ -13,14 +13,17 @@ class DepositMoneyController extends GetxController{
   static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
 
-  void confirmDeposit(){
+  Future<bool?> confirmDeposit(BuildContext context) async{
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldMoney.currentState;
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      ProviderTransactions().addDeposit(quantityMoney: double.parse(_formatValueMoney()));
+      return await RepositoryTransactions(context).depositMoney(
+          quantityMoney: double.parse(_formatValueMoney()),
+          desc: textEditingControllerDesc.text,
+          title: textEditingControllerTitle.text);
     }
   }
 
@@ -54,7 +57,7 @@ class DepositMoneyController extends GetxController{
     return true;
   }
 
-  String _formatValueMoney(){
+  String _formatValueMoney() {
     return textEditingControllerMoney.text
         .replaceAll(' ', '')
         .replaceAll('R\$', '')
