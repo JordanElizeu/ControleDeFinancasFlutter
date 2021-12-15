@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 
 class CreateAnnotations extends StatelessWidget {
   final String buttonText = 'Confirmar';
+  static BuildContext? context;
   final Function()? function;
 
   CreateAnnotations(this.function);
 
   @override
   Widget build(BuildContext context) {
+    CreateAnnotations.context = context;
     AnnotationsController annotationsController =
-        AnnotationsController(context: context);
+        AnnotationsController();
     return AlertDialog(
       title: const Text('Criar anotação'),
       content: Column(
@@ -58,7 +60,7 @@ class CreateAnnotations extends StatelessWidget {
               child: Text(buttonText),
             ),
             onPressed: function?? () {
-              AnnotationsController(context: context).sendAnnotation();
+              annotationsController.sendAnnotation(context: context);
               Navigator.pop(context);
             })
       ],

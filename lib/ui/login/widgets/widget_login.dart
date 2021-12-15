@@ -14,8 +14,7 @@ class WidgetLogin extends StatelessWidget {
     return WillPopScope(
       onWillPop: () =>
           Controller(context)
-              .finishAndPageTransition(route: Routes.LOGIN_INITIAL) ??
-          false,
+              .finishAndPageTransition(route: Routes.LOGIN_INITIAL),
       child: Material(
         child: Center(
           child: FlutterLogin(

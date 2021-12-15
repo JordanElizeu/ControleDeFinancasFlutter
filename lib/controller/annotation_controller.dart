@@ -1,15 +1,11 @@
 import 'package:app_financeiro/data/repository/firebase/repository_annotations.dart';
-import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'controller.dart';
-
 class AnnotationsController extends GetxController {
-  final BuildContext context;
-  static Map<dynamic,dynamic>? _map;
-
-  AnnotationsController({required this.context});
+  Map<dynamic,dynamic> map = {};
+  Map<dynamic,dynamic> mapBackup = {};
 
   static TextEditingController textEditingControllerTitle =
       TextEditingController();
@@ -18,26 +14,26 @@ class AnnotationsController extends GetxController {
   static GlobalKey<FormState> formKeyFieldTitle = GlobalKey<FormState>();
   static GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
 
-  void sendAnnotation() {
+  void sendAnnotation({required BuildContext context}) {
     final FormState? formValidateTitle = formKeyFieldTitle.currentState;
     final FormState? formValidateAnnotation =
         formKeyFieldAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
-      RepositoryAnnotations(context: context).repositorySendAnnotation(
+      RepositoryAnnotations().repositorySendAnnotation(
           title: textEditingControllerTitle.text,
-          annotation: textEditingControllerAnnotation.text);
+          annotation: textEditingControllerAnnotation.text, context: context);
     }
   }
 
-  void clearFields(){
+  void clearFields({required BuildContext context}) async{
     textEditingControllerTitle.text = '';
     textEditingControllerAnnotation.text = '';
-    Controller(context).finishAndPageTransition(route: Routes.ANNOTATIONS);
     update();
   }
 
-  Future<Map<dynamic,dynamic>> getAllAnnotations() async{
-    return RepositoryAnnotations(context: context).repositoryGetAllAnnotations();
+  Future<Map<dynamic,dynamic>> getAllAnnotations({required BuildContext context}) async{
+    map = await RepositoryAnnotations().repositoryGetAllAnnotations();
+    return map;
   }
 
   String? validateFieldFormTextTitle() {
@@ -55,25 +51,32 @@ class AnnotationsController extends GetxController {
   }
 
   void saveBackupMap(Map<dynamic,dynamic> map){
-    _map = map;
+    mapBackup = map;
     update();
   }
 
-  void removeAnnotation({required String uid}){
-    RepositoryAnnotations(context: context).removeAnnotation(uid: uid);
-  }
-
-  void editAnnotation({required String uid}){
-    RepositoryAnnotations(context: context).editAnnotation(uid: uid);
-  }
-
-  void recoverAnnotation(Map<dynamic,dynamic> map){
-    RepositoryAnnotations(context: context).repositorySendAnnotation(
-        title: map['title'],
-        annotation: map['annotation']);
-  }
-
   Map<dynamic,dynamic>? getBackupMap(){
-    return _map;
+    return mapBackup;
+  }
+
+  void removeAnnotation({required String uid,required BuildContext context}){
+    RepositoryAnnotations().removeAnnotation(uid: uid);
+  }
+
+  void editAnnotation({required String uid,required BuildContext context,required int index}){
+    map[index] = {
+      0: textEditingControllerTitle.text,
+      1: textEditingControllerAnnotation.text
+    };
+    RepositoryAnnotations().editAnnotation(uid: uid, context: context);
+    update();
+  }
+
+  void recoverAnnotation({required Map<dynamic,dynamic> map, required BuildContext context}){
+    this.map.addAll(map);
+    RepositoryAnnotations().repositorySendAnnotation(
+        title: map['title'],
+        annotation: map['annotation'], context: context);
+    update();
   }
 }

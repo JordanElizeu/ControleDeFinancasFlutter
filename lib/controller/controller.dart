@@ -11,7 +11,12 @@ class Controller extends GetxController{
     Navigator.of(_context).pushNamed(route);
   }
 
-  finishAndPageTransition({required String route}){
-    Navigator.of(_context).popAndPushNamed(route);
+  Future<bool> finishAndPageTransition({required String route}) async{
+    try{
+      await Navigator.of(_context).popAndPushNamed(route);
+      return true;
+    }catch(e){
+      return false;
+    }
   }
 }

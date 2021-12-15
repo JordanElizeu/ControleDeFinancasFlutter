@@ -15,8 +15,7 @@ class Transactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME) ??
-          false,
+          Controller(context).finishAndPageTransition(route: Routes.HOME),
       child: Scaffold(
         appBar: appBar(title: 'Transações'),
         body: FutureBuilder(

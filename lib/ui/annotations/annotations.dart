@@ -3,23 +3,24 @@ import 'dart:ui';
 import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/controller/controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
-import 'package:app_financeiro/ui/annotations/widgets/createannotations.dart';
+import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 class Annotations extends StatelessWidget {
   const Annotations({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    AnnotationsController annotationsController =
-        AnnotationsController(context: context);
+    AnnotationsController dx = Get.put(AnnotationsController());
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME) ??
-          false,
+          Controller(context).finishAndPageTransition(route: Routes.HOME),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Anotações'),
@@ -34,43 +35,43 @@ class Annotations extends StatelessWidget {
             )
           ],
         ),
-        body: FutureBuilder(
-          future: annotationsController.getAllAnnotations(),
-          builder: (BuildContext context,
-              AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
-            if (snapshot.hasData) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return error404();
-                case ConnectionState.waiting:
-                  return progress();
-                case ConnectionState.active:
-                  return progress();
-                case ConnectionState.done:
-                  return _widgetFutureBuilder(snapshot);
+        body: GetBuilder<AnnotationsController>(
+          builder: (_) => FutureBuilder(
+            future: _.getAllAnnotations(context: context),
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+              if (snapshot.hasData) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return error404();
+                  case ConnectionState.waiting:
+                    return progress();
+                  case ConnectionState.active:
+                    return progress();
+                  case ConnectionState.done:
+                    return _widgetFutureBuilder(snapshot,dx);
+                }
+              } else if (snapshot.hasError) {
+                return error404(title: '0 anotações');
               }
-            } else if (snapshot.hasError) {
-              return error404(title: '0 anotações');
-            }
-            return progress();
-          },
+              return progress();
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget _widgetFutureBuilder(AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+  Widget _widgetFutureBuilder(AsyncSnapshot<Map<dynamic, dynamic>> snapshot,AnnotationsController dx) {
     return ListView.builder(
-      itemCount: snapshot.data!.length,
+      itemCount: dx.map.length,
       itemBuilder: (BuildContext context, index) {
-        final AnnotationsController annotationsController =
-            AnnotationsController(context: context);
         return Dismissible(
           onDismissed: (DismissDirection dismissDirection) {
-            annotationsController
-                .saveBackupMap(snapshot.data!.values.toList().asMap()[index]);
-            annotationsController.removeAnnotation(
-                uid: snapshot.data!.values.toList().asMap()[index]['uid']);
+            dx.removeAnnotation(
+                uid: snapshot.data!.values.toList().asMap()[index]['uid'],
+                context: context);
+            dx.map.remove(index);
             final snackBar = SnackBar(
               padding: EdgeInsets.all(10),
               backgroundColor: Colors.purple,
@@ -82,11 +83,10 @@ class Annotations extends StatelessWidget {
               action: SnackBarAction(
                 textColor: Colors.white,
                 label: "Desfazer",
-                onPressed: () {
-                  AnnotationsController(context: context).recoverAnnotation(
-                      snapshot.data!.values.toList().asMap()[index]);
-                  Controller(context)
-                      .finishAndPageTransition(route: Routes.ANNOTATIONS);
+                onPressed: () async {
+                  dx.recoverAnnotation(
+                      map: snapshot.data!.values.toList().asMap()[index],
+                      context: context);
                 },
               ),
               duration: Duration(seconds: 3),
@@ -166,10 +166,12 @@ class Annotations extends StatelessWidget {
                                     .toList()
                                     .asMap()[index]['title'],
                                 function: () {
-                                  annotationsController.editAnnotation(
+                                  dx.editAnnotation(
                                       uid: snapshot.data!.values
                                           .toList()
-                                          .asMap()[index]['uid']);
+                                          .asMap()[index]['uid'],
+                                      context: context, index: index);
+                                  Navigator.pop(CreateAnnotations.context!);
                                 });
                           },
                           child: Icon(Icons.edit),

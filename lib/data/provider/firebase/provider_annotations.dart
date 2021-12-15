@@ -37,7 +37,7 @@ class ProviderAnnotations {
         .child(uuid)
         .child('uid')
         .set(uuid);
-    AnnotationsController(context: context).clearFields();
+    AnnotationsController().clearFields(context: context);
   }
 
   void providerEditAnnotation(
@@ -67,7 +67,7 @@ class ProviderAnnotations {
         .child(uid)
         .child('uid')
         .set(uid);
-    AnnotationsController(context: context).clearFields();
+    AnnotationsController().clearFields(context: context);
   }
 
   void providerRemoveAnnotation({required String uid}) {

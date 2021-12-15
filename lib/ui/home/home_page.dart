@@ -19,7 +19,7 @@ class PageHome extends StatelessWidget {
     Controller controller = Controller(context);
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME) ?? false,
+          Controller(context).finishAndPageTransition(route: Routes.HOME),
       child: SafeArea(
         child: Scaffold(
           body: LayoutBuilder(

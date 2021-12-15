@@ -14,8 +14,7 @@ class DepositMoney extends StatelessWidget {
         DepositMoneyController(context);
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME) ??
-          false,
+          Controller(context).finishAndPageTransition(route: Routes.HOME),
       child: Scaffold(
         appBar: appBar(title: 'Depositar dinheiro'),
         body: FormToWithdrawAndDeposit(
