@@ -1,5 +1,7 @@
+import 'package:app_financeiro/controller/controller.dart';
 import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
+import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
@@ -11,28 +13,33 @@ class Transactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Transações'),
-      body: FutureBuilder(
-        future: TransactionController(context).getAllTransactions(),
-        builder: (BuildContext context,
-            AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
-          if (snapshot.hasData) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return error404();
-              case ConnectionState.waiting:
-                return progress();
-              case ConnectionState.active:
-                return progress();
-              case ConnectionState.done:
-                return _listTile(snapshot);
+    return WillPopScope(
+      onWillPop: () =>
+          Controller(context).finishAndPageTransition(route: Routes.HOME) ??
+          false,
+      child: Scaffold(
+        appBar: appBar(title: 'Transações'),
+        body: FutureBuilder(
+          future: TransactionController(context).getAllTransactions(),
+          builder: (BuildContext context,
+              AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+            if (snapshot.hasData) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return error404();
+                case ConnectionState.waiting:
+                  return progress();
+                case ConnectionState.active:
+                  return progress();
+                case ConnectionState.done:
+                  return _listTile(snapshot);
+              }
+            } else if (snapshot.hasError) {
+              return error404(title: 'Não houve transações');
             }
-          } else if (snapshot.hasError) {
-            return error404(title: 'Não houve transações');
-          }
-          return progress();
-        },
+            return progress();
+          },
+        ),
       ),
     );
   }
@@ -52,16 +59,29 @@ class Transactions extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        child: Image.asset('assets/images/foguete.png'),
+                      Expanded(
+                        flex: 0,
+                        child: CircleAvatar(
+                          child: Icon(Icons.person),
+                        ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          snapshot.data!.values.toList().asMap()[index]
-                              ['title'],
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, color: Colors.white),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            snapshot.data!.values.toList().asMap()[index]
+                                ['title'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 0,
+                        child: CircleAvatar(
+                          child: Image.asset('assets/images/foguete.png'),
                         ),
                       ),
                     ],

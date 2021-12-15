@@ -6,9 +6,10 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 class AnnotationsController extends GetxController {
-  final BuildContext _context;
+  final BuildContext context;
+  static Map<dynamic,dynamic>? _map;
 
-  AnnotationsController(this._context);
+  AnnotationsController({required this.context});
 
   static TextEditingController textEditingControllerTitle =
       TextEditingController();
@@ -22,7 +23,7 @@ class AnnotationsController extends GetxController {
     final FormState? formValidateAnnotation =
         formKeyFieldAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
-      RepositoryAnnotations(_context).repositorySendAnnotation(
+      RepositoryAnnotations(context: context).repositorySendAnnotation(
           title: textEditingControllerTitle.text,
           annotation: textEditingControllerAnnotation.text);
     }
@@ -31,12 +32,12 @@ class AnnotationsController extends GetxController {
   void clearFields(){
     textEditingControllerTitle.text = '';
     textEditingControllerAnnotation.text = '';
-    Controller(_context).finishAndPageTransition(route: Routes.HOME);
+    Controller(context).finishAndPageTransition(route: Routes.ANNOTATIONS);
     update();
   }
 
   Future<Map<dynamic,dynamic>> getAllAnnotations() async{
-    return RepositoryAnnotations(_context).repositoryGetAllAnnotations();
+    return RepositoryAnnotations(context: context).repositoryGetAllAnnotations();
   }
 
   String? validateFieldFormTextTitle() {
@@ -51,5 +52,28 @@ class AnnotationsController extends GetxController {
       return 'Preencha uma anotação';
     }
     return null;
+  }
+
+  void saveBackupMap(Map<dynamic,dynamic> map){
+    _map = map;
+    update();
+  }
+
+  void removeAnnotation({required String uid}){
+    RepositoryAnnotations(context: context).removeAnnotation(uid: uid);
+  }
+
+  void editAnnotation({required String uid}){
+    RepositoryAnnotations(context: context).editAnnotation(uid: uid);
+  }
+
+  void recoverAnnotation(Map<dynamic,dynamic> map){
+    RepositoryAnnotations(context: context).repositorySendAnnotation(
+        title: map['title'],
+        annotation: map['annotation']);
+  }
+
+  Map<dynamic,dynamic>? getBackupMap(){
+    return _map;
   }
 }

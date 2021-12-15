@@ -1,3 +1,4 @@
+import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,9 @@ class ProviderAnnotations {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void providerSendAnnotation(
-      {required String title, required String annotation, required BuildContext context}) {
+      {required String title,
+      required String annotation,
+      required BuildContext context}) {
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -34,13 +37,48 @@ class ProviderAnnotations {
         .child(uuid)
         .child('uid')
         .set(uuid);
+    AnnotationsController(context: context).clearFields();
   }
 
-  void providerRemoveAnnotation() {}
+  void providerEditAnnotation(
+      {required String uid,
+      required BuildContext context}) {
+    _databaseReference
+        .child('AppFinancas')
+        .child(_auth.currentUser!.uid)
+        .child('Account')
+        .child('Annotations')
+        .child(uid)
+        .child('annotation')
+        .set(AnnotationsController.textEditingControllerAnnotation.text);
+    _databaseReference
+        .child('AppFinancas')
+        .child(_auth.currentUser!.uid)
+        .child('Account')
+        .child('Annotations')
+        .child(uid)
+        .child('title')
+        .set(AnnotationsController.textEditingControllerTitle.text);
+    _databaseReference
+        .child('AppFinancas')
+        .child(_auth.currentUser!.uid)
+        .child('Account')
+        .child('Annotations')
+        .child(uid)
+        .child('uid')
+        .set(uid);
+    AnnotationsController(context: context).clearFields();
+  }
+
+  void providerRemoveAnnotation({required String uid}) {
+    final DatabaseReference databaseReference = FirebaseDatabase.instance
+        .ref('AppFinancas/${_auth.currentUser!.uid}/Account/Annotations/$uid');
+    databaseReference.remove();
+  }
 
   Future<Map> providerGetAllAnnotations() async {
-    final DatabaseReference databaseReference =
-        FirebaseDatabase.instance.ref('AppFinancas/${_auth.currentUser!.uid}/Account/Annotations');
+    final DatabaseReference databaseReference = FirebaseDatabase.instance
+        .ref('AppFinancas/${_auth.currentUser!.uid}/Account/Annotations');
     DatabaseEvent event = await databaseReference.once();
     return event.snapshot.value as Map;
   }

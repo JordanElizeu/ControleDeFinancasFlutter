@@ -22,7 +22,7 @@ class Login extends StatelessWidget {
                     Image.asset(
                       'assets/images/foguete.png',
                       height: constraints.maxHeight * 0.60,
-                      width: constraints.maxWidth * 0.70,
+                      width: constraints.maxWidth * 0.60,
                     ),
                     Container(
                       width: constraints.maxWidth,

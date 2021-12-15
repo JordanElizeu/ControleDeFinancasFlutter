@@ -22,23 +22,28 @@ class ViewFailure extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.cloud_off),
-            Text(
-              messageError,
-              style: TextStyle(fontSize: 18.0),
+            Icon(Icons.cloud_off,color: Colors.red,size: 100,),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                messageError,
+                style: TextStyle(fontSize: 18.0),
+              ),
             ),
           ],
         ),
       ),
       actions: <Widget>[
         ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(buttonText),
-            ),
-            onPressed: functionButton?? (){
-              Navigator.pop(context);
-            })
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(buttonText),
+          ),
+          onPressed: functionButton ??
+              () {
+                Navigator.pop(context);
+              },
+        )
       ],
     );
   }
@@ -73,7 +78,7 @@ alertDialogViewFailure(
     context: context,
     builder: (contextDialog) {
       return FailureDialog(
-        functionButton: function ?? () {},
+        functionButton: function ?? null,
         titleError: titleError,
         messageError: messageError,
       );

@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 
 class CreateAnnotations extends StatelessWidget {
   final String buttonText = 'Confirmar';
-  final Function() functionButton;
+  final Function()? function;
 
-  CreateAnnotations({
-    required this.functionButton,
-  });
+  CreateAnnotations(this.function);
 
   @override
   Widget build(BuildContext context) {
-    AnnotationsController annotationsController = AnnotationsController(context);
+    AnnotationsController annotationsController =
+        AnnotationsController(context: context);
     return AlertDialog(
       title: const Text('Criar anotação'),
       content: Column(
@@ -58,31 +57,26 @@ class CreateAnnotations extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(buttonText),
             ),
-            onPressed: functionButton)
+            onPressed: function?? () {
+              AnnotationsController(context: context).sendAnnotation();
+              Navigator.pop(context);
+            })
       ],
     );
   }
 }
 
-class AnnotationDialog extends StatelessWidget {
-  final Function() functionButton;
-  AnnotationDialog({required this.functionButton});
-
-  @override
-  Widget build(BuildContext context) {
-    return CreateAnnotations(functionButton: functionButton,);
-  }
-}
-
 alertDialogCreateAnnotation({
   required BuildContext context,
-  required Function() function,
+  String? initialValueAnnotation,
+  String? initialValueTitle,
+  Function()? function,
 }) async {
+  AnnotationsController.textEditingControllerAnnotation.text = initialValueAnnotation??'';
+  AnnotationsController.textEditingControllerTitle.text = initialValueTitle??'';
   await showDialog(
       context: context,
       builder: (contextDialog) {
-        return AnnotationDialog(
-          functionButton: function,
-        );
+        return CreateAnnotations(function);
       });
 }

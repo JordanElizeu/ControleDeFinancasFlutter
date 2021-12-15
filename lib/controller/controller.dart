@@ -11,7 +11,7 @@ class Controller extends GetxController{
     Navigator.of(_context).pushNamed(route);
   }
 
-  void finishAndPageTransition({required String route}){
+  finishAndPageTransition({required String route}){
     Navigator.of(_context).popAndPushNamed(route);
   }
 }

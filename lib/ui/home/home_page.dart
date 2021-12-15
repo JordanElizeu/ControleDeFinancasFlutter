@@ -17,81 +17,100 @@ class PageHome extends StatelessWidget {
   Widget build(BuildContext context) {
     InitialController initialController = InitialController(context);
     Controller controller = Controller(context);
-    return SafeArea(
-      child: Scaffold(
-        body: LayoutBuilder(
-          builder: (_, constraints) {
-            return GetBuilder(
-              init: initialController,
-              builder: (InitialController initialController) {
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _containerWithInformationOfAccount(
-                          constraints: constraints,
-                          initialController: initialController,
-                          context: context),
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            children: [
-                              textInformative(text: 'Conta', fontSize: 22.0),
-                              _cardCircleButtons(
-                                  initialController: initialController,
-                                  context: context),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () {
-                                      controller.pageTransition(route: Routes.INCREMENT_MONEY);
-                                    },
-                                    child: circleAvatar(
-                                      iconData: Icons.arrow_circle_up_rounded,
-                                      text: "Depositar",
+    return WillPopScope(
+      onWillPop: () =>
+          Controller(context).finishAndPageTransition(route: Routes.HOME) ?? false,
+      child: SafeArea(
+        child: Scaffold(
+          body: LayoutBuilder(
+            builder: (_, constraints) {
+              return GetBuilder(
+                init: initialController,
+                builder: (InitialController initialController) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _containerWithInformationOfAccount(
+                            constraints: constraints,
+                            initialController: initialController,
+                            context: context),
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              children: [
+                                textInformative(text: 'Conta', fontSize: 22.0),
+                                _cardCircleButtons(
+                                    initialController: initialController,
+                                    context: context),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.pageTransition(
+                                              route: Routes.INCREMENT_MONEY);
+                                        },
+                                        child: circleAvatar(
+                                          iconData: Icons.arrow_circle_up_rounded,
+                                          text: "Depositar",
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      controller.pageTransition(route: Routes.DECREMENT_MONEY);
-                                    },
-                                    child: circleAvatar(
-                                      iconData: Icons.arrow_circle_down,
-                                      text: "Retirar",
+                                    Expanded(
+                                      flex: 2,
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.pageTransition(
+                                              route: Routes.DECREMENT_MONEY);
+                                        },
+                                        child: circleAvatar(
+                                          iconData: Icons.arrow_circle_down,
+                                          text: "Retirar",
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      controller.pageTransition(route: Routes.TRANSACTIONS);
-                                    },
-                                    child: circleAvatar(
-                                      iconData: Icons.assessment_outlined,
-                                      text: "Transações",
+                                    Expanded(
+                                      flex: 2,
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.pageTransition(
+                                              route: Routes.TRANSACTIONS);
+                                        },
+                                        child: circleAvatar(
+                                          iconData: Icons.assessment_outlined,
+                                          text: "Transações",
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      controller.pageTransition(route: Routes.ANNOTATIONS);
-                                    },
-                                    child: circleAvatar(
-                                      iconData: Icons.wysiwyg_outlined,
-                                      text: "Anotações",
+                                    Expanded(
+                                      flex: 2,
+                                      child: InkWell(
+                                        onTap: () {
+                                          controller.pageTransition(
+                                              route: Routes.ANNOTATIONS);
+                                        },
+                                        child: circleAvatar(
+                                          iconData: Icons.wysiwyg_outlined,
+                                          text: "Anotações",
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      _cardLastModifications(context)
-                    ],
-                  ),
-                );
-              },
-            );
-          },
+                        _cardLastModifications(context)
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -168,7 +187,7 @@ Widget _cardLastModifications(BuildContext context) {
     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
       return Card(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20.0,right: 20.0,top: 20.0),
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
           child: Column(
             children: [
               textInformative(
@@ -220,8 +239,7 @@ Widget _widgetCircularCard(
           backgroundColor: initialController.moneyVisible
               ? Colors.transparent
               : Colors.black26,
-          textColor:
-              initialController.moneyVisible ? null : Colors.transparent,
+          textColor: initialController.moneyVisible ? null : Colors.transparent,
           fontWeight: FontWeight.w400),
     ],
   );

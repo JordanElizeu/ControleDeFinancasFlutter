@@ -17,7 +17,7 @@ Widget circleAvatar({required IconData iconData, required String text}) {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(text),
+          child: Text(text,style: TextStyle(fontSize: 13),),
         )
       ],
     ),
