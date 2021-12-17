@@ -10,35 +10,35 @@ class WithdrawMoney extends StatelessWidget {
   const WithdrawMoney({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    WithdrawMoneyController _withdrawMoneyController =
-        WithdrawMoneyController(context);
+    WithdrawMoneyController withdrawMoneyController =
+        WithdrawMoneyController();
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME),
+          Controller().finishAndPageTransition(route: Routes.HOME,context: context),
       child: Scaffold(
         appBar: appBar(title: 'Sacar dinheiro'),
         body: FormToWithdrawAndDeposit(
-            globalKeyTitle: WithdrawMoneyController.formKeyFieldTitle,
-            globalKeyMoney: WithdrawMoneyController.formKeyFieldMoney,
-            globalKeyDesc: WithdrawMoneyController.formKeyFieldDesc,
+            globalKeyTitle: WithdrawMoneyController.formKeyFieldWithdrawTitle,
+            globalKeyMoney: WithdrawMoneyController.formKeyFieldWithdrawMoney,
+            globalKeyDesc: WithdrawMoneyController.formKeyFieldWithdrawDesc,
             textEditingControllerDesc:
-                WithdrawMoneyController.textEditingControllerDesc,
+                WithdrawMoneyController.textEditingControllerWithdrawDesc,
             textEditingControllerMoney:
-                WithdrawMoneyController.textEditingControllerMoney,
+                WithdrawMoneyController.textEditingControllerWithdrawMoney,
             textEditingControllerTitle:
-                WithdrawMoneyController.textEditingControllerTitle,
+                WithdrawMoneyController.textEditingControllerWithdrawTitle,
             functionValidateMoney: (String text) {
-              return _withdrawMoneyController.validateFieldFormTextMoney();
+              return withdrawMoneyController.validateFieldFormTextMoney();
             },
             functionValidateDesc: (String text) {
-              return _withdrawMoneyController.validateFieldFormTextDesc();
+              return withdrawMoneyController.validateFieldFormTextDesc();
             },
             functionValidateTitle: (String text) {
-              return _withdrawMoneyController.validateFieldFormTextTitle();
+              return withdrawMoneyController.validateFieldFormTextTitle();
             },
             labelFieldMoney: 'Valor a sacar',
             functionButtonConfirm: () async {
-              return await _withdrawMoneyController.confirmMoneyWithdraw();
+              return await withdrawMoneyController.confirmMoneyWithdraw(context: context);
             }).formsToWithdrawAndDeposit(),
       ),
     );

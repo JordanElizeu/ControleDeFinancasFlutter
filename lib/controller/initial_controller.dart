@@ -7,9 +7,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class InitialController extends GetxController {
-  final BuildContext _context;
-
-  InitialController(this._context);
 
   IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
@@ -21,7 +18,7 @@ class InitialController extends GetxController {
 
   Future<String> getMoneyInFirebase() async {
     return formatter.format(double.parse(
-        await RepositoryTransactions(_context).repositoryGetQuantityMoney()));
+        await RepositoryTransactions().repositoryGetQuantityMoney()));
   }
 
   String formatMoney(dynamic value) {
@@ -42,16 +39,19 @@ class InitialController extends GetxController {
   void changeIconDataEyeOfMoney() {
     switch (_moneyVisible) {
       case true:
-        _iconData = Icons.visibility;
+        _iconData = Icons.visibility_off;
         _moneyVisible = false;
-        print(_moneyVisible);
         break;
       case false:
-        _iconData = Icons.visibility_off;
+        _iconData = Icons.visibility;
         _moneyVisible = true;
-        print(_moneyVisible);
         break;
     }
     update();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

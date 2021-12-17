@@ -5,40 +5,38 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 class WithdrawMoneyController extends GetxController {
-
-  final BuildContext _context;
-
-  WithdrawMoneyController(this._context);
-
-  static TextEditingController textEditingControllerMoney =
+  static TextEditingController textEditingControllerWithdrawMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerTitle =
+  static TextEditingController textEditingControllerWithdrawTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerDesc =
+  static TextEditingController textEditingControllerWithdrawDesc =
       TextEditingController();
-  static GlobalKey<FormState> formKeyFieldTitle = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
 
-  Future<bool?> confirmMoneyWithdraw() async {
-    final FormState? formValidateTitle = formKeyFieldTitle.currentState;
-    final FormState? formValidateDesc = formKeyFieldDesc.currentState;
-    final FormState? formValidateMoney = formKeyFieldMoney.currentState;
+  Future<bool?> confirmMoneyWithdraw({required BuildContext context}) async {
+    final FormState? formValidateTitle = formKeyFieldWithdrawTitle.currentState;
+    final FormState? formValidateDesc = formKeyFieldWithdrawDesc.currentState;
+    final FormState? formValidateMoney = formKeyFieldWithdrawMoney.currentState;
 
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(formatMoneyValueInField());
-      return await RepositoryTransactions(_context).repositoryMoneyWithdraw(moneyWithdraw,
-          textEditingControllerTitle.text, textEditingControllerDesc.text);
+      return await RepositoryTransactions().repositoryMoneyWithdraw(
+          context: context,
+          title: textEditingControllerWithdrawTitle.text,
+          description: textEditingControllerWithdrawDesc.text,
+          value: moneyWithdraw);
     }
   }
 
-  void clearFields() {
-    textEditingControllerMoney.text = '';
-    textEditingControllerTitle.text = '';
-    textEditingControllerDesc.text = '';
-    Controller(_context).pageTransition(route: Routes.HOME);
+  void clearFields({required BuildContext context}) {
+    textEditingControllerWithdrawMoney.text = '';
+    textEditingControllerWithdrawTitle.text = '';
+    textEditingControllerWithdrawDesc.text = '';
+    Controller().pageTransition(route: Routes.HOME, context: context);
     update();
   }
 
@@ -50,21 +48,21 @@ class WithdrawMoneyController extends GetxController {
   }
 
   String? validateFieldFormTextTitle() {
-    if (textEditingControllerTitle.text.isEmpty) {
+    if (textEditingControllerWithdrawTitle.text.isEmpty) {
       return 'Preencha um título';
     }
     return null;
   }
 
   String? validateFieldFormTextDesc() {
-    if (textEditingControllerDesc.text.isEmpty) {
+    if (textEditingControllerWithdrawDesc.text.isEmpty) {
       return 'Preencha uma descrição';
     }
     return null;
   }
 
   String formatMoneyValueInField() {
-    String formatToString = textEditingControllerMoney.text
+    String formatToString = textEditingControllerWithdrawMoney.text
         .replaceAll(' ', '')
         .replaceAll('R\$', '')
         .replaceAll('.', '')
@@ -78,5 +76,10 @@ class WithdrawMoneyController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

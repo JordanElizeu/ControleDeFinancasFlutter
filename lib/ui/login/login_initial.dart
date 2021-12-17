@@ -33,8 +33,8 @@ class Login extends StatelessWidget {
                           FittedBox(
                             child: const Text(
                               'Finanças ',
-                              style:
-                                  TextStyle(fontSize: 30.0, color: Colors.white),
+                              style: TextStyle(
+                                  fontSize: 30.0, color: Colors.white),
                             ),
                           ),
                           FittedBox(
@@ -43,13 +43,15 @@ class Login extends StatelessWidget {
                                   fontSize: 30.0,
                                   fontFamily: 'Horizon',
                                   color: Colors.orange),
-                              child: AnimatedTextKit(
-                                animatedTexts: [
-                                  animatedText(title: 'Hoje'),
-                                  animatedText(title: 'Amanhã'),
-                                  animatedText(title: 'Sempre'),
-                                ],
-                                totalRepeatCount: 1,
+                              child: FittedBox(
+                                child: AnimatedTextKit(
+                                  animatedTexts: [
+                                    animatedText(title: 'Hoje'),
+                                    animatedText(title: 'Amanhã'),
+                                    animatedText(title: 'Sempre'),
+                                  ],
+                                  totalRepeatCount: 1,
+                                ),
                               ),
                             ),
                           )
@@ -57,7 +59,7 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: constraints.maxWidth*0.50,
+                      width: constraints.maxWidth * 0.50,
                       height: 50.0,
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -67,9 +69,10 @@ class Login extends StatelessWidget {
                                 RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(30.0)))),
-                        child: Text('Acessar minha conta'),
+                        child: FittedBox(child: Text('Acessar minha conta')),
                         onPressed: () {
-                          Controller(context).finishAndPageTransition(route: Routes.LOGIN);
+                          Controller().finishAndPageTransition(
+                              route: Routes.LOGIN, context: context);
                         },
                       ),
                     ),

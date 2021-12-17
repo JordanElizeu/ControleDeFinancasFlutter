@@ -13,45 +13,49 @@ class CreateAnnotations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CreateAnnotations.context = context;
-    AnnotationsController annotationsController =
-        AnnotationsController();
+    AnnotationsController annotationsController = AnnotationsController();
     return AlertDialog(
       title: const Text('Criar anotação'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
-            child: Form(
-              key: AnnotationsController.formKeyFieldTitle,
-              child: WidgetTextField().textField(
-                  label: 'Título',
-                  icon: Icons.wysiwyg,
-                  globalKey: AnnotationsController.formKeyFieldTitle,
-                  controller: AnnotationsController.textEditingControllerTitle,
-                  function: (String text) {
-                    annotationsController.validateFieldFormTextTitle();
-                  }),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+              child: Form(
+                key: AnnotationsController.formKeyFieldAnnotationTitle,
+                child: WidgetTextField().textField(
+                    label: 'Título',
+                    icon: Icons.wysiwyg,
+                    globalKey:
+                        AnnotationsController.formKeyFieldAnnotationTitle,
+                    controller:
+                        AnnotationsController.textEditingControllerTitle,
+                    function: (String text) {
+                      return annotationsController.validateFieldFormTextTitle(text);
+                    }),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
-            child: Form(
-              key: AnnotationsController.formKeyFieldAnnotation,
-              child: WidgetTextField().textField(
-                  label: 'Anotação',
-                  icon: Icons.chat,
-                  globalKey: AnnotationsController.formKeyFieldAnnotation,
-                  controller:
-                      AnnotationsController.textEditingControllerAnnotation,
-                  function: (String text) {
-                    annotationsController.validateFieldFormTextAnnotation();
-                  }),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+              child: Form(
+                key: AnnotationsController.formKeyFieldAnnotation,
+                child: WidgetTextField().textField(
+                    label: 'Anotação',
+                    icon: Icons.chat,
+                    globalKey: AnnotationsController.formKeyFieldAnnotation,
+                    controller:
+                        AnnotationsController.textEditingControllerAnnotation,
+                    function: (String text) {
+                      return annotationsController.validateFieldFormTextAnnotation();
+                    },
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: <Widget>[
         ElevatedButton(
@@ -59,10 +63,12 @@ class CreateAnnotations extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(buttonText),
             ),
-            onPressed: function?? () {
-              annotationsController.sendAnnotation(context: context);
-              Navigator.pop(context);
-            })
+            onPressed: function ??
+                () async {
+                  if(await annotationsController.sendAnnotation(context: context)){
+                    Navigator.pop(context);
+                  }
+                })
       ],
     );
   }
@@ -74,8 +80,10 @@ alertDialogCreateAnnotation({
   String? initialValueTitle,
   Function()? function,
 }) async {
-  AnnotationsController.textEditingControllerAnnotation.text = initialValueAnnotation??'';
-  AnnotationsController.textEditingControllerTitle.text = initialValueTitle??'';
+  AnnotationsController.textEditingControllerAnnotation.text =
+      initialValueAnnotation ?? '';
+  AnnotationsController.textEditingControllerTitle.text =
+      initialValueTitle ?? '';
   await showDialog(
       context: context,
       builder: (contextDialog) {

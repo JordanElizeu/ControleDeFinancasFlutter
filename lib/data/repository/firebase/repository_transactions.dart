@@ -2,32 +2,30 @@ import 'package:app_financeiro/data/provider/firebase/provider_transactions.dart
 import 'package:flutter/cupertino.dart';
 
 class RepositoryTransactions {
-  final BuildContext _context;
-
-  RepositoryTransactions(this._context);
 
   Future<String> repositoryGetQuantityMoney() async {
     return await ProviderTransactions().getAvailableMoney();
   }
 
-  Future<bool?> repositoryMoneyWithdraw(
-      double value, String title, String description) async {
+  Future<bool?> repositoryMoneyWithdraw({
+      required double value, required String title, required String description, required BuildContext context}) async {
     return await ProviderTransactions().moneyWithdraw(
-        moneyWithdraw: value, context: _context, title: title, description: description);
+        moneyWithdraw: value, context: context, title: title, description: description);
   }
 
   Future<bool?> repositoryDepositMoney(
       {required double quantityMoney,
       required String title,
-      required String desc}) async {
+      required String desc,
+      required BuildContext context}) async {
     return await ProviderTransactions().addDeposit(
         title: title,
         description: desc,
         quantityMoney: quantityMoney,
-        context: _context);
+        context: context);
   }
 
-  Future<Map<dynamic, dynamic>> repositoryGetAllTransactions() async {
+  Future<Map> repositoryGetAllTransactions() async {
     return await ProviderTransactions().getAllTransactions();
   }
 }

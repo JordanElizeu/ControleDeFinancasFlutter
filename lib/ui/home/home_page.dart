@@ -15,11 +15,11 @@ class PageHome extends StatelessWidget {
   const PageHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    InitialController initialController = InitialController(context);
-    Controller controller = Controller(context);
+    InitialController initialController = InitialController();
+    Controller controller = Controller();
     return WillPopScope(
-      onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME),
+      onWillPop: () => Controller()
+          .finishAndPageTransition(route: Routes.HOME, context: context),
       child: SafeArea(
         child: Scaffold(
           body: LayoutBuilder(
@@ -47,54 +47,51 @@ class PageHome extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       flex: 2,
-                                      child: InkWell(
-                                        onTap: () {
-                                          controller.pageTransition(
-                                              route: Routes.INCREMENT_MONEY);
+                                      child: circleAvatar(
+                                        function: (){
+                                          return controller.pageTransition(
+                                              route: Routes.INCREMENT_MONEY,
+                                              context: context);
                                         },
-                                        child: circleAvatar(
-                                          iconData: Icons.arrow_circle_up_rounded,
-                                          text: "Depositar",
-                                        ),
+                                        iconData:
+                                            Icons.arrow_circle_up_rounded,
+                                        text: "Depositar",
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
-                                      child: InkWell(
-                                        onTap: () {
-                                          controller.pageTransition(
-                                              route: Routes.DECREMENT_MONEY);
+                                      child: circleAvatar(
+                                        function: (){
+                                          return controller.pageTransition(
+                                              route: Routes.DECREMENT_MONEY,
+                                              context: context);
                                         },
-                                        child: circleAvatar(
-                                          iconData: Icons.arrow_circle_down,
-                                          text: "Retirar",
-                                        ),
+                                        iconData: Icons.arrow_circle_down,
+                                        text: "Retirar",
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
-                                      child: InkWell(
-                                        onTap: () {
-                                          controller.pageTransition(
-                                              route: Routes.TRANSACTIONS);
+                                      child: circleAvatar(
+                                        function: (){
+                                          return controller.pageTransition(
+                                              route: Routes.TRANSACTIONS,
+                                              context: context);
                                         },
-                                        child: circleAvatar(
-                                          iconData: Icons.assessment_outlined,
-                                          text: "Transações",
-                                        ),
+                                        iconData: Icons.assessment_outlined,
+                                        text: "Transações",
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
-                                      child: InkWell(
-                                        onTap: () {
-                                          controller.pageTransition(
-                                              route: Routes.ANNOTATIONS);
+                                      child: circleAvatar(
+                                        function: (){
+                                          return controller.pageTransition(
+                                              route: Routes.ANNOTATIONS,
+                                              context: context);
                                         },
-                                        child: circleAvatar(
-                                          iconData: Icons.wysiwyg_outlined,
-                                          text: "Anotações",
-                                        ),
+                                        iconData: Icons.wysiwyg_outlined,
+                                        text: "Anotações",
                                       ),
                                     ),
                                   ],
@@ -123,12 +120,11 @@ Widget _containerWithInformationOfAccount(
     required InitialController initialController}) {
   return FutureBuilder(
     future: initialController.getUserName(),
-    initialData: 'carregando...',
     builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
       return Container(
         color: Colors.purple,
         width: constraints.maxWidth,
-        height: constraints.maxHeight * 0.25,
+        height: constraints.maxHeight * 0.30,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -136,40 +132,55 @@ Widget _containerWithInformationOfAccount(
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    radius: 25.0,
-                    child: const Icon(
-                      Icons.person_outline,
-                      size: 25,
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: CircleAvatar(
+                        radius: 25.0,
+                        child: const Icon(
+                          Icons.person_outline,
+                          size: 25,
+                        ),
+                      ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      widgetInkwellIcon(
-                          icon: initialController.getIconData,
-                          function: () {
-                            return initialController.changeIconDataEyeOfMoney();
-                          }),
-                      widgetInkwellIcon(
-                          icon: Icons.info_rounded, function: () {}),
-                      widgetInkwellIcon(
-                          icon: Icons.logout,
-                          function: () {
-                            return LoginController(context).logoutAccount();
-                          }),
-                    ],
-                  )
+                  Expanded(
+                    flex: 1,
+                    child: widgetInkwellIcon(
+                        icon: initialController.getIconData,
+                        function: () {
+                          return initialController.changeIconDataEyeOfMoney();
+                        }),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: widgetInkwellIcon(
+                        icon: Icons.info_rounded, function: () {}),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: widgetInkwellIcon(
+                      icon: Icons.logout,
+                      function: () {
+                        return LoginController(context)
+                            .logoutAccount(context: context);
+                      },
+                    ),
+                  ),
                 ],
               ),
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Olá, ${snapshot.data}',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700),
+                  child: FittedBox(
+                    child: Text(
+                      'Olá, ${snapshot.data}',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
               )
@@ -183,7 +194,7 @@ Widget _containerWithInformationOfAccount(
 
 Widget _cardLastModifications(BuildContext context) {
   return FutureBuilder(
-    future: InitialController(context).getMoneyInFirebase(),
+    future: InitialController().getMoneyInFirebase(),
     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
       return Card(
         child: Padding(
@@ -205,7 +216,7 @@ Widget _cardCircleButtons(
     {required InitialController initialController,
     required BuildContext context}) {
   return FutureBuilder(
-    future: InitialController(context).getMoneyInFirebase(),
+    future: InitialController().getMoneyInFirebase(),
     builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
       if (snapshot.data != null) {
         switch (snapshot.connectionState) {

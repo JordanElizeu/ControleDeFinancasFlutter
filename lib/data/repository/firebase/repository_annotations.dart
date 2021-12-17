@@ -10,7 +10,7 @@ class RepositoryAnnotations {
         title: title, annotation: annotation, context: context);
   }
 
-  Future<Map<dynamic, dynamic>> repositoryGetAllAnnotations() {
+  Future<Map<dynamic,dynamic>> repositoryGetAllAnnotations() {
     return ProviderAnnotations().providerGetAllAnnotations();
   }
 

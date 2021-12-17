@@ -13,8 +13,8 @@ class WidgetLogin extends StatelessWidget {
     LoginController _loginController = LoginController(context);
     return WillPopScope(
       onWillPop: () =>
-          Controller(context)
-              .finishAndPageTransition(route: Routes.LOGIN_INITIAL),
+          Controller()
+              .finishAndPageTransition(route: Routes.LOGIN_INITIAL,context: context),
       child: Material(
         child: Center(
           child: FlutterLogin(
@@ -60,12 +60,12 @@ class WidgetLogin extends StatelessWidget {
                 icon: FontAwesomeIcons.google,
                 label: 'Google',
                 callback: () async {
-                  return await _loginController.signInGoogle();
+                  return await _loginController.signInGoogle(context: context);
                 },
               ),
             ],
             onSubmitAnimationCompleted: () {
-              Controller(context).finishAndPageTransition(route: Routes.HOME);
+              Controller().finishAndPageTransition(route: Routes.HOME,context: context);
             },
             onRecoverPassword: LoginController(context).forgotPasswordFirebase,
           ),

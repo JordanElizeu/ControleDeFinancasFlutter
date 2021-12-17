@@ -17,12 +17,12 @@ class ProviderLoginFirebase {
     try {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => Controller(context).finishAndPageTransition(
-                route: Routes.HOME,
-              ));
+          .then((value) => Controller()
+              .finishAndPageTransition(route: Routes.HOME, context: context));
     } on FirebaseAuthException catch (exception) {
-      return ProviderFirebaseExceptions().handleFirebaseLoginWithCredentialsException(
-          exceptionMessage: exception);
+      return ProviderFirebaseExceptions()
+          .handleFirebaseLoginWithCredentialsException(
+              exceptionMessage: exception);
     }
   }
 
@@ -40,7 +40,8 @@ class ProviderLoginFirebase {
     BuildContext context,
   ) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
       _databaseReference
           .child('AppFinancas')
           .child(_auth.currentUser!.uid)
@@ -61,13 +62,13 @@ class ProviderLoginFirebase {
     }
   }
 
-  Future<String?> providerForgotPassword(String email) async{
-    try{
+  Future<String?> providerForgotPassword(String email) async {
+    try {
       await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch(exception){
+    } on FirebaseAuthException catch (exception) {
       return ProviderFirebaseExceptions()
           .handleFirebaseSendPasswordResetEmailException(
-          exceptionMessage: exception);
+              exceptionMessage: exception);
     }
   }
 }

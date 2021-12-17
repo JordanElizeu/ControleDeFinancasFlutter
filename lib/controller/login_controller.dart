@@ -10,8 +10,8 @@ import 'controller.dart';
 
 class LoginController extends GetxController {
   Duration get loginTime => Duration(milliseconds: 2250);
-  final BuildContext _context;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final BuildContext _context;
 
   LoginController(this._context);
 
@@ -23,13 +23,14 @@ class LoginController extends GetxController {
     return false;
   }
 
-  void logoutAccount() async{
+  void logoutAccount({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
-    Controller(_context).finishAndPageTransition(route: Routes.LOGIN_INITIAL);
+    Controller()
+        .finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: context);
   }
 
-  Future<String?> signInGoogle() async {
-    return await RepositoryGoogleConnection().repositorySignInGoogle(_context);
+  Future<String?> signInGoogle({required BuildContext context}) async {
+    return await RepositoryGoogleConnection().repositorySignInGoogle(context);
   }
 
   Future<String?> signInFirebase(LoginData data) {
@@ -41,14 +42,23 @@ class LoginController extends GetxController {
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin()
-          .repositorySignUpFirebase(_context, data.name!, data.password!, data.additionalSignupData!['name'].toString());
+      return RepositoryFirebaseLogin().repositorySignUpFirebase(
+          _context,
+          data.name!,
+          data.password!,
+          data.additionalSignupData!['name'].toString());
     });
   }
 
   Future<String?> forgotPasswordFirebase(String email) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin().repositoryForgotPasswordFirebase(_context, email);
+      return RepositoryFirebaseLogin()
+          .repositoryForgotPasswordFirebase(_context, email);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

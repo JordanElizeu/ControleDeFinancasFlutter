@@ -4,11 +4,15 @@ import 'package:get/get.dart';
 
 class TransactionController extends GetxController{
 
-  final BuildContext _context;
+  static Map<dynamic,dynamic> map = {};
 
-  TransactionController(this._context);
+  Future<Map> getAllTransactions(BuildContext context) async {
+    map = await RepositoryTransactions().repositoryGetAllTransactions();
+    return map;
+  }
 
-  Future<Map<dynamic,dynamic>> getAllTransactions(){
-    return RepositoryTransactions(_context).repositoryGetAllTransactions();
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

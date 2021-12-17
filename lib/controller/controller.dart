@@ -3,20 +3,21 @@ import 'package:get/get.dart';
 
 class Controller extends GetxController{
 
-  final BuildContext _context;
-
-  Controller(this._context);
-
-  void pageTransition({required String route}){
-    Navigator.of(_context).pushNamed(route);
+  void pageTransition({required String route,required BuildContext context}){
+    Navigator.of(context).pushNamed(route);
   }
 
-  Future<bool> finishAndPageTransition({required String route}) async{
+  Future<bool> finishAndPageTransition({required String route,required BuildContext context}) async{
     try{
-      await Navigator.of(_context).popAndPushNamed(route);
+      await Navigator.of(context).popAndPushNamed(route);
       return true;
     }catch(e){
       return false;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

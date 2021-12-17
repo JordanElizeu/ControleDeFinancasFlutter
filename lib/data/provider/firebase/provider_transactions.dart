@@ -4,7 +4,6 @@ import 'package:app_financeiro/ui/widgets/widget_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:uuid/uuid.dart';
 
 class ProviderTransactions {
   final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
@@ -29,7 +28,7 @@ class ProviderTransactions {
           title: title,
           description: description,
           isDeposit: true);
-      DepositMoneyController(context).clearFields();
+      DepositMoneyController().clearFields(context: context);
       return true;
     } catch (exception) {
       alertDialogViewFailure(
@@ -39,19 +38,22 @@ class ProviderTransactions {
     }
   }
 
-  void _addTransaction(
+  Future<void> _addTransaction(
       {required double quantityMoney,
       required String title,
       required String description,
-      required bool isDeposit}) {
-    var uuid = Uuid().v4();
+      required bool isDeposit}) async {
+
+    final map = await getAllTransactions();
+    final String id = '${map.length}a';
+
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
-        .child(uuid)
+        .child(id)
         .child('money')
         .set(quantityMoney);
     _databaseReference
@@ -60,7 +62,7 @@ class ProviderTransactions {
         .child('Account')
         .child('Finances')
         .child('transactions')
-        .child(uuid)
+        .child(id)
         .child('title')
         .set(title);
     _databaseReference
@@ -69,7 +71,7 @@ class ProviderTransactions {
         .child('Account')
         .child('Finances')
         .child('transactions')
-        .child(uuid)
+        .child(id)
         .child('description')
         .set(description);
     _databaseReference
@@ -78,16 +80,16 @@ class ProviderTransactions {
         .child('Account')
         .child('Finances')
         .child('transactions')
-        .child(uuid)
+        .child(id)
         .child('uid')
-        .set(uuid);
+        .set(id);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
-        .child(uuid)
+        .child(id)
         .child('is_deposit')
         .set(isDeposit);
   }
@@ -117,7 +119,7 @@ class ProviderTransactions {
             quantityMoney: moneyWithdraw,
             title: title,
             description: description);
-        WithdrawMoneyController(context).clearFields();
+        WithdrawMoneyController().clearFields(context: context);
         return true;
       } catch (exception) {
         alertDialogViewFailure(
@@ -135,7 +137,7 @@ class ProviderTransactions {
     return event.snapshot.child('money').value.toString();
   }
 
-  Future<Map<dynamic, dynamic>> getAllTransactions() async {
+  Future<Map> getAllTransactions() async {
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref(
         'AppFinancas/${_auth.currentUser!.uid}/Account/Finances/transactions');
     DatabaseEvent event = await _databaseReference.once();

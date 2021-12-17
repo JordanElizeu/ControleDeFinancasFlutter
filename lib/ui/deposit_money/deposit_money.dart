@@ -11,22 +11,22 @@ class DepositMoney extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DepositMoneyController depositMoneyController =
-        DepositMoneyController(context);
+        DepositMoneyController();
     return WillPopScope(
       onWillPop: () =>
-          Controller(context).finishAndPageTransition(route: Routes.HOME),
+          Controller().finishAndPageTransition(route: Routes.HOME,context: context),
       child: Scaffold(
         appBar: appBar(title: 'Depositar dinheiro'),
         body: FormToWithdrawAndDeposit(
-            globalKeyTitle: DepositMoneyController.formKeyFieldTitle,
-            globalKeyMoney: DepositMoneyController.formKeyFieldMoney,
-            globalKeyDesc: DepositMoneyController.formKeyFieldDesc,
+            globalKeyTitle: DepositMoneyController.formKeyFieldDepositTitle,
+            globalKeyMoney: DepositMoneyController.formKeyFieldDepositMoney,
+            globalKeyDesc: DepositMoneyController.formKeyFieldDepositDesc,
             textEditingControllerDesc:
-                DepositMoneyController.textEditingControllerDesc,
+                DepositMoneyController.textEditingControllerDepositDesc,
             textEditingControllerMoney:
-                DepositMoneyController.textEditingControllerMoney,
+                DepositMoneyController.textEditingControllerDepositMoney,
             textEditingControllerTitle:
-                DepositMoneyController.textEditingControllerTitle,
+                DepositMoneyController.textEditingControllerDepositTitle,
             functionValidateMoney: (String text) {
               return depositMoneyController.validateFieldFormTextMoney();
             },
@@ -38,7 +38,7 @@ class DepositMoney extends StatelessWidget {
             },
             labelFieldMoney: 'Valor a depositar',
             functionButtonConfirm: () {
-              return depositMoneyController.confirmDeposit();
+              return depositMoneyController.confirmDeposit(context: context);
             }).formsToWithdrawAndDeposit(),
       ),
     );

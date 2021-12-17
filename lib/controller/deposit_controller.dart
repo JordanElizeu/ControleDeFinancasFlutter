@@ -2,44 +2,39 @@ import 'package:app_financeiro/data/repository/firebase/repository_transactions.
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import 'controller.dart';
 
 class DepositMoneyController extends GetxController {
 
-  final BuildContext _context;
-
-  DepositMoneyController(this._context);
-
-  static TextEditingController textEditingControllerMoney =
+  static TextEditingController textEditingControllerDepositMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerTitle =
+  static TextEditingController textEditingControllerDepositTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerDesc =
+  static TextEditingController textEditingControllerDepositDesc =
       TextEditingController();
-  static GlobalKey<FormState> formKeyFieldTitle = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldDesc = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldMoney = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
 
-  Future<bool?> confirmDeposit() async{
-    final FormState? formValidateTitle = formKeyFieldTitle.currentState;
-    final FormState? formValidateDesc = formKeyFieldDesc.currentState;
-    final FormState? formValidateMoney = formKeyFieldMoney.currentState;
+  Future<bool?> confirmDeposit({required BuildContext context}) async{
+    final FormState? formValidateTitle = formKeyFieldDepositTitle.currentState;
+    final FormState? formValidateDesc = formKeyFieldDepositDesc.currentState;
+    final FormState? formValidateMoney = formKeyFieldDepositMoney.currentState;
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      return await RepositoryTransactions(_context).repositoryDepositMoney(
+      return await RepositoryTransactions().repositoryDepositMoney(
           quantityMoney: double.parse(_formatValueMoney()),
-          desc: textEditingControllerDesc.text,
-          title: textEditingControllerTitle.text);
+          desc: textEditingControllerDepositDesc.text,
+          title: textEditingControllerDepositTitle.text,context: context);
     }
   }
 
-  void clearFields() {
-    textEditingControllerMoney.text = '';
-    textEditingControllerTitle.text = '';
-    textEditingControllerDesc.text = '';
-    Controller(_context).pageTransition(route: Routes.HOME);
+  void clearFields({required BuildContext context}) {
+    textEditingControllerDepositMoney.text = '';
+    textEditingControllerDepositTitle.text = '';
+    textEditingControllerDepositDesc.text = '';
+    Controller().pageTransition(route: Routes.HOME, context: context,);
     update();
   }
 
@@ -51,14 +46,14 @@ class DepositMoneyController extends GetxController {
   }
 
   String? validateFieldFormTextTitle() {
-    if (textEditingControllerTitle.text.isEmpty) {
+    if (textEditingControllerDepositTitle.text.isEmpty) {
       return 'Preencha um título';
     }
     return null;
   }
 
   String? validateFieldFormTextDesc() {
-    if (textEditingControllerDesc.text.isEmpty) {
+    if (textEditingControllerDepositDesc.text.isEmpty) {
       return 'Preencha uma descrição';
     }
     return null;
@@ -74,10 +69,15 @@ class DepositMoneyController extends GetxController {
   }
 
   String _formatValueMoney() {
-    return textEditingControllerMoney.text
+    return textEditingControllerDepositMoney.text
         .replaceAll(' ', '')
         .replaceAll('R\$', '')
         .replaceAll('.', '')
         .replaceAll(',', '.');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
