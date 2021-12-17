@@ -119,6 +119,7 @@ Widget _containerWithInformationOfAccount(
     required BuildContext context,
     required InitialController initialController}) {
   return FutureBuilder(
+    initialData: '',
     future: initialController.getUserName(),
     builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
       return Container(

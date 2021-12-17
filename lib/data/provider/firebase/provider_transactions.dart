@@ -22,7 +22,7 @@ class ProviderTransactions {
           .child('Account')
           .child('Finances')
           .child('money')
-          .set(quantityMoney + availableMoney);
+          .set((quantityMoney + availableMoney).toString());
       _addTransaction(
           quantityMoney: quantityMoney,
           title: title,
@@ -43,10 +43,8 @@ class ProviderTransactions {
       required String title,
       required String description,
       required bool isDeposit}) async {
-
     final map = await getAllTransactions();
     final String id = '${map.length}a';
-
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -137,10 +135,10 @@ class ProviderTransactions {
     return event.snapshot.child('money').value.toString();
   }
 
-  Future<Map> getAllTransactions() async {
+  Future<Map<dynamic,dynamic>> getAllTransactions() async {
     DatabaseReference _databaseReference = FirebaseDatabase.instance.ref(
         'AppFinancas/${_auth.currentUser!.uid}/Account/Finances/transactions');
     DatabaseEvent event = await _databaseReference.once();
-    return event.snapshot.value as Map;
+    return event.snapshot.value != null? event.snapshot.value as Map : {};
   }
 }

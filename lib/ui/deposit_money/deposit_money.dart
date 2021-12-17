@@ -13,20 +13,20 @@ class DepositMoney extends StatelessWidget {
     final DepositMoneyController depositMoneyController =
         DepositMoneyController();
     return WillPopScope(
-      onWillPop: () =>
-          Controller().finishAndPageTransition(route: Routes.HOME,context: context),
+      onWillPop: () => Controller()
+          .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: 'Depositar dinheiro'),
         body: FormToWithdrawAndDeposit(
-            globalKeyTitle: DepositMoneyController.formKeyFieldDepositTitle,
-            globalKeyMoney: DepositMoneyController.formKeyFieldDepositMoney,
-            globalKeyDesc: DepositMoneyController.formKeyFieldDepositDesc,
+            globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
+            globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
+            globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
             textEditingControllerDesc:
-                DepositMoneyController.textEditingControllerDepositDesc,
+                depositMoneyController.textEditingControllerDepositDesc,
             textEditingControllerMoney:
-                DepositMoneyController.textEditingControllerDepositMoney,
+                depositMoneyController.textEditingControllerDepositMoney,
             textEditingControllerTitle:
-                DepositMoneyController.textEditingControllerDepositTitle,
+                depositMoneyController.textEditingControllerDepositTitle,
             functionValidateMoney: (String text) {
               return depositMoneyController.validateFieldFormTextMoney();
             },

@@ -5,15 +5,15 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 class WithdrawMoneyController extends GetxController {
-  static TextEditingController textEditingControllerWithdrawMoney =
+  TextEditingController textEditingControllerWithdrawMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerWithdrawTitle =
+  TextEditingController textEditingControllerWithdrawTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerWithdrawDesc =
+  TextEditingController textEditingControllerWithdrawDesc =
       TextEditingController();
-  static GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
 
   Future<bool?> confirmMoneyWithdraw({required BuildContext context}) async {
     final FormState? formValidateTitle = formKeyFieldWithdrawTitle.currentState;

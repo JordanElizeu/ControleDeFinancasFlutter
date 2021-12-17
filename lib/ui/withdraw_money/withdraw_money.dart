@@ -10,23 +10,22 @@ class WithdrawMoney extends StatelessWidget {
   const WithdrawMoney({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    WithdrawMoneyController withdrawMoneyController =
-        WithdrawMoneyController();
+    WithdrawMoneyController withdrawMoneyController = WithdrawMoneyController();
     return WillPopScope(
-      onWillPop: () =>
-          Controller().finishAndPageTransition(route: Routes.HOME,context: context),
+      onWillPop: () => Controller()
+          .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: 'Sacar dinheiro'),
         body: FormToWithdrawAndDeposit(
-            globalKeyTitle: WithdrawMoneyController.formKeyFieldWithdrawTitle,
-            globalKeyMoney: WithdrawMoneyController.formKeyFieldWithdrawMoney,
-            globalKeyDesc: WithdrawMoneyController.formKeyFieldWithdrawDesc,
+            globalKeyTitle: withdrawMoneyController.formKeyFieldWithdrawTitle,
+            globalKeyMoney: withdrawMoneyController.formKeyFieldWithdrawMoney,
+            globalKeyDesc: withdrawMoneyController.formKeyFieldWithdrawDesc,
             textEditingControllerDesc:
-                WithdrawMoneyController.textEditingControllerWithdrawDesc,
+                withdrawMoneyController.textEditingControllerWithdrawDesc,
             textEditingControllerMoney:
-                WithdrawMoneyController.textEditingControllerWithdrawMoney,
+                withdrawMoneyController.textEditingControllerWithdrawMoney,
             textEditingControllerTitle:
-                WithdrawMoneyController.textEditingControllerWithdrawTitle,
+                withdrawMoneyController.textEditingControllerWithdrawTitle,
             functionValidateMoney: (String text) {
               return withdrawMoneyController.validateFieldFormTextMoney();
             },
@@ -38,7 +37,8 @@ class WithdrawMoney extends StatelessWidget {
             },
             labelFieldMoney: 'Valor a sacar',
             functionButtonConfirm: () async {
-              return await withdrawMoneyController.confirmMoneyWithdraw(context: context);
+              return await withdrawMoneyController.confirmMoneyWithdraw(
+                  context: context);
             }).formsToWithdrawAndDeposit(),
       ),
     );

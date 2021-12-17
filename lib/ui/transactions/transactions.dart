@@ -57,6 +57,7 @@ class Transactions extends StatelessWidget {
         return true;
       },
       child: ListView.builder(
+        reverse: true,
         shrinkWrap: true,
         itemCount: TransactionController.map.length,
         itemBuilder: (BuildContext context, index) {

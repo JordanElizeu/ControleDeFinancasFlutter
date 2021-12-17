@@ -6,15 +6,15 @@ import 'controller.dart';
 
 class DepositMoneyController extends GetxController {
 
-  static TextEditingController textEditingControllerDepositMoney =
+  TextEditingController textEditingControllerDepositMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerDepositTitle =
+  TextEditingController textEditingControllerDepositTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerDepositDesc =
+  TextEditingController textEditingControllerDepositDesc =
       TextEditingController();
-  static GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
 
   Future<bool?> confirmDeposit({required BuildContext context}) async{
     final FormState? formValidateTitle = formKeyFieldDepositTitle.currentState;
