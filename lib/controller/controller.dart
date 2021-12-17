@@ -15,9 +15,4 @@ class Controller extends GetxController{
       return false;
     }
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

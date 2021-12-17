@@ -3,26 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class AnnotationsController extends GetxController {
-  static Map<dynamic, dynamic> map = {};
+  Map<dynamic, dynamic> map = {};
 
-  static TextEditingController textEditingControllerTitle =
+  TextEditingController textEditingControllerTitle = TextEditingController();
+  TextEditingController textEditingControllerAnnotation =
       TextEditingController();
-  static TextEditingController textEditingControllerAnnotation =
-      TextEditingController();
-  static GlobalKey<FormState> formKeyFieldAnnotationTitle =
-      GlobalKey<FormState>();
-  static GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldAnnotationTitle = GlobalKey<FormState>();
+  GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
 
-  Future<bool> sendAnnotation({required BuildContext context}) async {
+  Future<bool> sendAnnotation(
+      {required BuildContext context,
+      required String title,
+      required String annotation}) async {
     final FormState? formValidateTitle =
         formKeyFieldAnnotationTitle.currentState;
     final FormState? formValidateAnnotation =
         formKeyFieldAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
       RepositoryAnnotations().repositorySendAnnotation(
-          title: textEditingControllerTitle.text,
-          annotation: textEditingControllerAnnotation.text,
-          context: context);
+          title: title, annotation: annotation, context: context);
       await Future.delayed(Duration(milliseconds: 300))
           .then((value) async => {await getAllAnnotations(), update()});
       return true;
@@ -37,20 +36,19 @@ class AnnotationsController extends GetxController {
   }
 
   Future<Map<dynamic, dynamic>> getAllAnnotations() async {
-    AnnotationsController.map =
-        await RepositoryAnnotations().repositoryGetAllAnnotations();
-    return AnnotationsController.map;
+    map = await RepositoryAnnotations().repositoryGetAllAnnotations();
+    return map;
   }
 
-  String? validateFieldFormTextTitle(text) {
+  String? validateFieldFormTextTitle({required String text}) {
     if (text.isEmpty) {
       return 'Preencha um título';
     }
     return null;
   }
 
-  String? validateFieldFormTextAnnotation() {
-    if (textEditingControllerAnnotation.text.isEmpty) {
+  String? validateFieldFormTextAnnotation({required String text}) {
+    if (text.isEmpty) {
       return 'Preencha uma anotação';
     }
     return null;
@@ -64,16 +62,20 @@ class AnnotationsController extends GetxController {
       {required String uid,
       required BuildContext context,
       required int index}) {
-    AnnotationsController.map[index] = {
+    map[index] = {
       0: textEditingControllerTitle.text,
       1: textEditingControllerAnnotation.text
     };
-    RepositoryAnnotations().editAnnotation(uid: uid, context: context);
+    RepositoryAnnotations().editAnnotation(
+        uid: uid,
+        context: context,
+        annotation: textEditingControllerAnnotation.text,
+        title: textEditingControllerTitle.text);
     update();
   }
 
   void recoverAnnotation({required Map<dynamic, dynamic> map}) async {
-    AnnotationsController.map.addAll(map);
+    this.map.addAll(map);
     update();
   }
 

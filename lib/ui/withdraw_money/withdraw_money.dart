@@ -37,7 +37,7 @@ class WithdrawMoney extends StatelessWidget {
             },
             labelFieldMoney: 'Valor a sacar',
             functionButtonConfirm: () async {
-              return await withdrawMoneyController.confirmMoneyWithdraw(
+              return withdrawMoneyController.confirmMoneyWithdraw(
                   context: context);
             }).formsToWithdrawAndDeposit(),
       ),

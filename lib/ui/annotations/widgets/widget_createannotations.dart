@@ -7,8 +7,17 @@ class CreateAnnotations extends StatelessWidget {
   final String buttonText = 'Confirmar';
   static BuildContext? context;
   final Function()? function;
+  final TextEditingController annotationTextController;
+  final TextEditingController titleTextController;
+  final GlobalKey<FormState> annotationGlobalKey;
+  final GlobalKey<FormState> titleGlobalKey;
 
-  CreateAnnotations(this.function);
+  CreateAnnotations(
+      {required this.function,
+      required this.annotationTextController,
+      required this.titleTextController,
+      required this.annotationGlobalKey,
+      required this.titleGlobalKey});
 
   @override
   Widget build(BuildContext context) {
@@ -25,32 +34,31 @@ class CreateAnnotations extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
-                key: AnnotationsController.formKeyFieldAnnotationTitle,
+                key: titleGlobalKey,
                 child: WidgetTextField().textField(
                     label: 'Título',
                     icon: Icons.wysiwyg,
-                    globalKey:
-                        AnnotationsController.formKeyFieldAnnotationTitle,
-                    controller:
-                        AnnotationsController.textEditingControllerTitle,
+                    globalKey: titleGlobalKey,
+                    controller: titleTextController,
                     function: (String text) {
-                      return annotationsController.validateFieldFormTextTitle(text);
+                      return annotationsController.validateFieldFormTextTitle(
+                          text: text);
                     }),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
-                key: AnnotationsController.formKeyFieldAnnotation,
+                key: annotationGlobalKey,
                 child: WidgetTextField().textField(
-                    label: 'Anotação',
-                    icon: Icons.chat,
-                    globalKey: AnnotationsController.formKeyFieldAnnotation,
-                    controller:
-                        AnnotationsController.textEditingControllerAnnotation,
-                    function: (String text) {
-                      return annotationsController.validateFieldFormTextAnnotation();
-                    },
+                  label: 'Anotação',
+                  icon: Icons.chat,
+                  globalKey: annotationGlobalKey,
+                  controller: annotationTextController,
+                  function: (String text) {
+                    return annotationsController
+                        .validateFieldFormTextAnnotation(text: text);
+                  },
                 ),
               ),
             ),
@@ -65,7 +73,10 @@ class CreateAnnotations extends StatelessWidget {
             ),
             onPressed: function ??
                 () async {
-                  if(await annotationsController.sendAnnotation(context: context)){
+                  if (await annotationsController.sendAnnotation(
+                      context: context,
+                      annotation: annotationTextController.text,
+                      title: titleTextController.text)) {
                     Navigator.pop(context);
                   }
                 })
@@ -76,17 +87,25 @@ class CreateAnnotations extends StatelessWidget {
 
 alertDialogCreateAnnotation({
   required BuildContext context,
+  required TextEditingController annotationTextController,
+  required TextEditingController titleTextController,
+  required GlobalKey<FormState> annotationGlobalKey,
+  required GlobalKey<FormState> titleGlobalKey,
   String? initialValueAnnotation,
   String? initialValueTitle,
   Function()? function,
 }) async {
-  AnnotationsController.textEditingControllerAnnotation.text =
-      initialValueAnnotation ?? '';
-  AnnotationsController.textEditingControllerTitle.text =
-      initialValueTitle ?? '';
+  annotationTextController.text = initialValueAnnotation ?? '';
+  titleTextController.text = initialValueTitle ?? '';
   await showDialog(
-      context: context,
-      builder: (contextDialog) {
-        return CreateAnnotations(function);
-      });
+    context: context,
+    builder: (contextDialog) {
+      return CreateAnnotations(
+          titleGlobalKey: titleGlobalKey,
+          annotationGlobalKey: annotationGlobalKey,
+          titleTextController: titleTextController,
+          annotationTextController: annotationTextController,
+          function: function);
+    },
+  );
 }

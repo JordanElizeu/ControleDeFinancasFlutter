@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class TransactionController extends GetxController{
 
-  static Map<dynamic,dynamic> map = {};
+  Map<dynamic,dynamic> map = {};
 
   Future<Map> getAllTransactions(BuildContext context) async {
     map = await RepositoryTransactions().repositoryGetAllTransactions();

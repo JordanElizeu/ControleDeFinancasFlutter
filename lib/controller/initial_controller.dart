@@ -17,8 +17,8 @@ class InitialController extends GetxController {
   IconData get getIconData => _iconData;
 
   Future<String> getMoneyInFirebase() async {
-    return formatter.format(double.parse(
-        await RepositoryTransactions().repositoryGetQuantityMoney()));
+    Map value = await RepositoryTransactions().repositoryGetQuantityMoney();
+    return formatter.format(double.parse(value['money'].toString()));
   }
 
   String formatMoney(dynamic value) {

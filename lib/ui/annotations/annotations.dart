@@ -32,9 +32,22 @@ class Annotations extends StatelessWidget {
                       context: context,
                       function: () async {
                         await annotationController.sendAnnotation(
-                            context: context);
+                          context: context,
+                          annotation: annotationController
+                              .textEditingControllerAnnotation.text,
+                          title: annotationController
+                              .textEditingControllerTitle.text,
+                        );
                         Navigator.pop(CreateAnnotations.context!);
-                      });
+                      },
+                      titleTextController:
+                          annotationController.textEditingControllerTitle,
+                      annotationTextController:
+                          annotationController.textEditingControllerAnnotation,
+                      titleGlobalKey:
+                          annotationController.formKeyFieldAnnotationTitle,
+                      annotationGlobalKey:
+                          annotationController.formKeyFieldAnnotation);
                 },
                 child: Icon(Icons.message),
               ),
@@ -45,7 +58,7 @@ class Annotations extends StatelessWidget {
           builder: (_) => FutureBuilder(
             future: _.getAllAnnotations(),
             builder: (BuildContext context,
-                AsyncSnapshot<Map<dynamic,dynamic>> snapshot) {
+                AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
               if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data!.length > 0) {
@@ -72,7 +85,7 @@ class Annotations extends StatelessWidget {
     );
   }
 
-  Widget _widgetFutureBuilder(AsyncSnapshot<Map<dynamic,dynamic>> snapshot,
+  Widget _widgetFutureBuilder(AsyncSnapshot<Map<dynamic, dynamic>> snapshot,
       AnnotationsController annotationController) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
@@ -83,7 +96,7 @@ class Annotations extends StatelessWidget {
       child: ListView.builder(
         reverse: true,
         shrinkWrap: true,
-        itemCount: AnnotationsController.map.length,
+        itemCount: annotationController.map.length,
         itemBuilder: (BuildContext context, index) {
           bool cancelRemove = false;
           return Dismissible(
@@ -98,7 +111,7 @@ class Annotations extends StatelessWidget {
                             context: context)
                       }
                   });
-              AnnotationsController.map.remove(index);
+              annotationController.map.remove(index);
               final snackBar = SnackBar(
                 padding: EdgeInsets.all(10),
                 backgroundColor: Colors.purple,
@@ -188,15 +201,25 @@ class Annotations extends StatelessWidget {
                             onPressed: () {
                               alertDialogCreateAnnotation(
                                   context: context,
-                                  initialValueAnnotation: snapshot.data!['${index}a']['annotation'],
-                                  initialValueTitle: snapshot.data!['${index}a']['title'],
+                                  initialValueAnnotation:
+                                      snapshot.data!['${index}a']['annotation'],
+                                  initialValueTitle: snapshot.data!['${index}a']
+                                      ['title'],
                                   function: () {
                                     annotationController.editAnnotation(
                                         uid: snapshot.data!['${index}a']['uid'],
                                         context: context,
                                         index: index);
                                     Navigator.pop(CreateAnnotations.context!);
-                                  });
+                                  },
+                                  titleTextController: annotationController
+                                      .textEditingControllerTitle,
+                                  annotationTextController: annotationController
+                                      .textEditingControllerAnnotation,
+                                  titleGlobalKey: annotationController
+                                      .formKeyFieldAnnotationTitle,
+                                  annotationGlobalKey: annotationController
+                                      .formKeyFieldAnnotation);
                             },
                             child: Icon(Icons.edit),
                           ),

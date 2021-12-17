@@ -1,41 +1,35 @@
-import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 
 class DepositMoneyController extends GetxController {
+  final TextEditingController textEditingControllerDepositMoney =
+      TextEditingController();
+  final TextEditingController textEditingControllerDepositTitle =
+      TextEditingController();
+  final TextEditingController textEditingControllerDepositDesc =
+      TextEditingController();
+  final GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
 
-  TextEditingController textEditingControllerDepositMoney =
-      TextEditingController();
-  TextEditingController textEditingControllerDepositTitle =
-      TextEditingController();
-  TextEditingController textEditingControllerDepositDesc =
-      TextEditingController();
-  GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
-
-  Future<bool?> confirmDeposit({required BuildContext context}) async{
+  Future<void> confirmDeposit({required BuildContext context}) async {
     final FormState? formValidateTitle = formKeyFieldDepositTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldDepositDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldDepositMoney.currentState;
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      return await RepositoryTransactions().repositoryDepositMoney(
+      await RepositoryDeposit().repositoryAddDeposit(
           quantityMoney: double.parse(_formatValueMoney()),
-          desc: textEditingControllerDepositDesc.text,
-          title: textEditingControllerDepositTitle.text,context: context);
+          title: textEditingControllerDepositTitle.text,
+          context: context,
+          description: textEditingControllerDepositDesc.text);
+      Controller()
+          .finishAndPageTransition(route: Routes.HOME, context: context);
     }
-  }
-
-  void clearFields({required BuildContext context}) {
-    textEditingControllerDepositMoney.text = '';
-    textEditingControllerDepositTitle.text = '';
-    textEditingControllerDepositDesc.text = '';
-    Controller().pageTransition(route: Routes.HOME, context: context,);
-    update();
   }
 
   String? validateFieldFormTextMoney() {

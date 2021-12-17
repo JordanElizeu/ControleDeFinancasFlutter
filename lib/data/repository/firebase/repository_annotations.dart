@@ -10,12 +10,17 @@ class RepositoryAnnotations {
         title: title, annotation: annotation, context: context);
   }
 
-  Future<Map<dynamic,dynamic>> repositoryGetAllAnnotations() {
+  Future<Map<dynamic, dynamic>> repositoryGetAllAnnotations() {
     return ProviderAnnotations().providerGetAllAnnotations();
   }
 
-  void editAnnotation({required String uid, required BuildContext context}) {
-    ProviderAnnotations().providerEditAnnotation(uid: uid, context: context);
+  void editAnnotation(
+      {required String uid,
+      required BuildContext context,
+      required String annotation,
+      required String title}) {
+    ProviderAnnotations().providerEditAnnotation(
+        uid: uid, context: context, annotation: annotation, title: title);
   }
 
   void removeAnnotation({required String uid}) {

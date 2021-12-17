@@ -1,21 +1,21 @@
-import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_withdraw.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 
 class WithdrawMoneyController extends GetxController {
-  TextEditingController textEditingControllerWithdrawMoney =
+  final TextEditingController textEditingControllerWithdrawMoney =
       TextEditingController();
-  TextEditingController textEditingControllerWithdrawTitle =
+  final TextEditingController textEditingControllerWithdrawTitle =
       TextEditingController();
-  TextEditingController textEditingControllerWithdrawDesc =
+  final TextEditingController textEditingControllerWithdrawDesc =
       TextEditingController();
-  GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
 
-  Future<bool?> confirmMoneyWithdraw({required BuildContext context}) async {
+  Future<void> confirmMoneyWithdraw({required BuildContext context}) async {
     final FormState? formValidateTitle = formKeyFieldWithdrawTitle.currentState;
     final FormState? formValidateDesc = formKeyFieldWithdrawDesc.currentState;
     final FormState? formValidateMoney = formKeyFieldWithdrawMoney.currentState;
@@ -24,20 +24,12 @@ class WithdrawMoneyController extends GetxController {
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(formatMoneyValueInField());
-      return await RepositoryTransactions().repositoryMoneyWithdraw(
+      await RepositoryWithdraw().repositoryMoneyWithdraw(
           context: context,
           title: textEditingControllerWithdrawTitle.text,
           description: textEditingControllerWithdrawDesc.text,
-          value: moneyWithdraw);
+          moneyWithdraw: moneyWithdraw);
     }
-  }
-
-  void clearFields({required BuildContext context}) {
-    textEditingControllerWithdrawMoney.text = '';
-    textEditingControllerWithdrawTitle.text = '';
-    textEditingControllerWithdrawDesc.text = '';
-    Controller().pageTransition(route: Routes.HOME, context: context);
-    update();
   }
 
   String? validateFieldFormTextMoney() {
@@ -52,6 +44,12 @@ class WithdrawMoneyController extends GetxController {
       return 'Preencha um título';
     }
     return null;
+  }
+
+  void clearFields() {
+    formKeyFieldWithdrawTitle.currentState!.reset();
+    formKeyFieldWithdrawDesc.currentState!.reset();
+    formKeyFieldWithdrawMoney.currentState!.reset();
   }
 
   String? validateFieldFormTextDesc() {

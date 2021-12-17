@@ -41,7 +41,10 @@ class ProviderAnnotations {
   }
 
   void providerEditAnnotation(
-      {required String uid, required BuildContext context}) {
+      {required String uid,
+      required BuildContext context,
+      required String annotation,
+      required String title}) {
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -49,7 +52,7 @@ class ProviderAnnotations {
         .child('Annotations')
         .child(uid)
         .child('annotation')
-        .set(AnnotationsController.textEditingControllerAnnotation.text);
+        .set(annotation);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -57,7 +60,7 @@ class ProviderAnnotations {
         .child('Annotations')
         .child(uid)
         .child('title')
-        .set(AnnotationsController.textEditingControllerTitle.text);
+        .set(title);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -75,7 +78,7 @@ class ProviderAnnotations {
     databaseReference.remove();
   }
 
-  Future<Map<dynamic,dynamic>> providerGetAllAnnotations() async {
+  Future<Map<dynamic, dynamic>> providerGetAllAnnotations() async {
     final DatabaseReference databaseReference = FirebaseDatabase.instance
         .ref('AppFinancas/${_auth.currentUser!.uid}/Account/Annotations');
     DatabaseEvent event = await databaseReference.once();

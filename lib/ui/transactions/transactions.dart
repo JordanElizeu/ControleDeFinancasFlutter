@@ -25,7 +25,7 @@ class Transactions extends StatelessWidget {
             future: _.getAllTransactions(context),
             builder: (BuildContext context,
                 AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
-              if (snapshot.hasData) {
+              if (snapshot.hasData && snapshot.data!.length > 0) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                     return error404();
@@ -37,6 +37,8 @@ class Transactions extends StatelessWidget {
                     return _listTile(snapshot, transactionController);
                 }
               } else if (snapshot.hasError) {
+                return error404(title: 'Não houve transações');
+              } else if (snapshot.hasData && snapshot.data!.length <= 0){
                 return error404(title: 'Não houve transações');
               }
               return progress();
@@ -59,7 +61,7 @@ class Transactions extends StatelessWidget {
       child: ListView.builder(
         reverse: true,
         shrinkWrap: true,
-        itemCount: TransactionController.map.length,
+        itemCount: transactionController.map.length,
         itemBuilder: (BuildContext context, index) {
           return Padding(
             padding: const EdgeInsets.all(10.0),
@@ -107,7 +109,7 @@ class Transactions extends StatelessWidget {
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
-                        '${InitialController().formatMoney(snapshot.data!.values.toList().asMap()[index]['money'])}',
+                        '${InitialController().formatMoney(snapshot.data!['${index}a']['money'])}',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: snapshot.data!['${index}a']

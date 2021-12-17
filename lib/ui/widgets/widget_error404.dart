@@ -21,7 +21,6 @@ Widget error404({String? title}) {
                     title ?? 'Erro 404',
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 22.0,
                         fontWeight: FontWeight.w700),
                   ),
                 ),
