@@ -1,6 +1,7 @@
 import 'package:app_financeiro/controller/controller.dart';
 import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
+import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_inkwellicon.dart';
@@ -15,6 +16,7 @@ class PageHome extends StatelessWidget {
   const PageHome({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(TransactionController());
     InitialController initialController = InitialController();
     Controller controller = Controller();
     return WillPopScope(
@@ -27,82 +29,79 @@ class PageHome extends StatelessWidget {
               return GetBuilder(
                 init: initialController,
                 builder: (InitialController initialController) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _containerWithInformationOfAccount(
-                            constraints: constraints,
-                            initialController: initialController,
-                            context: context),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              children: [
-                                textInformative(text: 'Conta', fontSize: 22.0),
-                                _cardCircleButtons(
-                                    initialController: initialController,
-                                    context: context),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: circleAvatar(
-                                        function: (){
-                                          return controller.pageTransition(
-                                              route: Routes.INCREMENT_MONEY,
-                                              context: context);
-                                        },
-                                        iconData:
-                                            Icons.arrow_circle_up_rounded,
-                                        text: "Depositar",
-                                      ),
+                  return ListView(
+                    children: [
+                      _containerWithInformationOfAccount(
+                          constraints: constraints,
+                          initialController: initialController,
+                          context: context),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              textInformative(text: 'Conta', fontSize: 22.0),
+                              _cardCircleButtons(
+                                  initialController: initialController,
+                                  context: context),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: circleAvatar(
+                                      function: () {
+                                        return controller.pageTransition(
+                                            route: Routes.INCREMENT_MONEY,
+                                            context: context);
+                                      },
+                                      iconData: Icons.arrow_circle_up_rounded,
+                                      text: "Depositar",
                                     ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: circleAvatar(
-                                        function: (){
-                                          return controller.pageTransition(
-                                              route: Routes.DECREMENT_MONEY,
-                                              context: context);
-                                        },
-                                        iconData: Icons.arrow_circle_down,
-                                        text: "Retirar",
-                                      ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: circleAvatar(
+                                      function: () {
+                                        return controller.pageTransition(
+                                            route: Routes.DECREMENT_MONEY,
+                                            context: context);
+                                      },
+                                      iconData: Icons.arrow_circle_down,
+                                      text: "Retirar",
                                     ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: circleAvatar(
-                                        function: (){
-                                          return controller.pageTransition(
-                                              route: Routes.TRANSACTIONS,
-                                              context: context);
-                                        },
-                                        iconData: Icons.assessment_outlined,
-                                        text: "Transações",
-                                      ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: circleAvatar(
+                                      function: () {
+                                        return controller.pageTransition(
+                                            route: Routes.TRANSACTIONS,
+                                            context: context);
+                                      },
+                                      iconData: Icons.assessment_outlined,
+                                      text: "Transações",
                                     ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: circleAvatar(
-                                        function: (){
-                                          return controller.pageTransition(
-                                              route: Routes.ANNOTATIONS,
-                                              context: context);
-                                        },
-                                        iconData: Icons.wysiwyg_outlined,
-                                        text: "Anotações",
-                                      ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: circleAvatar(
+                                      function: () {
+                                        return controller.pageTransition(
+                                            route: Routes.ANNOTATIONS,
+                                            context: context);
+                                      },
+                                      iconData: Icons.wysiwyg_outlined,
+                                      text: "Anotações",
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        _cardLastModifications(context)
-                      ],
-                    ),
+                      ),
+                      _cardLastModifications(context),
+                    ],
                   );
                 },
               );
@@ -194,22 +193,114 @@ Widget _containerWithInformationOfAccount(
 }
 
 Widget _cardLastModifications(BuildContext context) {
-  return FutureBuilder(
-    future: InitialController().getMoneyInFirebase(),
-    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-          child: Column(
-            children: [
-              textInformative(
-                  text: 'Últimas atualizações ${snapshot.data}',
-                  fontSize: 22.0),
-            ],
-          ),
-        ),
-      );
-    },
+  return GetBuilder<TransactionController>(
+    builder: (_) => FutureBuilder(
+      future: _.getAllTransactions(context),
+      builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
+        int position = snapshot.data!.length - 4;
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return progress();
+          case ConnectionState.waiting:
+            return progress();
+          case ConnectionState.active:
+            return progress();
+          case ConnectionState.done:
+            return Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    title: textInformative(
+                        text: 'Últimas transações', fontSize: 22.0),
+                  ),
+                  NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification:
+                        (OverscrollIndicatorNotification overscroll) {
+                      overscroll.disallowGlow();
+                      //this class has how function of remove effect scroll listview
+                      return true;
+                    },
+                    child: ListView.builder(
+                      reverse: true,
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount:
+                          snapshot.data!.length > 3 ? 3 : snapshot.data!.length,
+                      itemBuilder: (BuildContext context, index) {
+                        position++;
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, top: 20, bottom: 20),
+                          child: Column(
+                            children: [
+                              Card(
+                                color: Colors.purple,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 0,
+                                        child: CircleAvatar(
+                                          child: Icon(Icons.person),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            snapshot.data!['${position}a']
+                                                    ['title']
+                                                .toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 0,
+                                        child: CircleAvatar(
+                                          child: Image.asset(
+                                              'assets/images/foguete.png'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Card(
+                                child: ListTile(
+                                  title: Text(snapshot.data!['${position}a']
+                                          ['description']
+                                      .toString()),
+                                  subtitle: Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(
+                                      '${InitialController().formatMoney(snapshot.data!['${position}a']['money'])}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: snapshot.data!['${position}a']
+                                                  ['is_deposit']
+                                              ? Colors.green
+                                              : Colors.red),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            );
+        }
+      },
+    ),
   );
 }
 

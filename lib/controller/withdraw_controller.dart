@@ -29,6 +29,7 @@ class WithdrawMoneyController extends GetxController {
           title: textEditingControllerWithdrawTitle.text,
           description: textEditingControllerWithdrawDesc.text,
           moneyWithdraw: moneyWithdraw);
+      Controller().finishAndPageTransition(route: Routes.HOME, context: context);
     }
   }
 
