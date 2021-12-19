@@ -16,7 +16,7 @@ class WithdrawMoney extends StatelessWidget {
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: 'Sacar dinheiro'),
-        body: FormToWithdrawAndDeposit(
+        body: FormsToWithdrawAndDeposit(
             globalKeyTitle: withdrawMoneyController.formKeyFieldWithdrawTitle,
             globalKeyMoney: withdrawMoneyController.formKeyFieldWithdrawMoney,
             globalKeyDesc: withdrawMoneyController.formKeyFieldWithdrawDesc,
@@ -39,7 +39,7 @@ class WithdrawMoney extends StatelessWidget {
             functionButtonConfirm: () async {
               return withdrawMoneyController.confirmMoneyWithdraw(
                   context: context);
-            }).formsToWithdrawAndDeposit(),
+            }),
       ),
     );
   }

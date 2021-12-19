@@ -4,7 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 
-class FormToWithdrawAndDeposit {
+class FormsToWithdrawAndDeposit extends StatelessWidget {
+  const FormsToWithdrawAndDeposit(
+      {Key? key,
+      required this.globalKeyTitle,
+      required this.globalKeyDesc,
+      required this.globalKeyMoney,
+      required this.textEditingControllerTitle,
+      required this.textEditingControllerDesc,
+      required this.textEditingControllerMoney,
+      required this.functionValidateTitle,
+      required this.functionValidateDesc,
+      required this.functionValidateMoney,
+      required this.functionButtonConfirm,
+      required this.labelFieldMoney})
+      : super(key: key);
+
   final GlobalKey<FormState> globalKeyTitle;
   final GlobalKey<FormState> globalKeyDesc;
   final GlobalKey<FormState> globalKeyMoney;
@@ -14,25 +29,11 @@ class FormToWithdrawAndDeposit {
   final Function(String text) functionValidateTitle;
   final Function(String text) functionValidateDesc;
   final Function(String text) functionValidateMoney;
-  final Future<void>Function() functionButtonConfirm;
+  final Future<void> Function() functionButtonConfirm;
   final String labelFieldMoney;
 
-  FormToWithdrawAndDeposit({
-    required this.globalKeyTitle,
-    required this.globalKeyDesc,
-    required this.globalKeyMoney,
-    required this.textEditingControllerTitle,
-    required this.textEditingControllerDesc,
-    required this.textEditingControllerMoney,
-    required this.functionValidateTitle,
-    required this.functionValidateDesc,
-    required this.functionValidateMoney,
-    required this.functionButtonConfirm,
-    required this.labelFieldMoney,
-  });
-
-  Widget formsToWithdrawAndDeposit() {
-    WidgetTextField _widgetTextField = WidgetTextField();
+  @override
+  Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +44,7 @@ class FormToWithdrawAndDeposit {
               children: [
                 Form(
                   key: globalKeyTitle,
-                  child: _widgetTextField.textField(
+                  child: ValidateForm(
                       label: 'Título',
                       icon: Icons.wysiwyg,
                       controller: textEditingControllerTitle,
@@ -51,17 +52,16 @@ class FormToWithdrawAndDeposit {
                       function: functionValidateTitle),
                 ),
                 Form(
-                  key: globalKeyDesc,
-                  child: _widgetTextField.textField(
-                      icon: Icons.chat,
-                      label: 'Descrição',
-                      controller: textEditingControllerDesc,
-                      globalKey: globalKeyDesc,
-                      function: functionValidateDesc),
-                ),
+                    key: globalKeyDesc,
+                    child: ValidateForm(
+                        icon: Icons.chat,
+                        label: 'Descrição',
+                        controller: textEditingControllerDesc,
+                        globalKey: globalKeyDesc,
+                        function: functionValidateDesc)),
                 Form(
                   key: globalKeyMoney,
-                  child: _widgetTextField.textField(
+                  child: ValidateForm(
                       label: labelFieldMoney,
                       textAlign: TextAlign.center,
                       textInputType: TextInputType.number,

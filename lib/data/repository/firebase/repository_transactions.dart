@@ -1,6 +1,5 @@
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class RepositoryTransactions {
   final ProviderTransactions _providerTransactions = ProviderTransactions(

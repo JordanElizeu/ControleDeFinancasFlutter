@@ -10,15 +10,23 @@ class InitialController extends GetxController {
 
   IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
+  static String moneyValue = '';
   NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
 
-  bool get moneyVisible => _moneyVisible;
+  IconData get iconData => _iconData;
 
-  IconData get getIconData => _iconData;
+  String? moneyValueFormatted(){
+    if(moneyValue.length > 0) {
+      return formatter.format(double.parse(moneyValue));
+    }
+    return null;
+  }
 
   Future<String> getMoneyInFirebase() async {
-    Map value = await RepositoryTransactions().repositoryGetQuantityMoney();
-    return formatter.format(double.parse(value['money'].toString()));
+    await RepositoryTransactions().repositoryGetQuantityMoney().then((value) => {
+      moneyValue = value['money'].toString(),
+    });
+    return formatter.format(double.parse(moneyValue));
   }
 
   String formatMoney(dynamic value) {
@@ -54,4 +62,6 @@ class InitialController extends GetxController {
   void dispose() {
     super.dispose();
   }
+
+  bool get moneyVisible => _moneyVisible;
 }

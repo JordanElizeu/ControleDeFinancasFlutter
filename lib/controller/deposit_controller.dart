@@ -1,3 +1,4 @@
+import 'package:app_financeiro/controller/initial_controller.dart';
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
 
-class DepositMoneyController extends GetxController {
+class DepositMoneyController extends GetxController with DisposableWidget{
   final TextEditingController textEditingControllerDepositMoney =
       TextEditingController();
   final TextEditingController textEditingControllerDepositTitle =
@@ -31,6 +32,9 @@ class DepositMoneyController extends GetxController {
               double.parse(_formatValueMoney()),
               isDeposit: true));
       if (success) {
+        double valueAvailable = double.parse(InitialController.moneyValue);
+        double newValue = double.parse(_formatValueMoney());
+        InitialController.moneyValue = (valueAvailable + newValue).toString();
         Controller()
             .finishAndPageTransition(route: Routes.HOME, context: context);
       }
@@ -77,6 +81,7 @@ class DepositMoneyController extends GetxController {
 
   @override
   void dispose() {
+    cancelSubscriptions();
     super.dispose();
   }
 }

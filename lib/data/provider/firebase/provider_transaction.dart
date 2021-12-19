@@ -3,7 +3,7 @@ import 'package:app_financeiro/data/model/model_transaction/model_transaction.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class ProviderTransactions {
+class ProviderTransactions{
   final DatabaseReference databaseReference;
   final FirebaseAuth firebaseAuth;
 

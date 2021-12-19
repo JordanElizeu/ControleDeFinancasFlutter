@@ -35,7 +35,7 @@ class CreateAnnotations extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
                 key: titleGlobalKey,
-                child: WidgetTextField().textField(
+                child: ValidateForm(
                     label: 'Título',
                     icon: Icons.wysiwyg,
                     globalKey: titleGlobalKey,
@@ -50,16 +50,15 @@ class CreateAnnotations extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
                 key: annotationGlobalKey,
-                child: WidgetTextField().textField(
-                  label: 'Anotação',
-                  icon: Icons.chat,
-                  globalKey: annotationGlobalKey,
-                  controller: annotationTextController,
-                  function: (String text) {
-                    return annotationsController
-                        .validateFieldFormTextAnnotation(text: text);
-                  },
-                ),
+                child: ValidateForm(
+                    label: 'Anotação',
+                    icon: Icons.chat,
+                    globalKey: annotationGlobalKey,
+                    controller: annotationTextController,
+                    function: (String text) {
+                      return annotationsController
+                          .validateFieldFormTextAnnotation(text: text);
+                    }),
               ),
             ),
           ],

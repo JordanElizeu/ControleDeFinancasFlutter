@@ -17,16 +17,16 @@ class DepositMoney extends StatelessWidget {
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: 'Depositar dinheiro'),
-        body: FormToWithdrawAndDeposit(
+        body: FormsToWithdrawAndDeposit(
             globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
             globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
             globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
             textEditingControllerDesc:
-                depositMoneyController.textEditingControllerDepositDesc,
+            depositMoneyController.textEditingControllerDepositDesc,
             textEditingControllerMoney:
-                depositMoneyController.textEditingControllerDepositMoney,
+            depositMoneyController.textEditingControllerDepositMoney,
             textEditingControllerTitle:
-                depositMoneyController.textEditingControllerDepositTitle,
+            depositMoneyController.textEditingControllerDepositTitle,
             functionValidateMoney: (String text) {
               return depositMoneyController.validateFieldFormTextMoney();
             },
@@ -39,7 +39,8 @@ class DepositMoney extends StatelessWidget {
             labelFieldMoney: 'Valor a depositar',
             functionButtonConfirm: () {
               return depositMoneyController.confirmDeposit(context: context);
-            }).formsToWithdrawAndDeposit(),
+            }
+        ),
       ),
     );
   }
