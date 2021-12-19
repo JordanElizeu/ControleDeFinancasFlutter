@@ -1,3 +1,4 @@
+import 'package:app_financeiro/data/model/model_deposit/model_deposit.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,13 +23,16 @@ class DepositMoneyController extends GetxController {
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      await RepositoryDeposit().repositoryAddDeposit(
-          quantityMoney: double.parse(_formatValueMoney()),
-          title: textEditingControllerDepositTitle.text,
-          context: context,
-          description: textEditingControllerDepositDesc.text);
-      Controller()
-          .finishAndPageTransition(route: Routes.HOME, context: context);
+      bool success = await RepositoryDeposit().repositoryAddDeposit(
+          modelDeposit: ModelDeposit(
+              textEditingControllerDepositTitle.text,
+              textEditingControllerDepositDesc.text,
+              context,
+              double.parse(_formatValueMoney())));
+      if (success) {
+        Controller()
+            .finishAndPageTransition(route: Routes.HOME, context: context);
+      }
     }
   }
 

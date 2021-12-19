@@ -1,17 +1,13 @@
+import 'package:app_financeiro/data/model/model_deposit/model_deposit.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_deposit.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 
-class RepositoryDeposit extends ProviderDeposit {
+class RepositoryDeposit {
+  final ProviderDeposit _providerTransactions = ProviderDeposit(
+      RepositoryConnection.connectionDatabase(),
+      RepositoryConnection.connectionFirebaseAuth());
 
-  Future<void> repositoryAddDeposit(
-      {required double quantityMoney,
-      required String title,
-      required BuildContext context,
-      required String description}) {
-    return addDeposit(
-        quantityMoney: quantityMoney,
-        description: description,
-        context: context,
-        title: title);
+  Future<bool> repositoryAddDeposit({required ModelDeposit modelDeposit}) {
+    return _providerTransactions.addDeposit(modelDeposit: modelDeposit);
   }
 }
