@@ -57,8 +57,8 @@ class SuccessDialog extends StatelessWidget {
 
 alertDialogViewSuccess(
     {required BuildContext context,
-      required Function() function,
-      required String titleError}) async {
+    required Function() function,
+    required String titleError}) async {
   await showDialog(
     context: context,
     builder: (contextDialog) {

@@ -35,13 +35,13 @@ class PageHome extends StatelessWidget {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          textInformative(text: 'Conta', fontSize: 22.0),
+                          WidgetTextInformative(text: 'Conta', fontSize: 22.0),
                           _cardCircleButtons(context: context),
                           Row(
                             children: [
                               Expanded(
                                 flex: 2,
-                                child: circleAvatar(
+                                child: WidgetCircleAvatar(
                                   function: () {
                                     return controller.pageTransition(
                                         route: Routes.INCREMENT_MONEY,
@@ -53,7 +53,7 @@ class PageHome extends StatelessWidget {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: circleAvatar(
+                                child: WidgetCircleAvatar(
                                   function: () {
                                     return controller.pageTransition(
                                         route: Routes.DECREMENT_MONEY,
@@ -65,7 +65,7 @@ class PageHome extends StatelessWidget {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: circleAvatar(
+                                child: WidgetCircleAvatar(
                                   function: () {
                                     return controller.pageTransition(
                                         route: Routes.TRANSACTIONS,
@@ -77,7 +77,7 @@ class PageHome extends StatelessWidget {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: circleAvatar(
+                                child: WidgetCircleAvatar(
                                   function: () {
                                     return controller.pageTransition(
                                         route: Routes.ANNOTATIONS,
@@ -137,20 +137,21 @@ Widget _containerWithInformationOfAccount(
                     ),
                     Expanded(
                       flex: 1,
-                      child: widgetInkwellIcon(
-                          icon: _.iconData,
-                          function: () {
-                            return _.changeIconDataEyeOfMoney();
-                          }),
+                      child: WidgetInkwellIcon(
+                        icon: _.iconData,
+                        function: () {
+                          return _.changeIconDataEyeOfMoney();
+                        },
+                      ),
                     ),
                     Expanded(
                       flex: 1,
-                      child: widgetInkwellIcon(
+                      child: WidgetInkwellIcon(
                           icon: Icons.info_rounded, function: () {}),
                     ),
                     Expanded(
                       flex: 1,
-                      child: widgetInkwellIcon(
+                      child: WidgetInkwellIcon(
                         icon: Icons.logout,
                         function: () {
                           return LoginController(context)
@@ -192,17 +193,17 @@ Widget _cardLastModifications(BuildContext context) {
           int position = snapshot.data!.length - 4;
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              return progress();
+              return WidgetProgress();
             case ConnectionState.waiting:
-              return progress();
+              return WidgetProgress();
             case ConnectionState.active:
-              return progress();
+              return WidgetProgress();
             case ConnectionState.done:
               return Card(
                 child: Column(
                   children: [
                     ListTile(
-                      title: textInformative(
+                      title: WidgetTextInformative(
                           text: 'Últimas transações', fontSize: 22.0),
                     ),
                     NotificationListener<OverscrollIndicatorNotification>(
@@ -294,11 +295,11 @@ Widget _cardLastModifications(BuildContext context) {
               );
           }
         } else if (snapshot.hasError) {
-          return error404(title: 'Não houve transações');
+          return Error404(title: 'Não houve transações');
         } else if (snapshot.hasData && snapshot.data!.length <= 0) {
-          return error404(title: 'Não houve transações');
+          return Error404(title: 'Não houve transações');
         }
-        return progress();
+        return WidgetProgress();
       },
     ),
   );
@@ -315,16 +316,16 @@ Widget _cardCircleButtons({required BuildContext context}) {
           if (snapshot.data != null) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return progress();
+                return WidgetProgress();
               case ConnectionState.done:
                 return _widgetCircularCard();
               case ConnectionState.none:
-                return error404();
+                return Error404();
               case ConnectionState.active:
-                return progress();
+                return WidgetProgress();
             }
           }
-          return progress();
+          return WidgetProgress();
         },
       );
     }
@@ -335,7 +336,7 @@ Widget _widgetCircularCard() {
   return GetBuilder<InitialController>(
     builder: (_) => Column(
       children: [
-        textInformative(
+        WidgetTextInformative(
             text: _.moneyValueFormatted(),
             fontSize: 27.0,
             backgroundColor:

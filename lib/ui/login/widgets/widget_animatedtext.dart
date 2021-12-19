@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 
-TypewriterAnimatedText animatedText({required String title}){
+TypewriterAnimatedText animatedText({required String title}) {
   return TypewriterAnimatedText(
     title,
     textStyle: const TextStyle(

@@ -54,5 +54,4 @@ class ValidateForm extends StatelessWidget {
 void _showErrorFieldText(GlobalKey<FormState> globalKey) {
   final FormState? formRegisterValidated = globalKey.currentState;
   formRegisterValidated!.validate();
-
 }

@@ -28,20 +28,20 @@ class Transactions extends StatelessWidget {
               if (snapshot.hasData && snapshot.data!.length > 0) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
-                    return error404();
+                    return Error404();
                   case ConnectionState.waiting:
-                    return progress();
+                    return WidgetProgress();
                   case ConnectionState.active:
-                    return progress();
+                    return WidgetProgress();
                   case ConnectionState.done:
                     return _listTile(snapshot, transactionController);
                 }
               } else if (snapshot.hasError) {
-                return error404(title: 'Não houve transações');
+                return Error404(title: 'Não houve transações');
               } else if (snapshot.hasData && snapshot.data!.length <= 0){
-                return error404(title: 'Não houve transações');
+                return Error404(title: 'Não houve transações');
               }
-              return progress();
+              return WidgetProgress();
             },
           ),
         ),

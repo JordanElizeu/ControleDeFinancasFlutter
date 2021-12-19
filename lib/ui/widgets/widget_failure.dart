@@ -22,7 +22,11 @@ class ViewFailure extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(Icons.cloud_off,color: Colors.red,size: 100,),
+            Icon(
+              Icons.cloud_off,
+              color: Colors.red,
+              size: 100,
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(

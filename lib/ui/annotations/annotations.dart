@@ -64,20 +64,20 @@ class Annotations extends StatelessWidget {
                   snapshot.data!.length > 0) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
-                    return error404();
+                    return Error404();
                   case ConnectionState.waiting:
-                    return progress();
+                    return WidgetProgress();
                   case ConnectionState.active:
-                    return progress();
+                    return WidgetProgress();
                   case ConnectionState.done:
                     return _widgetFutureBuilder(snapshot, _);
                 }
               } else if (snapshot.hasError) {
-                return error404(title: '0 anotações');
+                return Error404(title: '0 anotações');
               } else if (snapshot.data != null && snapshot.data!.length < 1) {
-                return error404(title: '0 anotações');
+                return Error404(title: '0 anotações');
               }
-              return progress();
+              return WidgetProgress();
             },
           ),
         ),

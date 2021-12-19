@@ -58,6 +58,16 @@ class LoginController extends GetxController {
     });
   }
 
+  String? validation(String? text){
+    if(text!.length > 20){
+      return 'Nome muito grande';
+    }
+    if(text.isEmpty){
+      return 'Digite seu nome';
+    }
+    return null;
+  }
+
   @override
   void dispose() {
     super.dispose();
