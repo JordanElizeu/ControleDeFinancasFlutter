@@ -1,4 +1,4 @@
-import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_informationofuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +41,7 @@ class InitialController extends GetxController {
   }
 
   Future<String> getNameIfUserIsFromFirebase() {
-    return RepositoryFirebaseLogin().repositoryGetNameIfUserIsFromFirebase();
+    return RepositoryInformationOfUser().repositoryGetNameIfUserIsFromFirebase();
   }
 
   void changeIconDataEyeOfMoney() {

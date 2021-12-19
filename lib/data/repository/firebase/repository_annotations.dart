@@ -1,6 +1,6 @@
 import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
 import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
-import 'package:app_financeiro/data/provider/firebase/provider_annotation.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_createannotation.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 
 class RepositoryAnnotations {

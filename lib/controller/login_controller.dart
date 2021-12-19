@@ -1,11 +1,14 @@
+import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
+import 'package:app_financeiro/data/model/model_login/model_login.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_createuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_googleconnection.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_informationofuser.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
-
 import 'controller.dart';
 
 class LoginController extends GetxController {
@@ -35,25 +38,23 @@ class LoginController extends GetxController {
 
   Future<String?> signInFirebase(LoginData data) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin()
-          .repositorySignInFirebase(_context, data.name, data.password);
+      return RepositoryFirebaseLogin().repositorySignInFirebase(
+          modelLogin: ModelLogin(data.password, data.name, _context));
     });
   }
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin().repositorySignUpFirebase(
-          _context,
-          data.name!,
-          data.password!,
-          data.additionalSignupData!['name'].toString());
+      return RepositoryCreateUser().repositorySignUpFirebase(
+          modelCreateUser: ModelCreateUser(data.password!, data.name!, _context,
+              data.additionalSignupData!['name'].toString()));
     });
   }
 
   Future<String?> forgotPasswordFirebase(String email) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin()
-          .repositoryForgotPasswordFirebase(_context, email);
+      return RepositoryInformationOfUser()
+          .repositoryForgotPasswordFirebase(email: email);
     });
   }
 
