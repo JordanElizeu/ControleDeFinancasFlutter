@@ -1,5 +1,5 @@
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
-import 'package:app_financeiro/data/provider/firebase/provider_createdeposit.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_deposit.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 

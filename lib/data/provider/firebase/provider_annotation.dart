@@ -1,4 +1,3 @@
-import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
 import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +37,6 @@ class ProviderAnnotations {
         .child(id)
         .child('uid')
         .set(id);
-    AnnotationsController().clearFields(context: modelAnnotation.context);
   }
 
   Future<String> _getLengthAnnotation() async {
@@ -75,7 +73,6 @@ class ProviderAnnotations {
         .child(modelEditAnnotation.id)
         .child('uid')
         .set(modelEditAnnotation.id);
-    AnnotationsController().clearFields(context: modelEditAnnotation.context);
   }
 
   void providerRemoveAnnotation({required String uid}) {

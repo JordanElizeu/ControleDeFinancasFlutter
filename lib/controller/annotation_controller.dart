@@ -24,8 +24,11 @@ class AnnotationsController extends GetxController {
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
       RepositoryAnnotations().repositorySendAnnotation(
           modelAnnotation: ModelAnnotation(annotation, title, context));
-      await Future.delayed(Duration(milliseconds: 300))
-          .then((value) async => {await getAllAnnotations(), update()});
+      await Future.delayed(Duration(milliseconds: 300)).then((value) async => {
+            await getAllAnnotations(),
+            AnnotationsController().clearFields(context: context),
+            update(),
+          });
       return true;
     }
     return false;
@@ -72,6 +75,7 @@ class AnnotationsController extends GetxController {
             textEditingControllerTitle.text,
             context,
             id));
+    AnnotationsController().clearFields(context: context);
     update();
   }
 
