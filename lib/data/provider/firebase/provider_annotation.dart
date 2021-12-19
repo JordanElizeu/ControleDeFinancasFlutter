@@ -1,18 +1,19 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
+import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 
 class ProviderAnnotations {
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final DatabaseReference _databaseReference;
+  final FirebaseAuth _auth;
+
+  ProviderAnnotations(this._databaseReference, this._auth);
 
   void providerSendAnnotation(
-      {required String title,
-      required String annotation,
-      required BuildContext context}) async {
-    final map = await providerGetAllAnnotations();
-    final String id = '${map.length}a';
+      {required ModelAnnotation modelAnnotation}) async {
+    final String id = await _getLengthAnnotation();
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -20,7 +21,7 @@ class ProviderAnnotations {
         .child('Annotations')
         .child(id)
         .child('annotation')
-        .set(annotation);
+        .set(modelAnnotation.annotation);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -28,7 +29,7 @@ class ProviderAnnotations {
         .child('Annotations')
         .child(id)
         .child('title')
-        .set(title);
+        .set(modelAnnotation.titleAnnotation);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
@@ -37,39 +38,44 @@ class ProviderAnnotations {
         .child(id)
         .child('uid')
         .set(id);
-    AnnotationsController().clearFields(context: context);
+    AnnotationsController().clearFields(context: modelAnnotation.context);
+  }
+
+  Future<String> _getLengthAnnotation() async {
+    String lengthAnnotation = '';
+    await providerGetAllAnnotations().then((value) => {
+      lengthAnnotation = "${value.length.toString()}a"
+    });
+    return lengthAnnotation;
   }
 
   void providerEditAnnotation(
-      {required String uid,
-      required BuildContext context,
-      required String annotation,
-      required String title}) {
+      {required ModelEditAnnotation modelEditAnnotation}) {
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
         .child('Account')
         .child('Annotations')
-        .child(uid)
+        .child(modelEditAnnotation.id)
         .child('annotation')
-        .set(annotation);
+        .set(modelEditAnnotation.annotation);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
         .child('Account')
         .child('Annotations')
-        .child(uid)
+        .child(modelEditAnnotation.id)
         .child('title')
-        .set(title);
+        .set(modelEditAnnotation.titleAnnotation);
     _databaseReference
         .child('AppFinancas')
         .child(_auth.currentUser!.uid)
         .child('Account')
         .child('Annotations')
-        .child(uid)
+        .child(modelEditAnnotation.id)
         .child('uid')
-        .set(uid);
-    AnnotationsController().clearFields(context: context);
+        .set(modelEditAnnotation.id);
+    AnnotationsController().clearFields(context: modelEditAnnotation.context);
   }
 
   void providerRemoveAnnotation({required String uid}) {

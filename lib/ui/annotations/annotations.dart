@@ -107,7 +107,7 @@ class Annotations extends StatelessWidget {
                     if (!cancelRemove)
                       {
                         annotationController.removeAnnotation(
-                            uid: snapshot.data!['${index}a']['uid'],
+                            id: snapshot.data!['${index}a']['uid'],
                             context: context)
                       }
                   });
@@ -207,7 +207,7 @@ class Annotations extends StatelessWidget {
                                       ['title'],
                                   function: () {
                                     annotationController.editAnnotation(
-                                        uid: snapshot.data!['${index}a']['uid'],
+                                        id: snapshot.data!['${index}a']['uid'],
                                         context: context,
                                         index: index);
                                     Navigator.pop(CreateAnnotations.context!);

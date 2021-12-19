@@ -1,3 +1,5 @@
+import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_annotations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,7 @@ class AnnotationsController extends GetxController {
         formKeyFieldAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
       RepositoryAnnotations().repositorySendAnnotation(
-          title: title, annotation: annotation, context: context);
+          modelAnnotation: ModelAnnotation(annotation, title, context));
       await Future.delayed(Duration(milliseconds: 300))
           .then((value) async => {await getAllAnnotations(), update()});
       return true;
@@ -54,23 +56,22 @@ class AnnotationsController extends GetxController {
     return null;
   }
 
-  void removeAnnotation({required String uid, required BuildContext context}) {
-    RepositoryAnnotations().removeAnnotation(uid: uid);
+  void removeAnnotation({required String id, required BuildContext context}) {
+    RepositoryAnnotations().removeAnnotation(id: id);
   }
 
   void editAnnotation(
-      {required String uid,
-      required BuildContext context,
-      required int index}) {
+      {required String id, required BuildContext context, required int index}) {
     map[index] = {
       0: textEditingControllerTitle.text,
       1: textEditingControllerAnnotation.text
     };
     RepositoryAnnotations().editAnnotation(
-        uid: uid,
-        context: context,
-        annotation: textEditingControllerAnnotation.text,
-        title: textEditingControllerTitle.text);
+        modelEditAnnotation: ModelEditAnnotation(
+            textEditingControllerAnnotation.text,
+            textEditingControllerTitle.text,
+            context,
+            id));
     update();
   }
 

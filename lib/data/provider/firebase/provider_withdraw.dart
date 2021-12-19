@@ -1,4 +1,4 @@
-import 'package:app_financeiro/data/provider/firebase/provider_transactions.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/ui/widgets/widget_failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
