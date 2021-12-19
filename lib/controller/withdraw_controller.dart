@@ -1,3 +1,4 @@
+import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_withdraw.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,12 +25,17 @@ class WithdrawMoneyController extends GetxController {
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(formatMoneyValueInField());
-      await RepositoryWithdraw().repositoryMoneyWithdraw(
-          context: context,
-          title: textEditingControllerWithdrawTitle.text,
-          description: textEditingControllerWithdrawDesc.text,
-          moneyWithdraw: moneyWithdraw);
-      Controller().finishAndPageTransition(route: Routes.HOME, context: context);
+      bool success = await RepositoryWithdraw().repositoryMoneyWithdraw(
+          modelTransaction: ModelTransaction(
+              textEditingControllerWithdrawTitle.text,
+              textEditingControllerWithdrawDesc.text,
+              context,
+              moneyWithdraw,
+              isDeposit: false));
+      if (success) {
+        Controller()
+            .finishAndPageTransition(route: Routes.HOME, context: context);
+      }
     }
   }
 

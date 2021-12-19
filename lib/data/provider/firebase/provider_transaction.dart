@@ -1,48 +1,49 @@
 import 'dart:async';
-
+import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class ProviderTransactions {
+  final DatabaseReference databaseReference;
+  final FirebaseAuth firebaseAuth;
+
+  ProviderTransactions(
+      {required this.databaseReference, required this.firebaseAuth});
+
   Future<void> addTransaction(
-      {required double quantityMoney,
-      required String title,
-      required String description,
-      required bool isDeposit,
-      required FirebaseAuth auth,
-      required DatabaseReference databaseReference}) async {
-    final map = await getAllTransactions(auth: auth);
+      {required ModelTransaction modelAddTransaction}) async {
+    final map = await getAllTransactions();
     final String id = '${map.length}a';
     databaseReference
         .child('AppFinancas')
-        .child(auth.currentUser!.uid)
+        .child(firebaseAuth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
         .child(id)
         .child('money')
-        .set(quantityMoney);
+        .set(modelAddTransaction.quantityMoney);
     databaseReference
         .child('AppFinancas')
-        .child(auth.currentUser!.uid)
+        .child(firebaseAuth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
         .child(id)
         .child('title')
-        .set(title);
+        .set(modelAddTransaction.title);
     databaseReference
         .child('AppFinancas')
-        .child(auth.currentUser!.uid)
+        .child(firebaseAuth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
         .child(id)
         .child('description')
-        .set(description);
+        .set(modelAddTransaction.description);
     databaseReference
         .child('AppFinancas')
-        .child(auth.currentUser!.uid)
+        .child(firebaseAuth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
@@ -51,26 +52,25 @@ class ProviderTransactions {
         .set(id);
     databaseReference
         .child('AppFinancas')
-        .child(auth.currentUser!.uid)
+        .child(firebaseAuth.currentUser!.uid)
         .child('Account')
         .child('Finances')
         .child('transactions')
         .child(id)
         .child('is_deposit')
-        .set(isDeposit);
+        .set(modelAddTransaction.isDeposit);
   }
 
-  Future<Map> getAvailableMoney({required FirebaseAuth auth}) async {
+  Future<Map> getAvailableMoney() async {
     DatabaseReference databaseReference = FirebaseDatabase.instance
-        .ref('AppFinancas/${auth.currentUser!.uid}/Account/Finances');
+        .ref('AppFinancas/${firebaseAuth.currentUser!.uid}/Account/Finances');
     DatabaseEvent event = await databaseReference.once();
     return event.snapshot.value != null ? event.snapshot.value as Map : {};
   }
 
-  Future<Map<dynamic, dynamic>> getAllTransactions(
-      {required FirebaseAuth auth}) async {
+  Future<Map<dynamic, dynamic>> getAllTransactions() async {
     DatabaseReference databaseReference = FirebaseDatabase.instance.ref(
-        'AppFinancas/${auth.currentUser!.uid}/Account/Finances/transactions');
+        'AppFinancas/${firebaseAuth.currentUser!.uid}/Account/Finances/transactions');
     DatabaseEvent event = await databaseReference.once();
     return event.snapshot.value != null ? event.snapshot.value as Map : {};
   }

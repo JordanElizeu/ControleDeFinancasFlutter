@@ -1,15 +1,17 @@
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RepositoryTransactions extends ProviderTransactions{
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class RepositoryTransactions {
+  final ProviderTransactions _providerTransactions = ProviderTransactions(
+      databaseReference: RepositoryConnection.connectionDatabase(),
+      firebaseAuth: RepositoryConnection.connectionFirebaseAuth());
 
   Future<Map> repositoryGetQuantityMoney() async {
-    return await getAvailableMoney(auth: _auth);
+    return await _providerTransactions.getAvailableMoney();
   }
 
-  Future<Map<dynamic,dynamic>> repositoryGetAllTransactions() async {
-    return getAllTransactions(auth: _auth);
+  Future<Map<dynamic, dynamic>> repositoryGetAllTransactions() async {
+    return _providerTransactions.getAllTransactions();
   }
 }

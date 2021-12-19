@@ -1,46 +1,40 @@
+import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/ui/widgets/widget_failure.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 
-class ProviderWithdraw extends ProviderTransactions {
-  final DatabaseReference _databaseReference = FirebaseDatabase.instance.ref();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class ProviderWithdraw {
+  final ProviderTransactions _providerTransactions;
 
-  Future<void> providerMoneyWithdraw(
-      {required double moneyWithdraw,
-      required BuildContext context,
-      required String description,
-      required String title}) async {
-    Map mapValueMoney = await getAvailableMoney(auth: _auth);
+  ProviderWithdraw(this._providerTransactions);
+
+  Future<bool> providerMoneyWithdraw(
+      {required ModelTransaction modelTransaction}) async {
+    Map mapValueMoney = await _providerTransactions.getAvailableMoney();
     double availableMoney = double.parse(mapValueMoney['money'].toString());
-    if (moneyWithdraw > availableMoney) {
+    if (modelTransaction.quantityMoney > availableMoney) {
       alertDialogViewFailure(
           titleError: 'Saldo insuficiente',
-          context: context,
-          messageError: 'Saldo em conta insufiente para efetuar transação');
+          context: modelTransaction.context,
+          messageError: 'Saldo em conta insufiente');
+      return false;
     } else {
       try {
-        _databaseReference
+        _providerTransactions.databaseReference
             .child('AppFinancas')
-            .child(_auth.currentUser!.uid)
+            .child(_providerTransactions.firebaseAuth.currentUser!.uid)
             .child('Account')
             .child('Finances')
             .child('money')
-            .set(availableMoney - moneyWithdraw);
-        await addTransaction(
-            isDeposit: false,
-            quantityMoney: moneyWithdraw,
-            title: title,
-            description: description,
-            databaseReference: _databaseReference,
-            auth: _auth);
+            .set(availableMoney - modelTransaction.quantityMoney);
+        await _providerTransactions.addTransaction(
+            modelAddTransaction: modelTransaction);
+        return true;
       } catch (exception) {
         alertDialogViewFailure(
             titleError: 'Erro inesperado',
-            context: context,
+            context: modelTransaction.context,
             messageError: 'Ocorreu um erro inesperado');
+        return false;
       }
     }
   }

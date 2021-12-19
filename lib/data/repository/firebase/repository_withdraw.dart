@@ -1,17 +1,16 @@
+import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_withdraw.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 
-class RepositoryWithdraw extends ProviderWithdraw {
+class RepositoryWithdraw {
+  final ProviderWithdraw _providerWithdraw = ProviderWithdraw(
+      new ProviderTransactions(
+          databaseReference: RepositoryConnection.connectionDatabase(),
+          firebaseAuth: RepositoryConnection.connectionFirebaseAuth()));
 
-  Future<void> repositoryMoneyWithdraw(
-      {required double moneyWithdraw,
-      required BuildContext context,
-      required String description,
-      required String title}) async {
-    providerMoneyWithdraw(
-        title: title,
-        description: description,
-        context: context,
-        moneyWithdraw: moneyWithdraw);
+  Future<bool> repositoryMoneyWithdraw(
+      {required ModelTransaction modelTransaction}) async {
+    return _providerWithdraw.providerMoneyWithdraw(modelTransaction: modelTransaction);
   }
 }

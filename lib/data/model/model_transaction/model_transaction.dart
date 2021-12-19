@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
-class ModelDeposit{
+class ModelTransaction {
   final String _title;
   final String _description;
   final BuildContext _context;
   final double _quantityMoney;
+  final bool isDeposit;
 
-  ModelDeposit(
-      this._title, this._description, this._context, this._quantityMoney);
+  ModelTransaction(
+      this._title, this._description, this._context, this._quantityMoney,
+      {required this.isDeposit});
 
   double get quantityMoney => _quantityMoney;
 
