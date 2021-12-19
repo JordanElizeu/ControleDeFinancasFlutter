@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 class DepositMoney extends StatelessWidget {
   const DepositMoney({Key? key}) : super(key: key);
+
+  final String _appBarTitle = 'Depositar dinheiro';
+  final String _labelFieldMoney = 'Valor a depositar';
+
   @override
   Widget build(BuildContext context) {
     final DepositMoneyController depositMoneyController =
@@ -16,17 +20,17 @@ class DepositMoney extends StatelessWidget {
       onWillPop: () => Controller()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
-        appBar: appBar(title: 'Depositar dinheiro'),
+        appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
             globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
             globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
             globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
             textEditingControllerDesc:
-            depositMoneyController.textEditingControllerDepositDesc,
+                depositMoneyController.textEditingControllerDepositDesc,
             textEditingControllerMoney:
-            depositMoneyController.textEditingControllerDepositMoney,
+                depositMoneyController.textEditingControllerDepositMoney,
             textEditingControllerTitle:
-            depositMoneyController.textEditingControllerDepositTitle,
+                depositMoneyController.textEditingControllerDepositTitle,
             functionValidateMoney: (String text) {
               return depositMoneyController.validateFieldFormTextMoney();
             },
@@ -36,11 +40,10 @@ class DepositMoney extends StatelessWidget {
             functionValidateTitle: (String text) {
               return depositMoneyController.validateFieldFormTextTitle();
             },
-            labelFieldMoney: 'Valor a depositar',
+            labelFieldMoney: _labelFieldMoney,
             functionButtonConfirm: () {
               return depositMoneyController.confirmDeposit(context: context);
-            }
-        ),
+            }),
       ),
     );
   }

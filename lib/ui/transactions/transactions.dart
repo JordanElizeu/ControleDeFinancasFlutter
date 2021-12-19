@@ -11,6 +11,10 @@ import 'package:get/get.dart';
 
 class Transactions extends StatelessWidget {
   const Transactions({Key? key}) : super(key: key);
+
+  final String _appBarTransaction = 'Transações';
+  final String _textErrorTransaction = 'Não houve transações';
+
   @override
   Widget build(BuildContext context) {
     TransactionController transactionController =
@@ -19,7 +23,7 @@ class Transactions extends StatelessWidget {
       onWillPop: () => Controller()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
-        appBar: appBar(title: 'Transações'),
+        appBar: appBar(title: _appBarTransaction),
         body: GetBuilder<TransactionController>(
           builder: (_) => FutureBuilder(
             future: _.getAllTransactions(context),
@@ -37,9 +41,9 @@ class Transactions extends StatelessWidget {
                     return _listTile(snapshot, transactionController);
                 }
               } else if (snapshot.hasError) {
-                return Error404(title: 'Não houve transações');
-              } else if (snapshot.hasData && snapshot.data!.length <= 0){
-                return Error404(title: 'Não houve transações');
+                return Error404(title: _textErrorTransaction);
+              } else if (snapshot.hasData && snapshot.data!.length <= 0) {
+                return Error404(title: _textErrorTransaction);
               }
               return WidgetProgress();
             },
@@ -84,8 +88,7 @@ class Transactions extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              snapshot.data!['${index}a']
-                                  ['title'],
+                              snapshot.data!['${index}a']['title'],
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white),
@@ -104,16 +107,14 @@ class Transactions extends StatelessWidget {
                 ),
                 Card(
                   child: ListTile(
-                    title: Text(snapshot.data!['${index}a']
-                        ['description']),
+                    title: Text(snapshot.data!['${index}a']['description']),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
                         '${InitialController().formatMoney(snapshot.data!['${index}a']['money'])}',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: snapshot.data!['${index}a']
-                                    ['is_deposit']
+                            color: snapshot.data!['${index}a']['is_deposit']
                                 ? Colors.green
                                 : Colors.red),
                       ),

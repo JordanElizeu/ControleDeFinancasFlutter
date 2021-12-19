@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/controller/controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -14,6 +13,11 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 class Annotations extends StatelessWidget {
   const Annotations({Key? key}) : super(key: key);
 
+  final String _appBarTitle = 'Anotações';
+  final String _error404 = '0 anotações';
+  final String _removingAnnotation = 'Anotação removida!';
+  final String _cancelRemoveAnnotation = 'Desfazer';
+
   @override
   Widget build(BuildContext context) {
     AnnotationsController annotationController =
@@ -23,7 +27,7 @@ class Annotations extends StatelessWidget {
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Anotações'),
+          title: Text(_appBarTitle),
           actions: [
             Container(
               child: ElevatedButton(
@@ -73,9 +77,9 @@ class Annotations extends StatelessWidget {
                     return _widgetFutureBuilder(snapshot, _);
                 }
               } else if (snapshot.hasError) {
-                return Error404(title: '0 anotações');
+                return Error404(title: _error404);
               } else if (snapshot.data != null && snapshot.data!.length < 1) {
-                return Error404(title: '0 anotações');
+                return Error404(title: _error404);
               }
               return WidgetProgress();
             },
@@ -116,13 +120,13 @@ class Annotations extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 backgroundColor: Colors.purple,
                 content: Text(
-                  "Anotação removida!",
+                  _removingAnnotation,
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w700),
                 ),
                 action: SnackBarAction(
                   textColor: Colors.white,
-                  label: "Desfazer",
+                  label: _cancelRemoveAnnotation,
                   onPressed: () {
                     cancelRemove = true;
                     annotationController.recoverAnnotation(

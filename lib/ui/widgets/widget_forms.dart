@@ -32,6 +32,10 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
   final Future<void> Function() functionButtonConfirm;
   final String labelFieldMoney;
 
+  final String _textButtonConfirm = 'Confirmar';
+  final String _textLabelDescription = 'Descrição';
+  final String _textLabelTitle = 'Título';
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -45,7 +49,7 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
                 Form(
                   key: globalKeyTitle,
                   child: ValidateForm(
-                      label: 'Título',
+                      label: _textLabelTitle,
                       icon: Icons.wysiwyg,
                       controller: textEditingControllerTitle,
                       globalKey: globalKeyTitle,
@@ -55,7 +59,7 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
                     key: globalKeyDesc,
                     child: ValidateForm(
                         icon: Icons.chat,
-                        label: 'Descrição',
+                        label: _textLabelDescription,
                         controller: textEditingControllerDesc,
                         globalKey: globalKeyDesc,
                         function: functionValidateDesc)),
@@ -84,7 +88,7 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
                       width: 150,
                       child: ElevatedButton(
                         onPressed: functionButtonConfirm,
-                        child: const Text('Confirmar'),
+                        child: Text(_textButtonConfirm),
                       ),
                     ),
                   ),

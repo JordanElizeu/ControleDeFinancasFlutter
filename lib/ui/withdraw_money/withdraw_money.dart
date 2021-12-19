@@ -8,6 +8,10 @@ import 'package:flutter/material.dart';
 
 class WithdrawMoney extends StatelessWidget {
   const WithdrawMoney({Key? key}) : super(key: key);
+
+  final String _appBarTitle = 'Sacar dinheiro';
+  final String _labelFieldMoney = 'Valor a sacar';
+
   @override
   Widget build(BuildContext context) {
     WithdrawMoneyController withdrawMoneyController = WithdrawMoneyController();
@@ -15,7 +19,7 @@ class WithdrawMoney extends StatelessWidget {
       onWillPop: () => Controller()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
-        appBar: appBar(title: 'Sacar dinheiro'),
+        appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
             globalKeyTitle: withdrawMoneyController.formKeyFieldWithdrawTitle,
             globalKeyMoney: withdrawMoneyController.formKeyFieldWithdrawMoney,
@@ -35,7 +39,7 @@ class WithdrawMoney extends StatelessWidget {
             functionValidateTitle: (String text) {
               return withdrawMoneyController.validateFieldFormTextTitle();
             },
-            labelFieldMoney: 'Valor a sacar',
+            labelFieldMoney: _labelFieldMoney,
             functionButtonConfirm: () async {
               return withdrawMoneyController.confirmMoneyWithdraw(
                   context: context);

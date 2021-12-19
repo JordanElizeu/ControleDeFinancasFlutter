@@ -8,6 +8,12 @@ import 'package:flutter/material.dart';
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
 
+  final String _textFinances = 'Finanças ';
+  final String _textToday = 'Hoje';
+  final String _textTomorrow = 'Amanhã';
+  final String _textEveryday = 'Sempre';
+  final String _textAccessMyAccount = 'Acessar minha conta';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,8 +37,8 @@ class Login extends StatelessWidget {
                         children: [
                           const SizedBox(width: 20.0, height: 100.0),
                           FittedBox(
-                            child: const Text(
-                              'Finanças ',
+                            child: Text(
+                              _textFinances,
                               style: TextStyle(
                                   fontSize: 30.0, color: Colors.white),
                             ),
@@ -46,9 +52,9 @@ class Login extends StatelessWidget {
                               child: FittedBox(
                                 child: AnimatedTextKit(
                                   animatedTexts: [
-                                    animatedText(title: 'Hoje'),
-                                    animatedText(title: 'Amanhã'),
-                                    animatedText(title: 'Sempre'),
+                                    animatedText(title: _textToday),
+                                    animatedText(title: _textTomorrow),
+                                    animatedText(title: _textEveryday),
                                   ],
                                   totalRepeatCount: 1,
                                 ),
@@ -69,7 +75,7 @@ class Login extends StatelessWidget {
                                 RoundedRectangleBorder(
                                     borderRadius:
                                         new BorderRadius.circular(30.0)))),
-                        child: FittedBox(child: Text('Acessar minha conta')),
+                        child: FittedBox(child: Text(_textAccessMyAccount)),
                         onPressed: () {
                           Controller().finishAndPageTransition(
                               route: Routes.LOGIN, context: context);

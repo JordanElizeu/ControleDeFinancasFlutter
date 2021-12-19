@@ -14,6 +14,13 @@ import 'package:get/get.dart';
 
 class PageHome extends StatelessWidget {
   const PageHome({Key? key}) : super(key: key);
+
+  final String _textAccount = 'Conta';
+  final String _textCircleAvatarDeposit = "Depositar";
+  final String _textCircleAvatarWithdraw = 'Retirar';
+  final String _textCircleAvatarTransaction = 'Transações';
+  final String _textCircleAvatarAnnotation = 'Anotações';
+
   @override
   Widget build(BuildContext context) {
     Get.put(TransactionController());
@@ -35,7 +42,8 @@ class PageHome extends StatelessWidget {
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          WidgetTextInformative(text: 'Conta', fontSize: 22.0),
+                          WidgetTextInformative(
+                              text: _textAccount, fontSize: 22.0),
                           _cardCircleButtons(context: context),
                           Row(
                             children: [
@@ -48,7 +56,7 @@ class PageHome extends StatelessWidget {
                                         context: context);
                                   },
                                   iconData: Icons.arrow_circle_up_rounded,
-                                  text: "Depositar",
+                                  text: _textCircleAvatarDeposit,
                                 ),
                               ),
                               Expanded(
@@ -60,7 +68,7 @@ class PageHome extends StatelessWidget {
                                         context: context);
                                   },
                                   iconData: Icons.arrow_circle_down,
-                                  text: "Retirar",
+                                  text: _textCircleAvatarWithdraw,
                                 ),
                               ),
                               Expanded(
@@ -72,7 +80,7 @@ class PageHome extends StatelessWidget {
                                         context: context);
                                   },
                                   iconData: Icons.assessment_outlined,
-                                  text: "Transações",
+                                  text: _textCircleAvatarTransaction,
                                 ),
                               ),
                               Expanded(
@@ -84,7 +92,7 @@ class PageHome extends StatelessWidget {
                                         context: context);
                                   },
                                   iconData: Icons.wysiwyg_outlined,
-                                  text: "Anotações",
+                                  text: _textCircleAvatarAnnotation,
                                 ),
                               ),
                             ],
@@ -106,9 +114,11 @@ class PageHome extends StatelessWidget {
 
 Widget _containerWithInformationOfAccount(
     {required BoxConstraints constraints, required BuildContext context}) {
+  final String _loading = 'carregando...';
+
   return GetBuilder<InitialController>(
     builder: (_) => FutureBuilder(
-      initialData: 'carregando...',
+      initialData: _loading,
       future: _.getUserName(),
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         return Container(
@@ -185,6 +195,8 @@ Widget _containerWithInformationOfAccount(
 }
 
 Widget _cardLastModifications(BuildContext context) {
+  final String _lastTransaction = 'Últimas transações';
+
   return GetBuilder<TransactionController>(
     builder: (_) => FutureBuilder(
       future: _.getAllTransactions(context),
@@ -204,7 +216,7 @@ Widget _cardLastModifications(BuildContext context) {
                   children: [
                     ListTile(
                       title: WidgetTextInformative(
-                          text: 'Últimas transações', fontSize: 22.0),
+                          text: _lastTransaction, fontSize: 22.0),
                     ),
                     NotificationListener<OverscrollIndicatorNotification>(
                       onNotification:

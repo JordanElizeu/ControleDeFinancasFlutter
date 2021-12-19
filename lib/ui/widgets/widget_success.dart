@@ -2,16 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ViewSuccess extends StatelessWidget {
-  final String buttonText = 'Confirmar';
-  final String titleSuccess;
+  final String _buttonText = 'Confirmar';
+  final String _titleSuccess = 'Concluído com sucesso';
+  final String textSuccess;
   final Function() functionButton;
 
-  ViewSuccess({required this.functionButton, required this.titleSuccess});
+  ViewSuccess({required this.functionButton, required this.textSuccess});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Concluído com sucesso'),
+      title: Text(_titleSuccess),
       content: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -20,7 +21,7 @@ class ViewSuccess extends StatelessWidget {
           children: [
             Icon(Icons.monetization_on),
             Text(
-              titleSuccess,
+              textSuccess,
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -30,7 +31,7 @@ class ViewSuccess extends StatelessWidget {
         ElevatedButton(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(buttonText),
+              child: Text(_buttonText),
             ),
             onPressed: functionButton)
       ],
@@ -50,7 +51,7 @@ class SuccessDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewSuccess(
       functionButton: functionButton,
-      titleSuccess: titleError,
+      textSuccess: titleError,
     );
   }
 }

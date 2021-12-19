@@ -5,6 +5,7 @@ class Error404 extends StatelessWidget {
   const Error404({Key? key, this.title}) : super(key: key);
 
   final String? title;
+  final String textDefaultError = 'Erro 404';
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class Error404 extends StatelessWidget {
                       top: 10, bottom: 10, left: 40, right: 40),
                   child: FittedBox(
                     child: Text(
-                      title ?? 'Erro 404',
+                      title ?? textDefaultError,
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
