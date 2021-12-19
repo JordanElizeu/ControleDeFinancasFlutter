@@ -7,11 +7,14 @@ import 'package:get/get.dart';
 class AnnotationsController extends GetxController {
   Map<dynamic, dynamic> map = {};
 
-  TextEditingController textEditingControllerTitle = TextEditingController();
-  TextEditingController textEditingControllerAnnotation =
+  final TextEditingController textEditingControllerTitle =
       TextEditingController();
-  GlobalKey<FormState> formKeyFieldAnnotationTitle = GlobalKey<FormState>();
-  GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
+  final TextEditingController textEditingControllerAnnotation =
+      TextEditingController();
+  final GlobalKey<FormState> formKeyFieldAnnotationTitle =
+      GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
+  final RepositoryAnnotations _repositoryAnnotations = RepositoryAnnotations();
 
   Future<bool> sendAnnotation(
       {required BuildContext context,
@@ -41,7 +44,7 @@ class AnnotationsController extends GetxController {
   }
 
   Future<Map<dynamic, dynamic>> getAllAnnotations() async {
-    map = await RepositoryAnnotations().repositoryGetAllAnnotations();
+    map = await _repositoryAnnotations.repositoryGetAllAnnotations();
     return map;
   }
 
@@ -60,7 +63,7 @@ class AnnotationsController extends GetxController {
   }
 
   void removeAnnotation({required String id, required BuildContext context}) {
-    RepositoryAnnotations().removeAnnotation(id: id);
+    _repositoryAnnotations.removeAnnotation(id: id);
   }
 
   void editAnnotation(
@@ -69,13 +72,13 @@ class AnnotationsController extends GetxController {
       0: textEditingControllerTitle.text,
       1: textEditingControllerAnnotation.text
     };
-    RepositoryAnnotations().editAnnotation(
+    _repositoryAnnotations.editAnnotation(
         modelEditAnnotation: ModelEditAnnotation(
             textEditingControllerAnnotation.text,
             textEditingControllerTitle.text,
             context,
             id));
-    AnnotationsController().clearFields(context: context);
+    clearFields(context: context);
     update();
   }
 

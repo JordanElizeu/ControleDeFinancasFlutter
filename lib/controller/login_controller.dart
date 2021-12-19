@@ -1,5 +1,6 @@
 import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
 import 'package:app_financeiro/data/model/model_login/model_login.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_createuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_googleconnection.dart';
@@ -13,7 +14,7 @@ import 'controller.dart';
 
 class LoginController extends GetxController {
   Duration get loginTime => Duration(milliseconds: 2250);
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = RepositoryConnection.connectionFirebaseAuth();
   final BuildContext _context;
 
   LoginController(this._context);

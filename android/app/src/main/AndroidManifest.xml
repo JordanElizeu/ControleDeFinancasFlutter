@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app_financeiro">
    <application
-        android:label="app_financeiro"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Finanças Everyday"
+        android:icon="assets/images/foguete.png">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

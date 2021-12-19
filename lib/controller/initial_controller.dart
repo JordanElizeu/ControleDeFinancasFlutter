@@ -15,6 +15,8 @@ class InitialController extends GetxController {
 
   IconData get iconData => _iconData;
 
+  bool get moneyVisible => _moneyVisible;
+
   String? moneyValueFormatted(){
     if(moneyValue.length > 0) {
       return formatter.format(double.parse(moneyValue));
@@ -62,6 +64,4 @@ class InitialController extends GetxController {
   void dispose() {
     super.dispose();
   }
-
-  bool get moneyVisible => _moneyVisible;
 }

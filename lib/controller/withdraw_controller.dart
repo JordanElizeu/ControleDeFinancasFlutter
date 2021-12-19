@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'controller.dart';
 import 'initial_controller.dart';
 
-class WithdrawMoneyController extends GetxController with DisposableWidget{
+class WithdrawMoneyController extends GetxController with DisposableWidget {
   final TextEditingController textEditingControllerWithdrawMoney =
       TextEditingController();
   final TextEditingController textEditingControllerWithdrawTitle =
@@ -55,12 +55,6 @@ class WithdrawMoneyController extends GetxController with DisposableWidget{
       return 'Preencha um título';
     }
     return null;
-  }
-
-  void clearFields() {
-    formKeyFieldWithdrawTitle.currentState!.reset();
-    formKeyFieldWithdrawDesc.currentState!.reset();
-    formKeyFieldWithdrawMoney.currentState!.reset();
   }
 
   String? validateFieldFormTextDesc() {
