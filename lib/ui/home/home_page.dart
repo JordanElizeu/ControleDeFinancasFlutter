@@ -323,7 +323,7 @@ Widget _cardLastModifications(BuildContext context) {
 Widget _cardCircleButtons({required BuildContext context}) {
   return GetBuilder<HomeController>(builder: (_) {
     if (_.moneyValueFormatted() != null) {
-      return _widgetCircularCard();
+      return _widgetCircularCard(homeController: _);
     } else {
       return FutureBuilder(
         future: _.getMoneyInFirebase(),
@@ -333,7 +333,8 @@ Widget _cardCircleButtons({required BuildContext context}) {
               case ConnectionState.waiting:
                 return WidgetProgress();
               case ConnectionState.done:
-                return _widgetCircularCard();
+                return _widgetCircularCard(
+                    snapshot: snapshot, homeController: _);
               case ConnectionState.none:
                 return Error404();
               case ConnectionState.active:
@@ -347,14 +348,13 @@ Widget _cardCircleButtons({required BuildContext context}) {
   });
 }
 
-Widget _widgetCircularCard() {
-  return GetBuilder<HomeController>(
-    builder: (_) => WidgetTextInformative(
-        text: _.moneyValueFormatted(),
-        fontSize: 27.0,
-        backgroundColor:
-            _.moneyVisible ? Colors.transparent : Colors.black26,
-        textColor: _.moneyVisible ? null : Colors.transparent,
-        fontWeight: FontWeight.w400),
-  );
+Widget _widgetCircularCard(
+    {required HomeController homeController, AsyncSnapshot<String>? snapshot}) {
+  return WidgetTextInformative(
+      text: homeController.moneyValueFormatted() ?? snapshot!.data,
+      fontSize: 27.0,
+      backgroundColor:
+          homeController.moneyVisible ? Colors.white : Colors.black26,
+      textColor: homeController.moneyVisible ? null : Colors.transparent,
+      fontWeight: FontWeight.w400);
 }
