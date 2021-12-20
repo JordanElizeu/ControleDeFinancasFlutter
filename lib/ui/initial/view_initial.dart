@@ -23,9 +23,11 @@ class ViewInitial extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/images/foguete.png',
-                        width: constraints.maxWidth * 0.15,
+                      Expanded(
+                        child: Image.asset(
+                          'assets/images/foguete.png',
+                          width: constraints.maxWidth * 0.25,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
