@@ -349,16 +349,12 @@ Widget _cardCircleButtons({required BuildContext context}) {
 
 Widget _widgetCircularCard() {
   return GetBuilder<HomeController>(
-    builder: (_) => Column(
-      children: [
-        WidgetTextInformative(
-            text: _.moneyValueFormatted(),
-            fontSize: 27.0,
-            backgroundColor:
-                _.moneyVisible ? Colors.transparent : Colors.black26,
-            textColor: _.moneyVisible ? null : Colors.transparent,
-            fontWeight: FontWeight.w400),
-      ],
-    ),
+    builder: (_) => WidgetTextInformative(
+        text: _.moneyValueFormatted(),
+        fontSize: 27.0,
+        backgroundColor:
+            _.moneyVisible ? Colors.transparent : Colors.black26,
+        textColor: _.moneyVisible ? null : Colors.transparent,
+        fontWeight: FontWeight.w400),
   );
 }
