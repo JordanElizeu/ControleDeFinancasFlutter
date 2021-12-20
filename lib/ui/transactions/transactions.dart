@@ -1,5 +1,5 @@
 import 'package:app_financeiro/controller/controller.dart';
-import 'package:app_financeiro/controller/initial_controller.dart';
+import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
@@ -111,7 +111,7 @@ class Transactions extends StatelessWidget {
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
-                        '${InitialController().formatMoney(snapshot.data!['${index}a']['money'])}',
+                        '${HomeController().formatMoney(snapshot.data!['${index}a']['money'])}',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: snapshot.data!['${index}a']['is_deposit']

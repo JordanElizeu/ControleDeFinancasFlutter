@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class WidgetProgress extends StatelessWidget {
-  const WidgetProgress({Key? key}) : super(key: key);
+  const WidgetProgress({Key? key, this.colors}) : super(key: key);
+  final Color? colors;
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class WidgetProgress extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(40.0),
         child: CircularProgressIndicator(
-          color: Colors.purple,
+          color: colors ?? Colors.purple,
         ),
       ),
     );

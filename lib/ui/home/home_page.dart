@@ -1,5 +1,5 @@
 import 'package:app_financeiro/controller/controller.dart';
-import 'package:app_financeiro/controller/initial_controller.dart';
+import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -7,6 +7,7 @@ import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_inkwellicon.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_textinformative.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
+import 'package:app_financeiro/ui/widgets/widget_logout.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +25,10 @@ class PageHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(TransactionController());
-    Get.put(InitialController());
+    Get.put(HomeController());
     Controller controller = Controller();
     return WillPopScope(
-      onWillPop: () => Controller()
-          .finishAndPageTransition(route: Routes.HOME, context: context),
+      onWillPop: () => alertDialogViewSuccess(context: context),
       child: SafeArea(
         child: Scaffold(
           body: LayoutBuilder(
@@ -116,7 +116,7 @@ Widget _containerWithInformationOfAccount(
     {required BoxConstraints constraints, required BuildContext context}) {
   final String _loading = 'carregando...';
 
-  return GetBuilder<InitialController>(
+  return GetBuilder<HomeController>(
     builder: (_) => FutureBuilder(
       initialData: _loading,
       future: _.getUserName(),
@@ -164,8 +164,7 @@ Widget _containerWithInformationOfAccount(
                       child: WidgetInkwellIcon(
                         icon: Icons.logout,
                         function: () {
-                          return LoginController(context)
-                              .logoutAccount(context: context);
+                          return LoginController(context).logoutAccount();
                         },
                       ),
                     ),
@@ -231,9 +230,13 @@ Widget _cardLastModifications(BuildContext context) {
                         physics: ScrollPhysics(),
                         itemCount: snapshot.data!.length > 3
                             ? 3
-                            : snapshot.data!.length,
+                            : position = snapshot.data!.length,
                         itemBuilder: (BuildContext context, index) {
-                          position++;
+                          if (position == snapshot.data!.length) {
+                            position = index;
+                          } else {
+                            position++;
+                          }
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 10, right: 10, top: 20, bottom: 20),
@@ -284,7 +287,7 @@ Widget _cardLastModifications(BuildContext context) {
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: Text(
-                                        '${InitialController().formatMoney(snapshot.data!['${position}a']['money'])}',
+                                        '${HomeController().formatMoney(snapshot.data!['${position}a']['money'])}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color:
@@ -318,7 +321,7 @@ Widget _cardLastModifications(BuildContext context) {
 }
 
 Widget _cardCircleButtons({required BuildContext context}) {
-  return GetBuilder<InitialController>(builder: (_) {
+  return GetBuilder<HomeController>(builder: (_) {
     if (_.moneyValueFormatted() != null) {
       return _widgetCircularCard();
     } else {
@@ -345,7 +348,7 @@ Widget _cardCircleButtons({required BuildContext context}) {
 }
 
 Widget _widgetCircularCard() {
-  return GetBuilder<InitialController>(
+  return GetBuilder<HomeController>(
     builder: (_) => Column(
       children: [
         WidgetTextInformative(

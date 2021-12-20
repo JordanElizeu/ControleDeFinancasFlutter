@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/initial_controller.dart';
+import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -32,9 +32,9 @@ class DepositMoneyController extends GetxController with DisposableWidget{
               double.parse(_formatValueMoney()),
               isDeposit: true));
       if (success) {
-        double valueAvailable = double.parse(InitialController.moneyValue);
+        double valueAvailable = double.parse(HomeController.moneyValue);
         double newValue = double.parse(_formatValueMoney());
-        InitialController.moneyValue = (valueAvailable + newValue).toString();
+        HomeController.moneyValue = (valueAvailable + newValue).toString();
         Controller()
             .finishAndPageTransition(route: Routes.HOME, context: context);
       }

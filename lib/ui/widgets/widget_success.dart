@@ -13,19 +13,22 @@ class ViewSuccess extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(_titleSuccess),
-      content: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.monetization_on),
-            Text(
-              textSuccess,
-              style: TextStyle(fontSize: 18.0),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.monetization_on,
+              size: 100,
             ),
-          ],
-        ),
+          ),
+          Text(
+            textSuccess,
+          ),
+        ],
       ),
       actions: <Widget>[
         ElevatedButton(
@@ -41,17 +44,17 @@ class ViewSuccess extends StatelessWidget {
 
 class SuccessDialog extends StatelessWidget {
   final Function() functionButton;
-  final String titleError;
+  final String titleSuccess;
   SuccessDialog({
     required this.functionButton,
-    required this.titleError,
+    required this.titleSuccess,
   });
 
   @override
   Widget build(BuildContext context) {
     return ViewSuccess(
       functionButton: functionButton,
-      textSuccess: titleError,
+      textSuccess: titleSuccess,
     );
   }
 }
@@ -59,13 +62,13 @@ class SuccessDialog extends StatelessWidget {
 alertDialogViewSuccess(
     {required BuildContext context,
     required Function() function,
-    required String titleError}) async {
+    required String titleSuccess}) async {
   await showDialog(
     context: context,
     builder: (contextDialog) {
       return SuccessDialog(
         functionButton: function,
-        titleError: titleError,
+        titleSuccess: titleSuccess,
       );
     },
   );

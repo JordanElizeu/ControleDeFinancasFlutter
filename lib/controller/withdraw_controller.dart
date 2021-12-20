@@ -4,7 +4,7 @@ import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'controller.dart';
-import 'initial_controller.dart';
+import 'home_controller.dart';
 
 class WithdrawMoneyController extends GetxController with DisposableWidget {
   final TextEditingController textEditingControllerWithdrawMoney =
@@ -34,9 +34,9 @@ class WithdrawMoneyController extends GetxController with DisposableWidget {
               moneyWithdraw,
               isDeposit: false));
       if (success) {
-        double valueAvailable = double.parse(InitialController.moneyValue);
+        double valueAvailable = double.parse(HomeController.moneyValue);
         double newValue = double.parse(_formatMoneyValueInField());
-        InitialController.moneyValue = (valueAvailable - newValue).toString();
+        HomeController.moneyValue = (valueAvailable - newValue).toString();
         Controller()
             .finishAndPageTransition(route: Routes.HOME, context: context);
       }

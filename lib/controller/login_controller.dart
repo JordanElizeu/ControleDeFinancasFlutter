@@ -27,10 +27,15 @@ class LoginController extends GetxController {
     return false;
   }
 
-  void logoutAccount({required BuildContext context}) async {
+  FirebaseAuth getAuthentication(){
+    return _auth;
+  }
+
+  Future<bool> logoutAccount() async {
     await FirebaseAuth.instance.signOut();
     Controller()
-        .finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: context);
+        .finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: _context);
+    return true;
   }
 
   Future<String?> signInGoogle({required BuildContext context}) async {
@@ -40,7 +45,8 @@ class LoginController extends GetxController {
   Future<String?> signInFirebase(LoginData data) {
     return Future.delayed(loginTime).then((_) {
       return RepositoryFirebaseLogin().repositorySignInFirebase(
-          modelLogin: ModelLogin(data.password, data.name, _context));
+          modelLogin: ModelLogin(
+              context: _context, email: data.name, password: data.password));
     });
   }
 
@@ -59,11 +65,11 @@ class LoginController extends GetxController {
     });
   }
 
-  String? validation(String? text){
-    if(text!.length > 20){
+  String? validation(String? text) {
+    if (text!.length > 20) {
       return 'Nome muito grande';
     }
-    if(text.isEmpty){
+    if (text.isEmpty) {
       return 'Digite seu nome';
     }
     return null;
