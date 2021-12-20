@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class RepositoryInformationOfUser {
   FirebaseAuth _auth = RepositoryConnection.connectionFirebaseAuth();
 
-  Future<String> repositoryGetNameIfUserIsFromFirebase() async {
+  Future<String?> repositoryGetNameIfUserIsFromFirebase() async {
     return await ProviderInformationOfUser(_auth)
         .providerGetNameIfUserIsFromFirebase();
   }

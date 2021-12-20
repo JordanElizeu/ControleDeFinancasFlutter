@@ -42,7 +42,7 @@ class HomeController extends GetxController {
     return await getNameIfUserIsFromFirebase();
   }
 
-  Future<String> getNameIfUserIsFromFirebase() {
+  Future<String?> getNameIfUserIsFromFirebase() {
     return RepositoryInformationOfUser().repositoryGetNameIfUserIsFromFirebase();
   }
 

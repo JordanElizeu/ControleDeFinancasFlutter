@@ -175,7 +175,7 @@ Widget _containerWithInformationOfAccount(
                     alignment: Alignment.bottomLeft,
                     child: FittedBox(
                       child: Text(
-                        'Olá, ${snapshot.data}',
+                        'Olá, ${snapshot.data ?? ''}',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.white,

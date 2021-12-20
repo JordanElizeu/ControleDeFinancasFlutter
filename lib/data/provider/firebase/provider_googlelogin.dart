@@ -1,5 +1,5 @@
-import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_createuser.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_informationsofuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,7 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class ProviderGoogleLogin {
   Future<String?> signInWithGoogle(
       {required BuildContext context,
-      required ProviderCreateUser providerCreateUser}) async {
+      required ProviderCreateUser providerCreateUser,
+      required ProviderInformationOfUser providerInformationOfUser}) async {
     try {
       // Trigger the authentication flow
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -19,11 +20,24 @@ class ProviderGoogleLogin {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
+      if (!await userExists(providerInformationOfUser)) {
+        providerCreateUser.providerCreateUserGoogle();
+      }
       await FirebaseAuth.instance.signInWithCredential(credential);
-      providerCreateUser.providerCreateUserGoogle();
+
       return null;
     } catch (exception) {
-      return 'Erro inesperado';
+      return 'Erro! Login falhou';
     }
+  }
+
+  Future<bool> userExists(
+      ProviderInformationOfUser providerInformationOfUser) async {
+    final String? name =
+        await providerInformationOfUser.providerGetNameIfUserIsFromFirebase();
+    if (name != null) {
+      return true;
+    }
+    return false;
   }
 }

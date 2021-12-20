@@ -8,12 +8,16 @@ class ProviderInformationOfUser{
 
   ProviderInformationOfUser(this._auth);
 
-  Future<String> providerGetNameIfUserIsFromFirebase() async {
-    DatabaseReference _databaseReference = FirebaseDatabase.instance
-        .ref('AppFinancas/${_auth.currentUser!.uid}/Account');
-    DatabaseEvent event = await _databaseReference.once();
-    final String name = event.snapshot.child('name').value.toString();
-    return name;
+  Future<String?> providerGetNameIfUserIsFromFirebase() async {
+    if(_auth.currentUser != null){
+      DatabaseReference _databaseReference = FirebaseDatabase.instance
+          .ref('AppFinancas/${_auth.currentUser!.uid}/Account');
+      DatabaseEvent event = await _databaseReference.once();
+      final String name = event.snapshot.child('name').value.toString();
+      print(name);
+      return name;
+    }
+    return null;
   }
 
   Future<String?> providerForgotPassword(String email) async {
