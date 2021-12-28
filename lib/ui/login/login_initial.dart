@@ -1,5 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/login/widgets/widget_animatedtext.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,7 +77,7 @@ class Login extends StatelessWidget {
                                         new BorderRadius.circular(30.0)))),
                         child: FittedBox(child: Text(_textAccessMyAccount)),
                         onPressed: () {
-                          Controller().finishAndPageTransition(
+                          TransitionController().finishAndPageTransition(
                               route: Routes.LOGIN, context: context);
                         },
                       ),

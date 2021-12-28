@@ -35,24 +35,18 @@ class ProviderCreateUser {
   }
 
   Future<String?> providerCreateUserGoogle() async {
-    try {
-      _databaseReference
-          .child('AppFinancas')
-          .child(_auth.currentUser!.uid)
-          .child('Account')
-          .child('name')
-          .set(_auth.currentUser!.displayName);
-      _databaseReference
-          .child('AppFinancas')
-          .child(_auth.currentUser!.uid)
-          .child('Account')
-          .child('Finances')
-          .child('money')
-          .set('0');
-    } on FirebaseAuthException catch (exception) {
-      return ProviderFirebaseExceptions()
-          .handleFirebaseCreateUserWithEmailAndPasswordException(
-          exceptionMessage: exception);
-    }
+    _databaseReference
+        .child('AppFinancas')
+        .child(_auth.currentUser!.uid)
+        .child('Account')
+        .child('name')
+        .set(_auth.currentUser!.displayName);
+    _databaseReference
+        .child('AppFinancas')
+        .child(_auth.currentUser!.uid)
+        .child('Account')
+        .child('Finances')
+        .child('money')
+        .set('0');
   }
 }

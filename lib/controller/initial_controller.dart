@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,9 +9,9 @@ class InitialController extends GetxController {
     Future.delayed(Duration(seconds: 5)).then(
       (value) => {
         LoginController(context).getAuthentication().currentUser != null
-            ? Controller()
+            ? TransitionController()
                 .finishAndPageTransition(route: Routes.HOME, context: context)
-            : Controller().finishAndPageTransition(
+            : TransitionController().finishAndPageTransition(
                 route: Routes.LOGIN_INITIAL, context: context)
       },
     );

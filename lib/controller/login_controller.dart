@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
-import 'controller.dart';
+import 'transition_controller.dart';
 
 class LoginController extends GetxController {
   Duration get loginTime => Duration(milliseconds: 2250);
@@ -33,7 +33,7 @@ class LoginController extends GetxController {
 
   Future<bool> logoutAccount() async {
     await FirebaseAuth.instance.signOut();
-    Controller()
+    TransitionController()
         .finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: _context);
     return true;
   }

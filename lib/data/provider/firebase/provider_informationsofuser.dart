@@ -14,19 +14,8 @@ class ProviderInformationOfUser{
           .ref('AppFinancas/${_auth.currentUser!.uid}/Account');
       DatabaseEvent event = await _databaseReference.once();
       final String name = event.snapshot.child('name').value.toString();
-      print(name);
       return name;
     }
     return null;
-  }
-
-  Future<String?> providerForgotPassword(String email) async {
-    try {
-      await _auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (exception) {
-      return ProviderFirebaseExceptions()
-          .handleFirebaseSendPasswordResetEmailException(
-          exceptionMessage: exception);
-    }
   }
 }

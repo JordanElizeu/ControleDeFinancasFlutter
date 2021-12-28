@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/deposit_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
@@ -17,33 +17,35 @@ class DepositMoney extends StatelessWidget {
     final DepositMoneyController depositMoneyController =
         DepositMoneyController();
     return WillPopScope(
-      onWillPop: () => Controller()
+      onWillPop: () => TransitionController()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
-            globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
-            globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
-            globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
-            textEditingControllerDesc:
-                depositMoneyController.textEditingControllerDepositDesc,
-            textEditingControllerMoney:
-                depositMoneyController.textEditingControllerDepositMoney,
-            textEditingControllerTitle:
-                depositMoneyController.textEditingControllerDepositTitle,
-            functionValidateMoney: (String text) {
-              return depositMoneyController.validateFieldFormTextMoney();
-            },
-            functionValidateDesc: (String text) {
-              return depositMoneyController.validateFieldFormTextDesc();
-            },
-            functionValidateTitle: (String text) {
-              return depositMoneyController.validateFieldFormTextTitle();
-            },
-            labelFieldMoney: _labelFieldMoney,
-            functionButtonConfirm: () {
-              return depositMoneyController.confirmDeposit(context: context);
-            }),
+          globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
+          globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
+          globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
+          textEditingControllerDesc:
+              DepositMoneyController.textEditingControllerDepositDesc,
+          textEditingControllerMoney:
+              DepositMoneyController.textEditingControllerDepositMoney,
+          textEditingControllerTitle:
+              DepositMoneyController.textEditingControllerDepositTitle,
+          functionValidateMoney: (String text) {
+            return depositMoneyController.validateFieldFormTextMoney(text);
+          },
+          functionValidateDesc: (String text) {
+            return depositMoneyController.validateFieldFormTextDesc();
+          },
+          functionValidateTitle: (String text) {
+            return depositMoneyController.validateFieldFormTextTitle();
+          },
+          labelFieldMoney: _labelFieldMoney,
+          functionButtonConfirm: () async {
+            return await depositMoneyController.confirmDeposit(
+                context: context);
+          },
+        ),
       ),
     );
   }

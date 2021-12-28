@@ -1,5 +1,5 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
@@ -23,7 +23,7 @@ class Annotations extends StatelessWidget {
     AnnotationsController annotationController =
         Get.put(AnnotationsController());
     return WillPopScope(
-      onWillPop: () => Controller()
+      onWillPop: () => TransitionController()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: AppBar(
@@ -59,8 +59,8 @@ class Annotations extends StatelessWidget {
           ],
         ),
         body: GetBuilder<AnnotationsController>(
-          builder: (_) => FutureBuilder(
-            future: _.getAllAnnotations(),
+          builder: (controller) => FutureBuilder(
+            future: controller.getAllAnnotations(),
             builder: (BuildContext context,
                 AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
               if (snapshot.hasData &&
@@ -74,7 +74,7 @@ class Annotations extends StatelessWidget {
                   case ConnectionState.active:
                     return WidgetProgress();
                   case ConnectionState.done:
-                    return _widgetFutureBuilder(snapshot, _);
+                    return _widgetFutureBuilder(snapshot, controller);
                 }
               } else if (snapshot.hasError) {
                 return Error404(title: _error404);

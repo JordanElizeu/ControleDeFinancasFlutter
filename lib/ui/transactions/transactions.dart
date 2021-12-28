@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -20,7 +20,7 @@ class Transactions extends StatelessWidget {
     TransactionController transactionController =
         Get.put(TransactionController());
     return WillPopScope(
-      onWillPop: () => Controller()
+      onWillPop: () => TransitionController()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTransaction),
@@ -75,31 +75,43 @@ class Transactions extends StatelessWidget {
                   color: Colors.purple,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          flex: 0,
-                          child: CircleAvatar(
-                            child: Icon(Icons.person),
+                        Container(
+                          padding: EdgeInsets.only(bottom: 10,top: 5),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            snapshot.data!['${index}a']['data'],
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              snapshot.data!['${index}a']['title'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 0,
+                              child: CircleAvatar(
+                                child: Icon(Icons.person),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 0,
-                          child: CircleAvatar(
-                            child: Image.asset('assets/images/foguete.png'),
-                          ),
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  snapshot.data!['${index}a']['title'],
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 0,
+                              child: CircleAvatar(
+                                child: Image.asset('assets/images/foguete.png'),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

@@ -4,14 +4,14 @@ import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart'
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'controller.dart';
+import 'transition_controller.dart';
 
-class DepositMoneyController extends GetxController with DisposableWidget{
-  final TextEditingController textEditingControllerDepositMoney =
+class DepositMoneyController extends GetxController {
+  static TextEditingController textEditingControllerDepositMoney =
       TextEditingController();
-  final TextEditingController textEditingControllerDepositTitle =
+  static TextEditingController textEditingControllerDepositTitle =
       TextEditingController();
-  final TextEditingController textEditingControllerDepositDesc =
+  static TextEditingController textEditingControllerDepositDesc =
       TextEditingController();
   final GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
@@ -24,25 +24,36 @@ class DepositMoneyController extends GetxController with DisposableWidget{
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
-      bool success = await RepositoryDeposit().repositoryAddDeposit(
-          modelTransaction: ModelTransaction(
-              textEditingControllerDepositTitle.text,
-              textEditingControllerDepositDesc.text,
-              context,
-              double.parse(_formatValueMoney()),
-              isDeposit: true));
-      if (success) {
-        double valueAvailable = double.parse(HomeController.moneyValue);
-        double newValue = double.parse(_formatValueMoney());
+      double valueAvailable;
+      double newValue;
+      bool result = await RepositoryDeposit().repositoryAddDeposit(
+        modelTransaction: ModelTransaction(
+            textEditingControllerDepositTitle.text,
+            textEditingControllerDepositDesc.text,
+            context,
+            double.parse(_formatValueMoney()),
+            isDeposit: true),
+      );
+      if (result) {
+        valueAvailable = double.parse(HomeController.moneyValue);
+        newValue = double.parse(_formatValueMoney());
         HomeController.moneyValue = (valueAvailable + newValue).toString();
-        Controller()
-            .finishAndPageTransition(route: Routes.HOME, context: context);
+        clearAllFields();
+        await TransitionController()
+            .pageTransition(route: Routes.HOME, context: context);
       }
     }
   }
 
-  String? validateFieldFormTextMoney() {
-    if (!_validateValueMoney()) {
+  void clearAllFields() {
+    textEditingControllerDepositTitle.text = '';
+    textEditingControllerDepositDesc.text = '';
+    textEditingControllerDepositMoney.text = '';
+    update();
+  }
+
+  String? validateFieldFormTextMoney(text) {
+    if (!_validateValueMoney(text)) {
       return 'Preencha um valor correto';
     }
     return null;
@@ -62,7 +73,7 @@ class DepositMoneyController extends GetxController with DisposableWidget{
     return null;
   }
 
-  bool _validateValueMoney() {
+  bool _validateValueMoney(text) {
     String formatToString = _formatValueMoney();
     final double formatToDouble = double.parse(formatToString);
     if (formatToDouble <= 0.0) {
@@ -81,7 +92,9 @@ class DepositMoneyController extends GetxController with DisposableWidget{
 
   @override
   void dispose() {
-    cancelSubscriptions();
+    textEditingControllerDepositMoney.dispose();
+    textEditingControllerDepositTitle.dispose();
+    textEditingControllerDepositDesc.dispose();
     super.dispose();
   }
 }

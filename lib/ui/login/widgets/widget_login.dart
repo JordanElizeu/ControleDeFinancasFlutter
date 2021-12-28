@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,10 +12,10 @@ class WidgetLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     LoginController _loginController = LoginController(context);
-    Controller controller = Controller();
+    TransitionController controller = TransitionController();
     FirebaseAuth auth = _loginController.getAuthentication();
     return WillPopScope(
-      onWillPop: () => Controller().finishAndPageTransition(
+      onWillPop: () => TransitionController().finishAndPageTransition(
           route: Routes.LOGIN_INITIAL, context: context),
       child: Material(
         child: FlutterLogin(
@@ -69,7 +69,7 @@ class WidgetLogin extends StatelessWidget {
             ),
           ],
           onSubmitAnimationCompleted: () {
-            Controller().finishAndPageTransition(
+            TransitionController().finishAndPageTransition(
                 route: Routes.HOME, context: context);
           },
           onRecoverPassword: LoginController(context).forgotPasswordFirebase,

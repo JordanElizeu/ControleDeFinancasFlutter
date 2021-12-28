@@ -20,10 +20,11 @@ class ProviderGoogleLogin {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
       if (!await userExists(providerInformationOfUser)) {
         providerCreateUser.providerCreateUserGoogle();
       }
-      await FirebaseAuth.instance.signInWithCredential(credential);
 
       return null;
     } catch (exception) {

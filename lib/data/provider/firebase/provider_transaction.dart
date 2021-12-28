@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
-class ProviderTransactions{
+class ProviderTransactions {
   final DatabaseReference databaseReference;
   final FirebaseAuth firebaseAuth;
 
@@ -59,6 +60,25 @@ class ProviderTransactions{
         .child(id)
         .child('is_deposit')
         .set(modelAddTransaction.isDeposit);
+    databaseReference
+        .child('AppFinancas')
+        .child(firebaseAuth.currentUser!.uid)
+        .child('Account')
+        .child('Finances')
+        .child('transactions')
+        .child(id)
+        .child('data')
+        .set(getTodayDate());
+  }
+
+  String getTodayDate() {
+    DateFormat dateFormat = DateFormat();
+    var format = dateFormat.add_Hms();
+    final String dateString = '${DateTime.now().day}/'
+        '${DateTime.now().month}/'
+        '${DateTime.now().year} '
+        '${format.format(DateTime.now())}';
+    return dateString;
   }
 
   Future<Map> getAvailableMoney() async {

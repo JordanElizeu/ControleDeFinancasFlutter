@@ -1,4 +1,4 @@
-import 'package:app_financeiro/controller/controller.dart';
+import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
@@ -26,7 +26,7 @@ class PageHome extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(TransactionController());
     Get.put(HomeController());
-    Controller controller = Controller();
+    TransitionController controller = TransitionController();
     return WillPopScope(
       onWillPop: () => alertDialogViewSuccess(context: context),
       child: SafeArea(
