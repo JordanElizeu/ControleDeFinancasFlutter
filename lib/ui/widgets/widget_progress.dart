@@ -1,3 +1,4 @@
+import 'package:app_financeiro/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class WidgetProgress extends StatelessWidget {
@@ -10,7 +11,7 @@ class WidgetProgress extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(40.0),
         child: CircularProgressIndicator(
-          color: colors ?? Colors.purple,
+          color: colors ?? primaryColor,
         ),
       ),
     );

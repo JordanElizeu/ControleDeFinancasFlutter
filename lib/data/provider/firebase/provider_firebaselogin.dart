@@ -1,9 +1,9 @@
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/data/model/model_login/model_login.dart';
 import 'package:app_financeiro/data/provider/firebase_exceptions/firebase_exceptions.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../../utils/transition_page.dart';
 
 class ProviderLoginFirebase {
   final RepositoryConnection repositoryConnection;
@@ -17,7 +17,7 @@ class ProviderLoginFirebase {
           .connectionFirebaseAuth()
           .signInWithEmailAndPassword(
               email: modelLogin.email, password: modelLogin.password)
-          .then((value) => TransitionController().finishAndPageTransition(
+          .then((value) => TransitionPage().finishAndPageTransition(
               route: Routes.HOME, context: modelLogin.context));
     } on FirebaseAuthException catch (exception) {
       return ProviderFirebaseExceptions()

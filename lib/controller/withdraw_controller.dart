@@ -4,7 +4,7 @@ import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'transition_controller.dart';
+import '../utils/transition_page.dart';
 import 'home_controller.dart';
 
 class WithdrawMoneyController extends GetxController {
@@ -16,8 +16,8 @@ class WithdrawMoneyController extends GetxController {
       TextEditingController();
   final RepositoryWithdraw _repositoryWithdraw =
       getIt.get<RepositoryWithdraw>();
-  final TransitionController _transitionController =
-      getIt.get<TransitionController>();
+  final TransitionPage _transitionController =
+      getIt.get<TransitionPage>();
 
   Future<void> confirmMoneyWithdraw({
     required BuildContext context,
@@ -69,13 +69,6 @@ class WithdrawMoneyController extends GetxController {
   String? validateFieldFormTextTitle() {
     if (textEditingControllerWithdrawTitle.text.isEmpty) {
       return 'Preencha um título';
-    }
-    return null;
-  }
-
-  String? validateFieldFormTextDesc() {
-    if (textEditingControllerWithdrawDesc.text.isEmpty) {
-      return 'Preencha uma descrição';
     }
     return null;
   }

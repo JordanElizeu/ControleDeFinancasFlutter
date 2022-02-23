@@ -1,10 +1,12 @@
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/withdraw_controller.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_forms.dart';
+import 'package:app_financeiro/utils/transition_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../utils/form_validation.dart';
 
 class WithdrawMoney extends StatefulWidget {
   const WithdrawMoney({Key? key}) : super(key: key);
@@ -19,14 +21,15 @@ class _WithdrawMoneyState extends State<WithdrawMoney> {
   final GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
+  final TransitionPage _transitionPage = getIt.get<TransitionPage>();
 
   @override
   Widget build(BuildContext context) {
     WithdrawMoneyController withdrawMoneyController =
         getIt.get<WithdrawMoneyController>();
     return WillPopScope(
-      onWillPop: () => TransitionController()
-          .finishAndPageTransition(route: Routes.HOME, context: context),
+      onWillPop: () => _transitionPage.finishAndPageTransition(
+          route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
@@ -43,7 +46,7 @@ class _WithdrawMoneyState extends State<WithdrawMoney> {
             return withdrawMoneyController.validateFieldFormTextMoney();
           },
           functionValidateDesc: (String text) {
-            return withdrawMoneyController.validateFieldFormTextDesc();
+            return validateFieldFormTextDesc(text);
           },
           functionValidateTitle: (String text) {
             return withdrawMoneyController.validateFieldFormTextTitle();

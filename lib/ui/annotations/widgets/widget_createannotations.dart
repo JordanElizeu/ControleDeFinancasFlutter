@@ -2,6 +2,7 @@ import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
 import 'package:flutter/material.dart';
 import '../../../injection/injection.dart';
+import '../../../utils/form_validation.dart';
 
 class CreateAnnotations extends StatefulWidget {
   static BuildContext? context;
@@ -47,8 +48,7 @@ class _CreateAnnotationsState extends State<CreateAnnotations> {
                     controller:
                         annotationsController.textEditingControllerTitle,
                     function: (String text) {
-                      return annotationsController.validateFieldFormTextTitle(
-                          text: text);
+                      return validateFieldFormTextTitle(text: text);
                     }),
               ),
             ),
@@ -63,8 +63,7 @@ class _CreateAnnotationsState extends State<CreateAnnotations> {
                     controller:
                         annotationsController.textEditingControllerAnnotation,
                     function: (String text) {
-                      return annotationsController
-                          .validateFieldFormTextAnnotation(text: text);
+                      return validateFieldFormTextAnnotation(text: text);
                     }),
               ),
             ),

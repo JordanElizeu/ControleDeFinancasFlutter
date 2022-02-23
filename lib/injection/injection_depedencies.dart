@@ -11,7 +11,6 @@ export 'package:app_financeiro/controller/home_controller.dart';
 export 'package:app_financeiro/controller/initial_controller.dart';
 export 'package:app_financeiro/controller/login_controller.dart';
 export 'package:app_financeiro/controller/transaction_controller.dart';
-export 'package:app_financeiro/controller/transition_controller.dart';
 export 'package:app_financeiro/controller/withdraw_controller.dart';
 export 'package:app_financeiro/data/provider/firebase/provider_createuser.dart';
 export 'package:app_financeiro/data/provider/firebase/provider_deposit.dart';

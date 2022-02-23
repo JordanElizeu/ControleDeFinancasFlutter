@@ -1,3 +1,4 @@
+import 'package:app_financeiro/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Error404 extends StatelessWidget {
@@ -16,7 +17,7 @@ class Error404 extends StatelessWidget {
             children: [
               Image.asset('assets/images/error404.png'),
               Card(
-                color: Colors.purple,
+                color: secondaryColor,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 10, bottom: 10, left: 40, right: 40),

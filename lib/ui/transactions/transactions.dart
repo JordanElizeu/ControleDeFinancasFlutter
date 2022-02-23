@@ -1,14 +1,16 @@
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/string_i18n.dart';
+import 'package:app_financeiro/theme/theme.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../utils/transition_page.dart';
 
 class Transactions extends StatelessWidget {
   const Transactions({Key? key}) : super(key: key);
@@ -20,8 +22,8 @@ class Transactions extends StatelessWidget {
   Widget build(BuildContext context) {
     final TransactionController transactionController =
         Get.put(getIt.get<TransactionController>());
-    final TransitionController transitionController =
-        getIt.get<TransitionController>();
+    final TransitionPage transitionController =
+        getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => transitionController.finishAndPageTransition(
           route: Routes.HOME, context: context),
@@ -74,7 +76,7 @@ class Transactions extends StatelessWidget {
             child: Column(
               children: [
                 Card(
-                  color: Colors.purple,
+                  color: primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(

@@ -48,20 +48,6 @@ class AnnotationsController extends GetxController {
     return map;
   }
 
-  String? validateFieldFormTextTitle({required String text}) {
-    if (text.isEmpty) {
-      return 'Preencha um título';
-    }
-    return null;
-  }
-
-  String? validateFieldFormTextAnnotation({required String text}) {
-    if (text.isEmpty) {
-      return 'Preencha uma anotação';
-    }
-    return null;
-  }
-
   void changeCheckBoxSelected(bool value) {
     checkBoxSelected = value;
     update();

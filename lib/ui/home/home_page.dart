@@ -1,10 +1,10 @@
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/string_i18n.dart';
+import 'package:app_financeiro/theme/theme.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_inkwellicon.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_textinformative.dart';
@@ -13,6 +13,7 @@ import 'package:app_financeiro/ui/widgets/widget_logout.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../utils/transition_page.dart';
 
 class PageHome extends StatelessWidget {
   const PageHome({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class PageHome extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(getIt.get<TransactionController>());
     Get.put(getIt.get<HomeController>());
-    TransitionController controller = getIt.get<TransitionController>();
+    TransitionPage controller = getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => alertDialogViewSuccess(context: context),
       child: SafeArea(
@@ -42,10 +43,17 @@ class PageHome extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           WidgetTextInformative(
-                              text: _textAccount, fontSize: 22.0),
-                          _cardCircleButtons(context: context),
+                            text: _textAccount,
+                            fontSize: 22.0,
+                            constraints: constraints,
+                          ),
+                          _cardCircleButtons(
+                            context: context,
+                            constraints: constraints,
+                          ),
                           Row(
                             children: [
                               Expanded(
@@ -102,7 +110,10 @@ class PageHome extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _cardLastModifications(context),
+                  _cardLastModifications(
+                    context: context,
+                    constraints: constraints,
+                  ),
                 ],
               );
             },
@@ -124,7 +135,7 @@ Widget _containerWithInformationOfAccount(
       future: _.getUserName(),
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         return Container(
-          color: Colors.purple,
+          color: primaryColor,
           width: constraints.maxWidth,
           height: constraints.maxHeight * 0.30,
           child: Padding(
@@ -196,7 +207,10 @@ Widget _containerWithInformationOfAccount(
   );
 }
 
-Widget _cardLastModifications(BuildContext context) {
+Widget _cardLastModifications({
+  required BuildContext context,
+  required BoxConstraints constraints,
+}) {
   final String _lastTransaction = 'Últimas transações';
   final HomeController homeController = getIt.get<HomeController>();
 
@@ -219,7 +233,10 @@ Widget _cardLastModifications(BuildContext context) {
                   children: [
                     ListTile(
                       title: WidgetTextInformative(
-                          text: _lastTransaction, fontSize: 22.0),
+                        text: _lastTransaction,
+                        constraints: constraints,
+                        fontSize: 22.0,
+                      ),
                     ),
                     NotificationListener<OverscrollIndicatorNotification>(
                       onNotification:
@@ -241,12 +258,11 @@ Widget _cardLastModifications(BuildContext context) {
                             position++;
                           }
                           return Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 20, bottom: 20),
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               children: [
                                 Card(
-                                  color: Colors.purple,
+                                  color: primaryColor,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
@@ -323,10 +339,16 @@ Widget _cardLastModifications(BuildContext context) {
   );
 }
 
-Widget _cardCircleButtons({required BuildContext context}) {
+Widget _cardCircleButtons({
+  required BuildContext context,
+  required BoxConstraints constraints,
+}) {
   return GetBuilder<HomeController>(builder: (_) {
     if (_.moneyValueFormatted() != null) {
-      return _widgetCircularCard(homeController: _);
+      return _widgetCircularCard(
+        homeController: _,
+        constraints: constraints,
+      );
     } else {
       return FutureBuilder(
         future: _.getMoneyInFirebase(),
@@ -337,7 +359,10 @@ Widget _cardCircleButtons({required BuildContext context}) {
                 return WidgetProgress();
               case ConnectionState.done:
                 return _widgetCircularCard(
-                    snapshot: snapshot, homeController: _);
+                  snapshot: snapshot,
+                  homeController: _,
+                  constraints: constraints,
+                );
               case ConnectionState.none:
                 return Error404();
               case ConnectionState.active:
@@ -351,11 +376,15 @@ Widget _cardCircleButtons({required BuildContext context}) {
   });
 }
 
-Widget _widgetCircularCard(
-    {required HomeController homeController, AsyncSnapshot<String>? snapshot}) {
+Widget _widgetCircularCard({
+  required HomeController homeController,
+  required BoxConstraints constraints,
+  AsyncSnapshot<String>? snapshot,
+}) {
   return WidgetTextInformative(
       text: homeController.moneyValueFormatted() ?? snapshot!.data,
       fontSize: 27.0,
+      constraints: constraints,
       backgroundColor:
           homeController.moneyVisible ? Colors.white : Colors.black26,
       textColor: homeController.moneyVisible ? null : Colors.transparent,

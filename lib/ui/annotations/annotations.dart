@@ -1,7 +1,7 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/theme/theme.dart';
 import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
@@ -10,6 +10,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import '../../string_i18n.dart';
+import '../../utils/transition_page.dart';
 
 class Annotations extends StatelessWidget {
   const Annotations({Key? key}) : super(key: key);
@@ -23,8 +24,8 @@ class Annotations extends StatelessWidget {
   Widget build(BuildContext context) {
     AnnotationsController annotationController =
         Get.put(getIt.get<AnnotationsController>());
-    TransitionController transitionController =
-        getIt.get<TransitionController>();
+    TransitionPage transitionController =
+        getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => transitionController.finishAndPageTransition(
           route: Routes.HOME, context: context),
@@ -32,28 +33,30 @@ class Annotations extends StatelessWidget {
         appBar: AppBar(
           title: Text(_appBarTitle),
           actions: [
-            Container(
-              child: ElevatedButton(
-                onPressed: () {
-                  alertDialogCreateAnnotation(
-                      context: context,
-                      function: () async {
-                        await annotationController.sendAnnotation(
-                          context: context,
-                          annotation: annotationController
-                              .textEditingControllerAnnotation.text,
-                          title: annotationController
-                              .textEditingControllerTitle.text,
-                          formKeyAnnotation:
-                              CreateAnnotations.formKeyAnnotation,
-                          formKeyTitle:
-                              CreateAnnotations.formKeyAnnotationTitle,
-                        );
-                        Navigator.pop(CreateAnnotations.context!);
-                      },
-                      annotationsController: annotationController);
-                },
-                child: Icon(Icons.message),
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(buttonColor),
+              ),
+              onPressed: () {
+                alertDialogCreateAnnotation(
+                    context: context,
+                    function: () async {
+                      await annotationController.sendAnnotation(
+                        context: context,
+                        annotation: annotationController
+                            .textEditingControllerAnnotation.text,
+                        title: annotationController
+                            .textEditingControllerTitle.text,
+                        formKeyAnnotation: CreateAnnotations.formKeyAnnotation,
+                        formKeyTitle: CreateAnnotations.formKeyAnnotationTitle,
+                      );
+                      Navigator.pop(CreateAnnotations.context!);
+                    },
+                    annotationsController: annotationController);
+              },
+              child: Icon(
+                Icons.message,
+                color: Colors.white,
               ),
             )
           ],

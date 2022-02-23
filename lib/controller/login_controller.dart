@@ -11,21 +11,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
-import 'transition_controller.dart';
+import '../utils/transition_page.dart';
 
 class LoginController extends GetxController {
   Duration get loginTime => Duration(milliseconds: 2250);
 
   final RepositoryInformationOfUser _repositoryInformationOfUser =
       getIt.get<RepositoryInformationOfUser>();
-  final TransitionController _transitionController =
-      getIt.get<TransitionController>();
+  final TransitionPage _transitionController = getIt.get<TransitionPage>();
   final RepositoryGoogleConnection _repositoryGoogleConnection =
       getIt.get<RepositoryGoogleConnection>();
   final RepositoryCreateUser _repositoryCreateUser =
       getIt.get<RepositoryCreateUser>();
   final RepositoryFirebaseLogin _repositoryFirebaseLogin =
       getIt.get<RepositoryFirebaseLogin>();
+  bool pageIsLoading = false;
 
   bool userIsOn({required FirebaseAuth auth}) {
     if (auth.currentUser != null) {
@@ -35,10 +35,16 @@ class LoginController extends GetxController {
     return false;
   }
 
+  void pageLoadingState() async {
+    await Future.delayed(Duration(seconds: 4));
+    pageIsLoading = true;
+    update();
+  }
+
   Future<bool> logoutAccount({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
     _transitionController.finishAndPageTransition(
-        route: Routes.LOGIN_INITIAL, context: context);
+        route: Routes.INITIAL, context: context);
     return true;
   }
 
@@ -67,16 +73,6 @@ class LoginController extends GetxController {
       return _repositoryInformationOfUser.repositoryForgotPasswordFirebase(
           email: email);
     });
-  }
-
-  String? validation(String? text) {
-    if (text!.length > 20) {
-      return 'Nome muito grande';
-    }
-    if (text.isEmpty) {
-      return 'Digite seu nome';
-    }
-    return null;
   }
 
   @override

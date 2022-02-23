@@ -1,4 +1,3 @@
-import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -8,6 +7,8 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../../../injection/injection.dart';
+import '../../../utils/form_validation.dart';
+import '../../../utils/transition_page.dart';
 
 class WidgetLogin extends StatelessWidget {
   const WidgetLogin({Key? key}) : super(key: key);
@@ -16,13 +17,18 @@ class WidgetLogin extends StatelessWidget {
     LoginController _loginController = Get.put(getIt.get<LoginController>());
     FirebaseAuth auth =
         getIt.get<RepositoryConnection>().connectionFirebaseAuth();
-    TransitionController transitionController =
-        getIt.get<TransitionController>();
+    TransitionPage transitionController = getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => transitionController.finishAndPageTransition(
-          route: Routes.LOGIN_INITIAL, context: context),
+          route: Routes.INITIAL, context: context),
       child: Material(
         child: FlutterLogin(
+          passwordValidator: (text) {
+            return validatePassword(text!);
+          },
+          userValidator: (text) {
+            return validateEmail(text!);
+          },
           messages: LoginMessages(
             forgotPasswordButton: 'Esqueci minha senha',
             signupButton: 'Cadastre-se',
@@ -60,7 +66,7 @@ class WidgetLogin extends StatelessWidget {
                 keyName: 'name',
                 icon: Icon(Icons.person),
                 displayName: 'Name',
-                fieldValidator: _loginController.validation,
+                fieldValidator: validateName,
                 userType: LoginUserType.name),
           ],
           loginProviders: [

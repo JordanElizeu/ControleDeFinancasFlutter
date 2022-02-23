@@ -5,7 +5,7 @@ import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'transition_controller.dart';
+import '../utils/transition_page.dart';
 
 class DepositMoneyController extends GetxController {
   final TextEditingController textEditingControllerDepositMoney =
@@ -16,8 +16,8 @@ class DepositMoneyController extends GetxController {
       TextEditingController();
 
   final RepositoryDeposit _repositoryDeposit = getIt.get<RepositoryDeposit>();
-  final TransitionController _transitionController =
-      getIt.get<TransitionController>();
+  final TransitionPage _transitionController =
+      getIt.get<TransitionPage>();
 
   Future<void> confirmDeposit({
     required BuildContext context,
@@ -59,27 +59,6 @@ class DepositMoneyController extends GetxController {
     update();
   }
 
-  String? validateFieldFormTextMoney(text) {
-    if (!_validateValueMoney(text)) {
-      return 'Preencha um valor correto';
-    }
-    return null;
-  }
-
-  String? validateFieldFormTextTitle() {
-    if (textEditingControllerDepositTitle.text.isEmpty) {
-      return 'Preencha um título';
-    }
-    return null;
-  }
-
-  String? validateFieldFormTextDesc() {
-    if (textEditingControllerDepositDesc.text.isEmpty) {
-      return 'Preencha uma descrição';
-    }
-    return null;
-  }
-
   bool _validateValueMoney(text) {
     String formatToString = _formatValueMoney();
     final double formatToDouble = double.parse(formatToString);
@@ -87,6 +66,13 @@ class DepositMoneyController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  String? validateFieldFormTextMoney(text) {
+    if (!_validateValueMoney(text)) {
+      return 'Preencha um valor correto';
+    }
+    return null;
   }
 
   String _formatValueMoney() {
