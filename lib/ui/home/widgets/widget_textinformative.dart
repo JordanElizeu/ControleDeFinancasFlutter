@@ -1,9 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class WidgetTextInformative extends StatelessWidget {
-  const WidgetTextInformative({Key? key, this.text, required this.fontSize, this.backgroundColor, this.textColor, this.fontWeight}) : super(key: key);
+  const WidgetTextInformative(
+      {Key? key,
+      this.text,
+      required this.fontSize,
+      this.backgroundColor,
+      this.textColor,
+      this.fontWeight})
+      : super(key: key);
 
   final String? text;
   final double fontSize;
@@ -18,13 +23,12 @@ class WidgetTextInformative extends StatelessWidget {
       child: Container(
         alignment: Alignment.centerLeft,
         child: Text(
-          text?? '',
+          text ?? '',
           style: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
-              color: textColor?? Colors.black,
-              backgroundColor: backgroundColor?? Colors.transparent
-          ),
+              color: textColor ?? Colors.black,
+              backgroundColor: backgroundColor ?? Colors.transparent),
         ),
       ),
     );

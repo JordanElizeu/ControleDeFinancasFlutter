@@ -1,15 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class RepositoryConnection{
+class RepositoryConnection {
+  DatabaseReference? _databaseReference;
+  FirebaseAuth? _auth;
 
-  static DatabaseReference connectionDatabase(){
-    final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
-    return databaseReference;
+  DatabaseReference connectionDatabase() {
+    if (_databaseReference != null) {
+      return _databaseReference!;
+    }
+    _databaseReference = FirebaseDatabase.instance.ref();
+    return _databaseReference!;
   }
 
-  static FirebaseAuth connectionFirebaseAuth(){
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    return auth;
+  FirebaseAuth connectionFirebaseAuth() {
+    if (_auth != null) {
+      return _auth!;
+    }
+    _auth = FirebaseAuth.instance;
+    return _auth!;
   }
 }

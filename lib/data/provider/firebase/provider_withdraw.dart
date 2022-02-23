@@ -1,16 +1,22 @@
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/ui/widgets/widget_failure.dart';
+import '../../../string_i18n.dart';
 
-class ProviderWithdraw {
-  final ProviderTransactions _providerTransactions;
-
-  ProviderWithdraw(this._providerTransactions);
+class ProviderWithdraw extends ProviderTransactions {
+  ProviderWithdraw({required RepositoryConnection repositoryConnection})
+      : super(repositoryConnection: repositoryConnection);
 
   Future<bool> providerMoneyWithdraw(
       {required ModelTransaction modelTransaction}) async {
-    Map mapValueMoney = await _providerTransactions.getAvailableMoney();
-    double availableMoney = double.parse(mapValueMoney['money'].toString());
+    double availableMoney = 0;
+    await getAvailableMoney().then((value) => {
+          if (value![columnMoney] != null)
+            {
+              availableMoney = double.parse(value[columnMoney].toString()),
+            }
+        });
     if (modelTransaction.quantityMoney > availableMoney) {
       alertDialogViewFailure(
           titleError: 'Saldo insuficiente',
@@ -19,14 +25,14 @@ class ProviderWithdraw {
       return false;
     } else {
       try {
-        _providerTransactions.databaseReference
-            .child('AppFinancas')
-            .child(_providerTransactions.firebaseAuth.currentUser!.uid)
-            .child('Account')
-            .child('Finances')
-            .child('money')
+        repositoryConnection.connectionDatabase()
+            .child(pathAppFinances)
+            .child(repositoryConnection.connectionFirebaseAuth().currentUser!.uid)
+            .child(pathAccount)
+            .child(pathFinances)
+            .child(columnMoney)
             .set(availableMoney - modelTransaction.quantityMoney);
-        await _providerTransactions.addTransaction(
+        await addTransaction(
             modelAddTransaction: modelTransaction);
         return true;
       } catch (exception) {

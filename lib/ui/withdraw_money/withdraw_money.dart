@@ -1,35 +1,44 @@
 import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/withdraw_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_forms.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class WithdrawMoney extends StatelessWidget {
+class WithdrawMoney extends StatefulWidget {
   const WithdrawMoney({Key? key}) : super(key: key);
 
+  @override
+  State<WithdrawMoney> createState() => _WithdrawMoneyState();
+}
+
+class _WithdrawMoneyState extends State<WithdrawMoney> {
   final String _appBarTitle = 'Sacar dinheiro';
   final String _labelFieldMoney = 'Valor a sacar';
+  final GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    WithdrawMoneyController withdrawMoneyController = WithdrawMoneyController();
+    WithdrawMoneyController withdrawMoneyController =
+        getIt.get<WithdrawMoneyController>();
     return WillPopScope(
       onWillPop: () => TransitionController()
           .finishAndPageTransition(route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
-          globalKeyTitle: withdrawMoneyController.formKeyFieldWithdrawTitle,
-          globalKeyMoney: withdrawMoneyController.formKeyFieldWithdrawMoney,
-          globalKeyDesc: withdrawMoneyController.formKeyFieldWithdrawDesc,
+          globalKeyTitle: formKeyFieldWithdrawTitle,
+          globalKeyMoney: formKeyFieldWithdrawMoney,
+          globalKeyDesc: formKeyFieldWithdrawDesc,
           textEditingControllerDesc:
-              WithdrawMoneyController.textEditingControllerWithdrawDesc,
+              withdrawMoneyController.textEditingControllerWithdrawDesc,
           textEditingControllerMoney:
-              WithdrawMoneyController.textEditingControllerWithdrawMoney,
+              withdrawMoneyController.textEditingControllerWithdrawMoney,
           textEditingControllerTitle:
-              WithdrawMoneyController.textEditingControllerWithdrawTitle,
+              withdrawMoneyController.textEditingControllerWithdrawTitle,
           functionValidateMoney: (String text) {
             return withdrawMoneyController.validateFieldFormTextMoney();
           },
@@ -42,10 +51,28 @@ class WithdrawMoney extends StatelessWidget {
           labelFieldMoney: _labelFieldMoney,
           functionButtonConfirm: () async {
             return await withdrawMoneyController.confirmMoneyWithdraw(
-                context: context);
+              context: context,
+              formKeyTitle: formKeyFieldWithdrawTitle,
+              formKeyMoney: formKeyFieldWithdrawMoney,
+              formKeyDesc: formKeyFieldWithdrawDesc,
+            );
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (formKeyFieldWithdrawDesc.currentState != null) {
+      formKeyFieldWithdrawDesc.currentState!.dispose();
+    }
+    if (formKeyFieldWithdrawMoney.currentState != null) {
+      formKeyFieldWithdrawMoney.currentState!.dispose();
+    }
+    if (formKeyFieldWithdrawTitle.currentState != null) {
+      formKeyFieldWithdrawTitle.currentState!.dispose();
+    }
   }
 }

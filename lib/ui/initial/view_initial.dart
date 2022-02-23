@@ -1,6 +1,6 @@
 import 'package:app_financeiro/controller/initial_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +8,7 @@ class ViewInitial extends StatelessWidget {
   const ViewInitial({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Get.put(InitialController());
+    Get.put(getIt.get<InitialController>());
     return GetBuilder<InitialController>(
       builder: (_) => FutureBuilder(
         future: _.splashScreen(context),

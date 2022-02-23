@@ -1,5 +1,6 @@
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_withdraw.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -7,26 +8,32 @@ import 'transition_controller.dart';
 import 'home_controller.dart';
 
 class WithdrawMoneyController extends GetxController {
-  static TextEditingController textEditingControllerWithdrawMoney =
+  final TextEditingController textEditingControllerWithdrawMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerWithdrawTitle =
+  final TextEditingController textEditingControllerWithdrawTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerWithdrawDesc =
+  final TextEditingController textEditingControllerWithdrawDesc =
       TextEditingController();
-  final GlobalKey<FormState> formKeyFieldWithdrawTitle = GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyFieldWithdrawDesc = GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyFieldWithdrawMoney = GlobalKey<FormState>();
+  final RepositoryWithdraw _repositoryWithdraw =
+      getIt.get<RepositoryWithdraw>();
+  final TransitionController _transitionController =
+      getIt.get<TransitionController>();
 
-  Future<void> confirmMoneyWithdraw({required BuildContext context}) async {
-    final FormState? formValidateTitle = formKeyFieldWithdrawTitle.currentState;
-    final FormState? formValidateDesc = formKeyFieldWithdrawDesc.currentState;
-    final FormState? formValidateMoney = formKeyFieldWithdrawMoney.currentState;
+  Future<void> confirmMoneyWithdraw({
+    required BuildContext context,
+    required GlobalKey<FormState> formKeyTitle,
+    required GlobalKey<FormState> formKeyDesc,
+    required GlobalKey<FormState> formKeyMoney,
+  }) async {
+    final FormState? formValidateTitle = formKeyTitle.currentState;
+    final FormState? formValidateDesc = formKeyDesc.currentState;
+    final FormState? formValidateMoney = formKeyMoney.currentState;
 
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(_formatMoneyValueInField());
-      bool success = await RepositoryWithdraw().repositoryMoneyWithdraw(
+      bool success = await _repositoryWithdraw.repositoryMoneyWithdraw(
         modelTransaction: ModelTransaction(
             textEditingControllerWithdrawTitle.text,
             textEditingControllerWithdrawDesc.text,
@@ -39,8 +46,8 @@ class WithdrawMoneyController extends GetxController {
         double newValue = double.parse(_formatMoneyValueInField());
         HomeController.moneyValue = (valueAvailable - newValue).toString();
         clearAllFields();
-        TransitionController()
-            .pageTransition(route: Routes.HOME, context: context);
+        _transitionController.finishAndPageTransition(
+            route: Routes.HOME, context: context);
       }
     }
   }
@@ -92,9 +99,9 @@ class WithdrawMoneyController extends GetxController {
 
   @override
   void dispose() {
+    super.dispose();
     textEditingControllerWithdrawMoney.dispose();
     textEditingControllerWithdrawTitle.dispose();
     textEditingControllerWithdrawDesc.dispose();
-    super.dispose();
   }
 }

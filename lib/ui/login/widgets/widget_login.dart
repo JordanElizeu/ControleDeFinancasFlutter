@@ -1,21 +1,25 @@
 import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import '../../../injection/injection.dart';
 
 class WidgetLogin extends StatelessWidget {
   const WidgetLogin({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    LoginController _loginController = LoginController(context);
-    TransitionController controller = TransitionController();
-    FirebaseAuth auth = _loginController.getAuthentication();
+    LoginController _loginController = Get.put(getIt.get<LoginController>());
+    FirebaseAuth auth =
+        getIt.get<RepositoryConnection>().connectionFirebaseAuth();
+    TransitionController transitionController =
+        getIt.get<TransitionController>();
     return WillPopScope(
-      onWillPop: () => TransitionController().finishAndPageTransition(
+      onWillPop: () => transitionController.finishAndPageTransition(
           route: Routes.LOGIN_INITIAL, context: context),
       child: Material(
         child: FlutterLogin(
@@ -49,7 +53,7 @@ class WidgetLogin extends StatelessWidget {
           onLogin: _loginController.signInFirebase,
           onSignup: _loginController.signUpFirebase,
           savedEmail:
-              '${auth.currentUser != null ? controller.finishAndPageTransition(route: Routes.HOME, context: context) : ''}',
+              '${auth.currentUser != null ? transitionController.finishAndPageTransition(route: Routes.HOME, context: context) : ''}',
           logoTag: 'assets/images/foguete.png',
           additionalSignupFields: [
             UserFormField(
@@ -69,10 +73,10 @@ class WidgetLogin extends StatelessWidget {
             ),
           ],
           onSubmitAnimationCompleted: () {
-            TransitionController().finishAndPageTransition(
+            transitionController.finishAndPageTransition(
                 route: Routes.HOME, context: context);
           },
-          onRecoverPassword: LoginController(context).forgotPasswordFirebase,
+          onRecoverPassword: _loginController.forgotPasswordFirebase,
         ),
       ),
     );

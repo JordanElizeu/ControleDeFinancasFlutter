@@ -1,52 +1,52 @@
 import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
 import 'package:app_financeiro/data/provider/firebase_exceptions/firebase_exceptions.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import '../../../string_i18n.dart';
 
 class ProviderCreateUser {
-  final FirebaseAuth _auth;
-  final DatabaseReference _databaseReference;
+  final RepositoryConnection repositoryConnection;
 
-  ProviderCreateUser(this._auth, this._databaseReference);
+  ProviderCreateUser({required this.repositoryConnection});
 
   Future<String?> providerCreateFirebaseUser(
       {required ModelCreateUser modelCreateUser}) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
+      final DatabaseReference databaseReference =
+          repositoryConnection.connectionDatabase();
+      await auth.createUserWithEmailAndPassword(
           email: modelCreateUser.email, password: modelCreateUser.password);
-      _databaseReference
-          .child('AppFinancas')
-          .child(_auth.currentUser!.uid)
-          .child('Account')
-          .child('name')
+      databaseReference
+          .child(pathAppFinances)
+          .child(auth.currentUser!.uid)
+          .child(pathAccount)
+          .child(columnName)
           .set(modelCreateUser.name);
-      _databaseReference
-          .child('AppFinancas')
-          .child(_auth.currentUser!.uid)
-          .child('Account')
-          .child('Finances')
-          .child('money')
+      databaseReference
+          .child(pathAppFinances)
+          .child(auth.currentUser!.uid)
+          .child(pathAccount)
+          .child(pathFinances)
+          .child(columnMoney)
           .set('0');
     } on FirebaseAuthException catch (exception) {
       return ProviderFirebaseExceptions()
           .handleFirebaseCreateUserWithEmailAndPasswordException(
               exceptionMessage: exception);
     }
+    return null;
   }
 
-  Future<String?> providerCreateUserGoogle() async {
-    _databaseReference
-        .child('AppFinancas')
-        .child(_auth.currentUser!.uid)
-        .child('Account')
-        .child('name')
-        .set(_auth.currentUser!.displayName);
-    _databaseReference
-        .child('AppFinancas')
-        .child(_auth.currentUser!.uid)
-        .child('Account')
-        .child('Finances')
-        .child('money')
-        .set('0');
+  Future<void> providerCreateUserGoogle() async {
+    final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
+    repositoryConnection
+        .connectionDatabase()
+        .child(pathAppFinances)
+        .child(auth.currentUser!.uid)
+        .child(pathAccount)
+        .child(columnName)
+        .set(auth.currentUser!.displayName);
   }
 }

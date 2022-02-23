@@ -1,11 +1,12 @@
 import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/string_i18n.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,11 +18,13 @@ class Transactions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TransactionController transactionController =
-        Get.put(TransactionController());
+    final TransactionController transactionController =
+        Get.put(getIt.get<TransactionController>());
+    final TransitionController transitionController =
+        getIt.get<TransitionController>();
     return WillPopScope(
-      onWillPop: () => TransitionController()
-          .finishAndPageTransition(route: Routes.HOME, context: context),
+      onWillPop: () => transitionController.finishAndPageTransition(
+          route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTransaction),
         body: GetBuilder<TransactionController>(
@@ -53,12 +56,11 @@ class Transactions extends StatelessWidget {
     );
   }
 
-//this class has how function of remove effect scroll listview
   Widget _listTile(AsyncSnapshot<Map> snapshot,
       TransactionController transactionController) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
-        overscroll.disallowGlow();
+        overscroll.disallowIndicator();
         //this class has how function of remove effect scroll listview
         return true;
       },
@@ -78,10 +80,10 @@ class Transactions extends StatelessWidget {
                     child: Column(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: 10,top: 5),
+                          padding: EdgeInsets.only(bottom: 10, top: 5),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            snapshot.data!['${index}a']['data'],
+                            snapshot.data!['${index}a'][columnDate],
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -98,7 +100,7 @@ class Transactions extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  snapshot.data!['${index}a']['title'],
+                                  snapshot.data!['${index}a'][columnTitle],
                                   style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       color: Colors.white),
@@ -119,14 +121,14 @@ class Transactions extends StatelessWidget {
                 ),
                 Card(
                   child: ListTile(
-                    title: Text(snapshot.data!['${index}a']['description']),
+                    title: Text(snapshot.data!['${index}a'][columnDescription]),
                     subtitle: Padding(
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Text(
-                        '${HomeController().formatMoney(snapshot.data!['${index}a']['money'])}',
+                        '${getIt.get<HomeController>().formatMoney(snapshot.data!['${index}a'][columnMoney])}',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: snapshot.data!['${index}a']['is_deposit']
+                            color: snapshot.data!['${index}a'][columnIsDeposit]
                                 ? Colors.green
                                 : Colors.red),
                       ),

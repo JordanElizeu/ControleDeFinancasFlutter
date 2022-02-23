@@ -1,32 +1,39 @@
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'transition_controller.dart';
 
 class DepositMoneyController extends GetxController {
-  static TextEditingController textEditingControllerDepositMoney =
+  final TextEditingController textEditingControllerDepositMoney =
       TextEditingController();
-  static TextEditingController textEditingControllerDepositTitle =
+  final TextEditingController textEditingControllerDepositTitle =
       TextEditingController();
-  static TextEditingController textEditingControllerDepositDesc =
+  final TextEditingController textEditingControllerDepositDesc =
       TextEditingController();
-  final GlobalKey<FormState> formKeyFieldDepositTitle = GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyFieldDepositDesc = GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyFieldDepositMoney = GlobalKey<FormState>();
 
-  Future<void> confirmDeposit({required BuildContext context}) async {
-    final FormState? formValidateTitle = formKeyFieldDepositTitle.currentState;
-    final FormState? formValidateDesc = formKeyFieldDepositDesc.currentState;
-    final FormState? formValidateMoney = formKeyFieldDepositMoney.currentState;
+  final RepositoryDeposit _repositoryDeposit = getIt.get<RepositoryDeposit>();
+  final TransitionController _transitionController =
+      getIt.get<TransitionController>();
+
+  Future<void> confirmDeposit({
+    required BuildContext context,
+    required GlobalKey<FormState> formKeyTitle,
+    required GlobalKey<FormState> formKeyMoney,
+    required GlobalKey<FormState> formKeyDesc,
+  }) async {
+    final FormState? formValidateTitle = formKeyTitle.currentState;
+    final FormState? formValidateDesc = formKeyDesc.currentState;
+    final FormState? formValidateMoney = formKeyMoney.currentState;
     if (formValidateTitle!.validate() &&
         formValidateDesc!.validate() &&
         formValidateMoney!.validate()) {
       double valueAvailable;
       double newValue;
-      bool result = await RepositoryDeposit().repositoryAddDeposit(
+      bool result = await _repositoryDeposit.repositoryAddDeposit(
         modelTransaction: ModelTransaction(
             textEditingControllerDepositTitle.text,
             textEditingControllerDepositDesc.text,
@@ -39,8 +46,8 @@ class DepositMoneyController extends GetxController {
         newValue = double.parse(_formatValueMoney());
         HomeController.moneyValue = (valueAvailable + newValue).toString();
         clearAllFields();
-        await TransitionController()
-            .pageTransition(route: Routes.HOME, context: context);
+        await _transitionController.finishAndPageTransition(
+            route: Routes.HOME, context: context);
       }
     }
   }
@@ -92,9 +99,9 @@ class DepositMoneyController extends GetxController {
 
   @override
   void dispose() {
+    super.dispose();
     textEditingControllerDepositMoney.dispose();
     textEditingControllerDepositTitle.dispose();
     textEditingControllerDepositDesc.dispose();
-    super.dispose();
   }
 }

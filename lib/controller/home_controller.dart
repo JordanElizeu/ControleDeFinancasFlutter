@@ -1,33 +1,38 @@
 import 'package:app_financeiro/data/repository/firebase/repository_informationofuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
-
   IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
   static String moneyValue = '';
   NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
-
   IconData get iconData => _iconData;
-
   bool get moneyVisible => _moneyVisible;
 
-  String? moneyValueFormatted(){
-    if(moneyValue.length > 0) {
+  final RepositoryTransactions _repositoryTransactions =
+      getIt.get<RepositoryTransactions>();
+  final RepositoryInformationOfUser _repositoryInformationOfUser =
+      getIt.get<RepositoryInformationOfUser>();
+
+  String? moneyValueFormatted() {
+    if (moneyValue.length > 0) {
       return formatter.format(double.parse(moneyValue));
     }
     return null;
   }
 
   Future<String> getMoneyInFirebase() async {
-    await RepositoryTransactions().repositoryGetQuantityMoney().then((value) => {
-      moneyValue = value['money'].toString(),
-    });
+    await _repositoryTransactions.repositoryGetQuantityMoney().then((value) => {
+          if (value!['money'] != null)
+            {moneyValue = value['money'].toString()}
+          else
+            {moneyValue = '0'}
+        });
     return formatter.format(double.parse(moneyValue));
   }
 
@@ -43,7 +48,7 @@ class HomeController extends GetxController {
   }
 
   Future<String?> getNameIfUserIsFromFirebase() {
-    return RepositoryInformationOfUser().repositoryGetNameIfUserIsFromFirebase();
+    return _repositoryInformationOfUser.repositoryGetNameIfUserIsFromFirebase();
   }
 
   void changeIconDataEyeOfMoney() {

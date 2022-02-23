@@ -1,6 +1,7 @@
 import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
 import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_annotations.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -11,25 +12,24 @@ class AnnotationsController extends GetxController {
       TextEditingController();
   final TextEditingController textEditingControllerAnnotation =
       TextEditingController();
-  final GlobalKey<FormState> formKeyFieldAnnotationTitle =
-      GlobalKey<FormState>();
-  final GlobalKey<FormState> formKeyFieldAnnotation = GlobalKey<FormState>();
-  final RepositoryAnnotations _repositoryAnnotations = RepositoryAnnotations();
+  final RepositoryAnnotations _repositoryAnnotations =
+      getIt.get<RepositoryAnnotations>();
+  static bool checkBoxSelected = false;
 
   Future<bool> sendAnnotation(
       {required BuildContext context,
       required String title,
+      required GlobalKey<FormState> formKeyAnnotation,
+      required GlobalKey<FormState> formKeyTitle,
       required String annotation}) async {
-    final FormState? formValidateTitle =
-        formKeyFieldAnnotationTitle.currentState;
-    final FormState? formValidateAnnotation =
-        formKeyFieldAnnotation.currentState;
+    final FormState? formValidateTitle = formKeyTitle.currentState;
+    final FormState? formValidateAnnotation = formKeyAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
-      RepositoryAnnotations().repositorySendAnnotation(
+      _repositoryAnnotations.repositorySendAnnotation(
           modelAnnotation: ModelAnnotation(annotation, title, context));
       await Future.delayed(Duration(milliseconds: 300)).then((value) async => {
             await getAllAnnotations(),
-            AnnotationsController().clearFields(context: context),
+            clearFields(context: context),
             update(),
           });
       return true;
@@ -62,17 +62,26 @@ class AnnotationsController extends GetxController {
     return null;
   }
 
-  void removeAnnotation({required String id, required BuildContext context}) {
-    _repositoryAnnotations.removeAnnotation(id: id);
+  void changeCheckBoxSelected(bool value) {
+    checkBoxSelected = value;
+    update();
   }
 
-  void editAnnotation(
-      {required String id, required BuildContext context, required int index}) {
+  Future<void> removeAnnotation(
+      {required String id, required BuildContext context}) async {
+    await _repositoryAnnotations.removeAnnotation(id: id);
+    update();
+  }
+
+  Future<void> editAnnotation(
+      {required String id,
+      required BuildContext context,
+      required int index}) async {
     map[index] = {
       0: textEditingControllerTitle.text,
       1: textEditingControllerAnnotation.text
     };
-    _repositoryAnnotations.editAnnotation(
+    await _repositoryAnnotations.editAnnotation(
         modelEditAnnotation: ModelEditAnnotation(
             textEditingControllerAnnotation.text,
             textEditingControllerTitle.text,
@@ -90,5 +99,7 @@ class AnnotationsController extends GetxController {
   @override
   void dispose() {
     super.dispose();
+    textEditingControllerTitle.dispose();
+    textEditingControllerAnnotation.dispose();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:app_financeiro/data/provider/firebase/provider_createuser.dart';
-import 'package:app_financeiro/data/provider/firebase/provider_informationsofuser.dart';
+import 'package:app_financeiro/data/provider/firebase/provider_user_information.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -20,25 +20,13 @@ class ProviderGoogleLogin {
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      await FirebaseAuth.instance.signInWithCredential(credential);
-
-      if (!await userExists(providerInformationOfUser)) {
-        providerCreateUser.providerCreateUserGoogle();
-      }
-
+      await FirebaseAuth.instance.signInWithCredential(credential).then(
+            (value) async =>
+                {await providerCreateUser.providerCreateUserGoogle()},
+          );
       return null;
     } catch (exception) {
       return 'Erro! Login falhou';
     }
-  }
-
-  Future<bool> userExists(
-      ProviderInformationOfUser providerInformationOfUser) async {
-    final String? name =
-        await providerInformationOfUser.providerGetNameIfUserIsFromFirebase();
-    if (name != null) {
-      return true;
-    }
-    return false;
   }
 }

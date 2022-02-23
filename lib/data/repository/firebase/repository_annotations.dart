@@ -1,15 +1,15 @@
 import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
 import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_annotation.dart';
-import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
+import 'package:app_financeiro/injection/injection.dart';
 
 class RepositoryAnnotations {
-  final ProviderAnnotations _providerAnnotations = ProviderAnnotations(
-      RepositoryConnection.connectionDatabase(),
-      RepositoryConnection.connectionFirebaseAuth());
+  final ProviderAnnotations _providerAnnotations =
+      getIt.get<ProviderAnnotations>();
 
-  void repositorySendAnnotation({required ModelAnnotation modelAnnotation}) {
-    _providerAnnotations.providerSendAnnotation(
+  Future<void> repositorySendAnnotation(
+      {required ModelAnnotation modelAnnotation}) async {
+    await _providerAnnotations.providerSendAnnotation(
         modelAnnotation: modelAnnotation);
   }
 
@@ -17,12 +17,13 @@ class RepositoryAnnotations {
     return _providerAnnotations.providerGetAllAnnotations();
   }
 
-  void editAnnotation({required ModelEditAnnotation modelEditAnnotation}) {
-    _providerAnnotations.providerEditAnnotation(
+  Future<void> editAnnotation(
+      {required ModelEditAnnotation modelEditAnnotation}) async {
+    await _providerAnnotations.providerEditAnnotation(
         modelEditAnnotation: modelEditAnnotation);
   }
 
-  void removeAnnotation({required String id}) {
-    _providerAnnotations.providerRemoveAnnotation(uid: id);
+  Future<void> removeAnnotation({required String id}) async {
+    await _providerAnnotations.providerRemoveAnnotation(uid: id);
   }
 }

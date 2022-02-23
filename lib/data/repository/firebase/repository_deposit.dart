@@ -1,13 +1,9 @@
 import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_deposit.dart';
-import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
-import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
+import '../../../injection/injection.dart';
 
 class RepositoryDeposit {
-  final ProviderDeposit _providerTransactions = ProviderDeposit(
-      new ProviderTransactions(
-          firebaseAuth: RepositoryConnection.connectionFirebaseAuth(),
-          databaseReference: RepositoryConnection.connectionDatabase()));
+  final ProviderDeposit _providerTransactions = getIt.get();
 
   Future<bool> repositoryAddDeposit(
       {required ModelTransaction modelTransaction}) {

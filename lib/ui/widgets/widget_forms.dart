@@ -1,5 +1,4 @@
 import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';

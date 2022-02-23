@@ -1,28 +1,33 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../injection/injection.dart';
 
-class CreateAnnotations extends StatelessWidget {
-  final String buttonText = 'Confirmar';
+class CreateAnnotations extends StatefulWidget {
   static BuildContext? context;
   final Function()? function;
-  final TextEditingController annotationTextController;
-  final TextEditingController titleTextController;
-  final GlobalKey<FormState> annotationGlobalKey;
-  final GlobalKey<FormState> titleGlobalKey;
+  final AnnotationsController annotationsController;
+  static final GlobalKey<FormState> formKeyAnnotationTitle =
+      GlobalKey<FormState>();
+  static final GlobalKey<FormState> formKeyAnnotation = GlobalKey<FormState>();
 
-  CreateAnnotations(
-      {required this.function,
-      required this.annotationTextController,
-      required this.titleTextController,
-      required this.annotationGlobalKey,
-      required this.titleGlobalKey});
+  CreateAnnotations({
+    required this.function,
+    required this.annotationsController,
+  });
+
+  @override
+  State<CreateAnnotations> createState() => _CreateAnnotationsState();
+}
+
+class _CreateAnnotationsState extends State<CreateAnnotations> {
+  final String buttonText = 'Confirmar';
 
   @override
   Widget build(BuildContext context) {
     CreateAnnotations.context = context;
-    AnnotationsController annotationsController = AnnotationsController();
+    AnnotationsController annotationsController =
+        getIt.get<AnnotationsController>();
     return AlertDialog(
       title: const Text('Criar anotação'),
       content: SingleChildScrollView(
@@ -34,12 +39,13 @@ class CreateAnnotations extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
-                key: titleGlobalKey,
+                key: CreateAnnotations.formKeyAnnotationTitle,
                 child: ValidateForm(
                     label: 'Título',
                     icon: Icons.wysiwyg,
-                    globalKey: titleGlobalKey,
-                    controller: titleTextController,
+                    globalKey: CreateAnnotations.formKeyAnnotationTitle,
+                    controller:
+                        annotationsController.textEditingControllerTitle,
                     function: (String text) {
                       return annotationsController.validateFieldFormTextTitle(
                           text: text);
@@ -49,12 +55,13 @@ class CreateAnnotations extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
               child: Form(
-                key: annotationGlobalKey,
+                key: CreateAnnotations.formKeyAnnotation,
                 child: ValidateForm(
                     label: 'Anotação',
                     icon: Icons.chat,
-                    globalKey: annotationGlobalKey,
-                    controller: annotationTextController,
+                    globalKey: CreateAnnotations.formKeyAnnotation,
+                    controller:
+                        annotationsController.textEditingControllerAnnotation,
                     function: (String text) {
                       return annotationsController
                           .validateFieldFormTextAnnotation(text: text);
@@ -66,45 +73,58 @@ class CreateAnnotations extends StatelessWidget {
       ),
       actions: <Widget>[
         ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(buttonText),
-            ),
-            onPressed: function ??
-                () async {
-                  if (await annotationsController.sendAnnotation(
-                      context: context,
-                      annotation: annotationTextController.text,
-                      title: titleTextController.text)) {
-                    Navigator.pop(context);
-                  }
-                })
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(buttonText),
+          ),
+          onPressed: widget.function ??
+              () async {
+                if (await annotationsController.sendAnnotation(
+                    context: context,
+                    annotation: annotationsController
+                        .textEditingControllerAnnotation.text,
+                    title:
+                        annotationsController.textEditingControllerTitle.text,
+                    formKeyTitle: CreateAnnotations.formKeyAnnotationTitle,
+                    formKeyAnnotation: CreateAnnotations.formKeyAnnotation)) {
+                  Navigator.pop(context);
+                }
+              },
+        )
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (CreateAnnotations.formKeyAnnotation.currentState != null) {
+      CreateAnnotations.formKeyAnnotation.currentState!.dispose();
+    }
+    if (CreateAnnotations.formKeyAnnotationTitle.currentState != null) {
+      CreateAnnotations.formKeyAnnotationTitle.currentState!.dispose();
+    }
   }
 }
 
 alertDialogCreateAnnotation({
   required BuildContext context,
-  required TextEditingController annotationTextController,
-  required TextEditingController titleTextController,
-  required GlobalKey<FormState> annotationGlobalKey,
-  required GlobalKey<FormState> titleGlobalKey,
+  required AnnotationsController annotationsController,
   String? initialValueAnnotation,
   String? initialValueTitle,
   Function()? function,
 }) async {
-  annotationTextController.text = initialValueAnnotation ?? '';
-  titleTextController.text = initialValueTitle ?? '';
+  annotationsController.textEditingControllerAnnotation.text =
+      initialValueAnnotation ?? '';
+  annotationsController.textEditingControllerTitle.text =
+      initialValueTitle ?? '';
   await showDialog(
     context: context,
     builder: (contextDialog) {
       return CreateAnnotations(
-          titleGlobalKey: titleGlobalKey,
-          annotationGlobalKey: annotationGlobalKey,
-          titleTextController: titleTextController,
-          annotationTextController: annotationTextController,
-          function: function);
+        function: function,
+        annotationsController: annotationsController,
+      );
     },
   );
 }

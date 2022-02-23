@@ -1,14 +1,15 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/controller/transition_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
+import '../../string_i18n.dart';
 
 class Annotations extends StatelessWidget {
   const Annotations({Key? key}) : super(key: key);
@@ -21,10 +22,12 @@ class Annotations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AnnotationsController annotationController =
-        Get.put(AnnotationsController());
+        Get.put(getIt.get<AnnotationsController>());
+    TransitionController transitionController =
+        getIt.get<TransitionController>();
     return WillPopScope(
-      onWillPop: () => TransitionController()
-          .finishAndPageTransition(route: Routes.HOME, context: context),
+      onWillPop: () => transitionController.finishAndPageTransition(
+          route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: AppBar(
           title: Text(_appBarTitle),
@@ -41,17 +44,14 @@ class Annotations extends StatelessWidget {
                               .textEditingControllerAnnotation.text,
                           title: annotationController
                               .textEditingControllerTitle.text,
+                          formKeyAnnotation:
+                              CreateAnnotations.formKeyAnnotation,
+                          formKeyTitle:
+                              CreateAnnotations.formKeyAnnotationTitle,
                         );
                         Navigator.pop(CreateAnnotations.context!);
                       },
-                      titleTextController:
-                          annotationController.textEditingControllerTitle,
-                      annotationTextController:
-                          annotationController.textEditingControllerAnnotation,
-                      titleGlobalKey:
-                          annotationController.formKeyFieldAnnotationTitle,
-                      annotationGlobalKey:
-                          annotationController.formKeyFieldAnnotation);
+                      annotationsController: annotationController);
                 },
                 child: Icon(Icons.message),
               ),
@@ -78,7 +78,7 @@ class Annotations extends StatelessWidget {
                 }
               } else if (snapshot.hasError) {
                 return Error404(title: _error404);
-              } else if (snapshot.data != null && snapshot.data!.length < 1) {
+              } else if (snapshot.data != null && snapshot.data!.isEmpty) {
                 return Error404(title: _error404);
               }
               return WidgetProgress();
@@ -93,7 +93,7 @@ class Annotations extends StatelessWidget {
       AnnotationsController annotationController) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
-        overscroll.disallowGlow();
+        overscroll.disallowIndicator();
         //this class has how function of remove effect scroll listview
         return false;
       },
@@ -105,16 +105,18 @@ class Annotations extends StatelessWidget {
           bool cancelRemove = false;
           return Dismissible(
             onDismissed: (DismissDirection dismissDirection) {
-              Future.delayed(Duration(seconds: 4)).then((value) => {
-                    //if user not click the button in three
-                    // seconds, this method does not delete annotation in firebase
-                    if (!cancelRemove)
-                      {
-                        annotationController.removeAnnotation(
-                            id: snapshot.data!['${index}a']['uid'],
-                            context: context)
-                      }
-                  });
+              Future.delayed(Duration(seconds: 4)).then(
+                (value) => {
+                  //if user not click the button in three
+                  // seconds, this method does not delete annotation in firebase
+                  if (!cancelRemove)
+                    {
+                      annotationController.removeAnnotation(
+                          id: snapshot.data!['${index}a'][columnUid],
+                          context: context)
+                    }
+                },
+              );
               annotationController.map.remove(index);
               final snackBar = SnackBar(
                 padding: EdgeInsets.all(10),
@@ -137,7 +139,8 @@ class Annotations extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
-            key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+            key:
+                ValueKey(Key(DateTime.now().millisecondsSinceEpoch.toString())),
             background: Card(
               color: Colors.red,
               child: Align(
@@ -162,7 +165,7 @@ class Annotations extends StatelessWidget {
                             Expanded(
                               flex: 4,
                               child: Text(
-                                '${snapshot.data!['${index}a']['title']}',
+                                '${snapshot.data!['${index}a'][columnTitle]}',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700),
@@ -183,7 +186,7 @@ class Annotations extends StatelessWidget {
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
-                            '${snapshot.data!['${index}a']['annotation']}',
+                            '${snapshot.data!['${index}a'][columnAnnotation]}',
                             style: TextStyle(color: Colors.black),
                           ),
                         ),
@@ -205,25 +208,19 @@ class Annotations extends StatelessWidget {
                             onPressed: () {
                               alertDialogCreateAnnotation(
                                   context: context,
-                                  initialValueAnnotation:
-                                      snapshot.data!['${index}a']['annotation'],
+                                  initialValueAnnotation: snapshot
+                                      .data!['${index}a'][columnAnnotation],
                                   initialValueTitle: snapshot.data!['${index}a']
-                                      ['title'],
-                                  function: () {
-                                    annotationController.editAnnotation(
-                                        id: snapshot.data!['${index}a']['uid'],
+                                      [columnTitle],
+                                  function: () async {
+                                    await annotationController.editAnnotation(
+                                        id: snapshot.data!['${index}a']
+                                            [columnUid],
                                         context: context,
                                         index: index);
                                     Navigator.pop(CreateAnnotations.context!);
                                   },
-                                  titleTextController: annotationController
-                                      .textEditingControllerTitle,
-                                  annotationTextController: annotationController
-                                      .textEditingControllerAnnotation,
-                                  titleGlobalKey: annotationController
-                                      .formKeyFieldAnnotationTitle,
-                                  annotationGlobalKey: annotationController
-                                      .formKeyFieldAnnotation);
+                                  annotationsController: annotationController);
                             },
                             child: Icon(Icons.edit),
                           ),

@@ -1,5 +1,5 @@
 import 'package:app_financeiro/controller/login_controller.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:flutter/material.dart';
 
 class ViewLogout extends StatelessWidget {
@@ -11,6 +11,7 @@ class ViewLogout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoginController loginController = getIt.get<LoginController>();
     return AlertDialog(
       title: Text(_titleLogout),
       content: Column(
@@ -46,7 +47,7 @@ class ViewLogout extends StatelessWidget {
               child: Text(_textButtonConfirm),
             ),
             onPressed: () {
-              LoginController(context).logoutAccount();
+              loginController.logoutAccount(context: context);
             }),
       ],
     );

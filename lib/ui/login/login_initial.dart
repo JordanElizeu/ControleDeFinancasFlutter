@@ -2,8 +2,9 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/login/widgets/widget_animatedtext.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../injection/injection.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TransitionController transitionController =
+        getIt.get<TransitionController>();
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.purple,
@@ -77,7 +80,7 @@ class Login extends StatelessWidget {
                                         new BorderRadius.circular(30.0)))),
                         child: FittedBox(child: Text(_textAccessMyAccount)),
                         onPressed: () {
-                          TransitionController().finishAndPageTransition(
+                          transitionController.finishAndPageTransition(
                               route: Routes.LOGIN, context: context);
                         },
                       ),

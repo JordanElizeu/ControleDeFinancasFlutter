@@ -8,7 +8,7 @@ import 'package:app_financeiro/ui/transactions/transactions.dart';
 import 'package:app_financeiro/ui/withdraw_money/withdraw_money.dart';
 import 'app_routes.dart';
 
-class AppPagesView{
+class AppPagesView {
   static final routes = {
     Routes.LOGIN_INITIAL: (_) => Login(),
     Routes.HOME: (_) => PageHome(),

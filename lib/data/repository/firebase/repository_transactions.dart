@@ -1,12 +1,10 @@
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
-import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
+import 'package:app_financeiro/injection/injection.dart';
 
 class RepositoryTransactions {
-  final ProviderTransactions _providerTransactions = ProviderTransactions(
-      databaseReference: RepositoryConnection.connectionDatabase(),
-      firebaseAuth: RepositoryConnection.connectionFirebaseAuth());
+  final ProviderTransactions _providerTransactions = getIt.get<ProviderTransactions>();
 
-  Future<Map> repositoryGetQuantityMoney() async {
+  Future<Map?> repositoryGetQuantityMoney() async {
     return await _providerTransactions.getAvailableMoney();
   }
 

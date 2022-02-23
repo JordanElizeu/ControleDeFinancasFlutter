@@ -2,14 +2,15 @@ import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/home_controller.dart';
 import 'package:app_financeiro/controller/login_controller.dart';
 import 'package:app_financeiro/controller/transaction_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/string_i18n.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_circleavatar.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_inkwellicon.dart';
 import 'package:app_financeiro/ui/home/widgets/widget_textinformative.dart';
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_logout.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,9 +25,9 @@ class PageHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(TransactionController());
-    Get.put(HomeController());
-    TransitionController controller = TransitionController();
+    Get.put(getIt.get<TransactionController>());
+    Get.put(getIt.get<HomeController>());
+    TransitionController controller = getIt.get<TransitionController>();
     return WillPopScope(
       onWillPop: () => alertDialogViewSuccess(context: context),
       child: SafeArea(
@@ -51,7 +52,7 @@ class PageHome extends StatelessWidget {
                                 flex: 2,
                                 child: WidgetCircleAvatar(
                                   function: () {
-                                    return controller.pageTransition(
+                                    return controller.finishAndPageTransition(
                                         route: Routes.INCREMENT_MONEY,
                                         context: context);
                                   },
@@ -63,7 +64,7 @@ class PageHome extends StatelessWidget {
                                 flex: 2,
                                 child: WidgetCircleAvatar(
                                   function: () {
-                                    return controller.pageTransition(
+                                    return controller.finishAndPageTransition(
                                         route: Routes.DECREMENT_MONEY,
                                         context: context);
                                   },
@@ -75,7 +76,7 @@ class PageHome extends StatelessWidget {
                                 flex: 2,
                                 child: WidgetCircleAvatar(
                                   function: () {
-                                    return controller.pageTransition(
+                                    return controller.finishAndPageTransition(
                                         route: Routes.TRANSACTIONS,
                                         context: context);
                                   },
@@ -87,7 +88,7 @@ class PageHome extends StatelessWidget {
                                 flex: 2,
                                 child: WidgetCircleAvatar(
                                   function: () {
-                                    return controller.pageTransition(
+                                    return controller.finishAndPageTransition(
                                         route: Routes.ANNOTATIONS,
                                         context: context);
                                   },
@@ -115,6 +116,7 @@ class PageHome extends StatelessWidget {
 Widget _containerWithInformationOfAccount(
     {required BoxConstraints constraints, required BuildContext context}) {
   final String _loading = 'carregando...';
+  final LoginController loginController = getIt.get<LoginController>();
 
   return GetBuilder<HomeController>(
     builder: (_) => FutureBuilder(
@@ -164,7 +166,8 @@ Widget _containerWithInformationOfAccount(
                       child: WidgetInkwellIcon(
                         icon: Icons.logout,
                         function: () {
-                          return LoginController(context).logoutAccount();
+                          return loginController.logoutAccount(
+                              context: context);
                         },
                       ),
                     ),
@@ -195,6 +198,7 @@ Widget _containerWithInformationOfAccount(
 
 Widget _cardLastModifications(BuildContext context) {
   final String _lastTransaction = 'Últimas transações';
+  final HomeController homeController = getIt.get<HomeController>();
 
   return GetBuilder<TransactionController>(
     builder: (_) => FutureBuilder(
@@ -220,8 +224,7 @@ Widget _cardLastModifications(BuildContext context) {
                     NotificationListener<OverscrollIndicatorNotification>(
                       onNotification:
                           (OverscrollIndicatorNotification overscroll) {
-                        overscroll.disallowGlow();
-                        //this class has how function of remove effect scroll listview
+                        overscroll.disallowIndicator();
                         return true;
                       },
                       child: ListView.builder(
@@ -260,7 +263,7 @@ Widget _cardLastModifications(BuildContext context) {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
                                               snapshot.data!['${position}a']
-                                                      ['title']
+                                                      [columnTitle]
                                                   .toString(),
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
@@ -282,17 +285,17 @@ Widget _cardLastModifications(BuildContext context) {
                                 Card(
                                   child: ListTile(
                                     title: Text(snapshot.data!['${position}a']
-                                            ['description']
+                                            [columnDescription]
                                         .toString()),
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: Text(
-                                        '${HomeController().formatMoney(snapshot.data!['${position}a']['money'])}',
+                                        '${homeController.formatMoney(snapshot.data!['${position}a'][columnMoney])}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color:
                                                 snapshot.data!['${position}a']
-                                                        ['is_deposit']
+                                                        [columnIsDeposit]
                                                     ? Colors.green
                                                     : Colors.red),
                                       ),

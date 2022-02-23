@@ -1,11 +1,12 @@
 import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
 import 'package:app_financeiro/data/model/model_login/model_login.dart';
-import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_createuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_googleconnection.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_informationofuser.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/string_i18n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -14,54 +15,57 @@ import 'transition_controller.dart';
 
 class LoginController extends GetxController {
   Duration get loginTime => Duration(milliseconds: 2250);
-  final FirebaseAuth _auth = RepositoryConnection.connectionFirebaseAuth();
-  final BuildContext _context;
 
-  LoginController(this._context);
+  final RepositoryInformationOfUser _repositoryInformationOfUser =
+      getIt.get<RepositoryInformationOfUser>();
+  final TransitionController _transitionController =
+      getIt.get<TransitionController>();
+  final RepositoryGoogleConnection _repositoryGoogleConnection =
+      getIt.get<RepositoryGoogleConnection>();
+  final RepositoryCreateUser _repositoryCreateUser =
+      getIt.get<RepositoryCreateUser>();
+  final RepositoryFirebaseLogin _repositoryFirebaseLogin =
+      getIt.get<RepositoryFirebaseLogin>();
 
-  bool userIsOn() {
-    if (_auth.currentUser != null) {
-      print(_auth.currentUser!.displayName);
+  bool userIsOn({required FirebaseAuth auth}) {
+    if (auth.currentUser != null) {
+      print(auth.currentUser!.displayName);
       return true;
     }
     return false;
   }
 
-  FirebaseAuth getAuthentication(){
-    return _auth;
-  }
-
-  Future<bool> logoutAccount() async {
+  Future<bool> logoutAccount({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
-    TransitionController()
-        .finishAndPageTransition(route: Routes.LOGIN_INITIAL, context: _context);
+    _transitionController.finishAndPageTransition(
+        route: Routes.LOGIN_INITIAL, context: context);
     return true;
   }
 
   Future<String?> signInGoogle({required BuildContext context}) async {
-    return await RepositoryGoogleConnection().repositorySignInGoogle(context);
+    return await _repositoryGoogleConnection.repositorySignInGoogle(context);
   }
 
   Future<String?> signInFirebase(LoginData data) {
-    return Future.delayed(loginTime).then((_) {
-      return RepositoryFirebaseLogin().repositorySignInFirebase(
+    return Future.delayed(loginTime).then((_) async {
+      return await _repositoryFirebaseLogin.repositorySignInFirebase(
           modelLogin: ModelLogin(
-              context: _context, email: data.name, password: data.password));
+              email: data.name, password: data.password, context: Get.context));
     });
   }
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryCreateUser().repositorySignUpFirebase(
-          modelCreateUser: ModelCreateUser(data.password!, data.name!, _context,
-              data.additionalSignupData!['name'].toString()));
+      return _repositoryCreateUser.repositorySignUpFirebase(
+          modelCreateUser: ModelCreateUser(data.password!, data.name!,
+              Get.context!, data.additionalSignupData![columnName].toString()));
     });
   }
 
   Future<String?> forgotPasswordFirebase(String email) {
     return Future.delayed(loginTime).then((_) {
-      return RepositoryInformationOfUser()
-          .repositoryForgotPasswordFirebase(email: email);
+      return _repositoryInformationOfUser.repositoryForgotPasswordFirebase(
+          email: email);
     });
   }
 

@@ -1,36 +1,46 @@
 import 'package:app_financeiro/controller/transition_controller.dart';
 import 'package:app_financeiro/controller/deposit_controller.dart';
+import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:app_financeiro/ui/widgets/widget_appbar.dart';
 import 'package:app_financeiro/ui/widgets/widget_forms.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DepositMoney extends StatelessWidget {
+class DepositMoney extends StatefulWidget {
   const DepositMoney({Key? key}) : super(key: key);
 
+  @override
+  State<DepositMoney> createState() => _DepositMoneyState();
+}
+
+class _DepositMoneyState extends State<DepositMoney> {
   final String _appBarTitle = 'Depositar dinheiro';
   final String _labelFieldMoney = 'Valor a depositar';
+  final GlobalKey<FormState> formKeyDepositTitle = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyDepositDesc = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyDepositMoney = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final DepositMoneyController depositMoneyController =
-        DepositMoneyController();
+        getIt.get<DepositMoneyController>();
+    final TransitionController transitionController =
+        getIt.get<TransitionController>();
     return WillPopScope(
-      onWillPop: () => TransitionController()
-          .finishAndPageTransition(route: Routes.HOME, context: context),
+      onWillPop: () => transitionController.finishAndPageTransition(
+          route: Routes.HOME, context: context),
       child: Scaffold(
         appBar: appBar(title: _appBarTitle),
         body: FormsToWithdrawAndDeposit(
-          globalKeyTitle: depositMoneyController.formKeyFieldDepositTitle,
-          globalKeyMoney: depositMoneyController.formKeyFieldDepositMoney,
-          globalKeyDesc: depositMoneyController.formKeyFieldDepositDesc,
+          globalKeyTitle: formKeyDepositTitle,
+          globalKeyMoney: formKeyDepositMoney,
+          globalKeyDesc: formKeyDepositDesc,
           textEditingControllerDesc:
-              DepositMoneyController.textEditingControllerDepositDesc,
+              depositMoneyController.textEditingControllerDepositDesc,
           textEditingControllerMoney:
-              DepositMoneyController.textEditingControllerDepositMoney,
+              depositMoneyController.textEditingControllerDepositMoney,
           textEditingControllerTitle:
-              DepositMoneyController.textEditingControllerDepositTitle,
+              depositMoneyController.textEditingControllerDepositTitle,
           functionValidateMoney: (String text) {
             return depositMoneyController.validateFieldFormTextMoney(text);
           },
@@ -43,10 +53,27 @@ class DepositMoney extends StatelessWidget {
           labelFieldMoney: _labelFieldMoney,
           functionButtonConfirm: () async {
             return await depositMoneyController.confirmDeposit(
-                context: context);
+                context: context,
+                formKeyDesc: formKeyDepositDesc,
+                formKeyMoney: formKeyDepositMoney,
+                formKeyTitle: formKeyDepositTitle);
           },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (formKeyDepositDesc.currentState != null) {
+      formKeyDepositDesc.currentState!.dispose();
+    }
+    if (formKeyDepositMoney.currentState != null) {
+      formKeyDepositMoney.currentState!.dispose();
+    }
+    if (formKeyDepositTitle.currentState != null) {
+      formKeyDepositTitle.currentState!.dispose();
+    }
   }
 }
