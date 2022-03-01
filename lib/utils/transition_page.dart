@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class TransitionPage extends GetxController {
+class TransitionPage{
   Future<bool> finishAndPageTransition(
       {required String route, required BuildContext context}) async {
     try {

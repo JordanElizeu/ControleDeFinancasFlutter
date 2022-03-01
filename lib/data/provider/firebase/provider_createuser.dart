@@ -1,4 +1,4 @@
-import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
+import 'package:app_financeiro/data/model/login_model/create_user_model.dart';
 import 'package:app_financeiro/data/provider/firebase_exceptions/firebase_exceptions.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +11,7 @@ class ProviderCreateUser {
   ProviderCreateUser({required this.repositoryConnection});
 
   Future<String?> providerCreateFirebaseUser(
-      {required ModelCreateUser modelCreateUser}) async {
+      {required CreateUserModel modelCreateUser}) async {
     try {
       final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
       final DatabaseReference databaseReference =

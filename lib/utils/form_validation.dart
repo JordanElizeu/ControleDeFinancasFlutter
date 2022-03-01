@@ -48,3 +48,27 @@ String? validateFieldFormTextDesc(text) {
   }
   return null;
 }
+
+String formatValueMoney({required textValue}) {
+  return textValue
+      .replaceAll(' ', '')
+      .replaceAll('R\$', '')
+      .replaceAll('.', '')
+      .replaceAll(',', '.');
+}
+
+bool _validateValueMoney(text) {
+  String formatToString = formatValueMoney(textValue: text);
+  final double formatToDouble = double.parse(formatToString);
+  if (formatToDouble <= 0.0) {
+    return false;
+  }
+  return true;
+}
+
+String? validateFieldFormTextMoney(text) {
+  if (!_validateValueMoney(text)) {
+    return 'Preencha um valor correto';
+  }
+  return null;
+}

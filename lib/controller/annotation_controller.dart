@@ -1,5 +1,5 @@
-import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
-import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/annotation_model.dart';
+import 'package:app_financeiro/data/model/model_annotation/edit_annotation_model.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_annotations.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +26,7 @@ class AnnotationsController extends GetxController {
     final FormState? formValidateAnnotation = formKeyAnnotation.currentState;
     if (formValidateTitle!.validate() && formValidateAnnotation!.validate()) {
       _repositoryAnnotations.repositorySendAnnotation(
-          modelAnnotation: ModelAnnotation(annotation, title, context));
+          modelAnnotation: AnnotationModel(annotation, title, context));
       await Future.delayed(Duration(milliseconds: 300)).then((value) async => {
             await getAllAnnotations(),
             clearFields(context: context),
@@ -68,7 +68,7 @@ class AnnotationsController extends GetxController {
       1: textEditingControllerAnnotation.text
     };
     await _repositoryAnnotations.editAnnotation(
-        modelEditAnnotation: ModelEditAnnotation(
+        editAnnotationModel: EditAnnotationModel(
             textEditingControllerAnnotation.text,
             textEditingControllerTitle.text,
             context,

@@ -1,5 +1,5 @@
-import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
-import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/annotation_model.dart';
+import 'package:app_financeiro/data/model/model_annotation/edit_annotation_model.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_annotation.dart';
 import 'package:app_financeiro/injection/injection.dart';
 
@@ -8,7 +8,7 @@ class RepositoryAnnotations {
       getIt.get<ProviderAnnotations>();
 
   Future<void> repositorySendAnnotation(
-      {required ModelAnnotation modelAnnotation}) async {
+      {required AnnotationModel modelAnnotation}) async {
     await _providerAnnotations.providerSendAnnotation(
         modelAnnotation: modelAnnotation);
   }
@@ -18,9 +18,9 @@ class RepositoryAnnotations {
   }
 
   Future<void> editAnnotation(
-      {required ModelEditAnnotation modelEditAnnotation}) async {
+      {required EditAnnotationModel editAnnotationModel}) async {
     await _providerAnnotations.providerEditAnnotation(
-        modelEditAnnotation: modelEditAnnotation);
+        editAnnotationModel: editAnnotationModel);
   }
 
   Future<void> removeAnnotation({required String id}) async {

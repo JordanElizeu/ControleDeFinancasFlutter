@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 class HomeController extends GetxController {
   IconData _iconData = Icons.visibility_off;
   bool _moneyVisible = true;
-  static String moneyValue = '';
-  NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
+  static String? moneyValue;
+  final NumberFormat formatter = NumberFormat.simpleCurrency(locale: 'pt-BR');
   IconData get iconData => _iconData;
   bool get moneyVisible => _moneyVisible;
 
@@ -19,9 +19,9 @@ class HomeController extends GetxController {
   final RepositoryInformationOfUser _repositoryInformationOfUser =
       getIt.get<RepositoryInformationOfUser>();
 
-  String? moneyValueFormatted() {
-    if (moneyValue.length > 0) {
-      return formatter.format(double.parse(moneyValue));
+  String? moneyValueFormatted({required String? value}) {
+    if (value != null) {
+      return formatter.format(double.parse(moneyValue!));
     }
     return null;
   }
@@ -33,7 +33,7 @@ class HomeController extends GetxController {
           else
             {moneyValue = '0'}
         });
-    return formatter.format(double.parse(moneyValue));
+    return formatter.format(double.parse(moneyValue!));
   }
 
   String formatMoney(dynamic value) {
@@ -41,7 +41,7 @@ class HomeController extends GetxController {
   }
 
   Future<String?> getUserName() async {
-    if (FirebaseAuth.instance.currentUser!.displayName != null) {
+    if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
       return FirebaseAuth.instance.currentUser!.displayName;
     }
     return await getNameIfUserIsFromFirebase();

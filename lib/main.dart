@@ -1,5 +1,4 @@
 import 'package:app_financeiro/router/app_pages.dart';
-import 'package:app_financeiro/router/app_routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +19,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: AppPagesView.routes,
-      initialRoute: Routes.INITIAL,
     );
   }
 }

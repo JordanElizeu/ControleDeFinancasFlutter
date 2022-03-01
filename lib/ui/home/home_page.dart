@@ -23,6 +23,7 @@ class PageHome extends StatelessWidget {
   final String _textCircleAvatarWithdraw = 'Retirar';
   final String _textCircleAvatarTransaction = 'Transações';
   final String _textCircleAvatarAnnotation = 'Anotações';
+  final String _textCircleAvatarPayment = 'Rendas';
 
   @override
   Widget build(BuildContext context) {
@@ -54,57 +55,92 @@ class PageHome extends StatelessWidget {
                             context: context,
                             constraints: constraints,
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: WidgetCircleAvatar(
-                                  function: () {
-                                    return controller.finishAndPageTransition(
-                                        route: Routes.INCREMENT_MONEY,
-                                        context: context);
-                                  },
-                                  iconData: Icons.arrow_circle_up_rounded,
-                                  text: _textCircleAvatarDeposit,
+                          NotificationListener<OverscrollIndicatorNotification>(
+                            onNotification:
+                                (OverscrollIndicatorNotification overscroll) {
+                              overscroll.disallowIndicator();
+                              return true;
+                            },
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width: constraints.maxWidth,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: WidgetCircleAvatar(
+                                        function: () {
+                                          return controller
+                                              .finishAndPageTransition(
+                                                  route: Routes.INCREMENT_MONEY,
+                                                  context: context);
+                                        },
+                                        iconData: Icons.arrow_circle_up_rounded,
+                                        text: _textCircleAvatarDeposit,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      flex: 2,
+                                      child: WidgetCircleAvatar(
+                                        function: () {
+                                          return controller
+                                              .finishAndPageTransition(
+                                                  route: Routes.DECREMENT_MONEY,
+                                                  context: context);
+                                        },
+                                        iconData: Icons.arrow_circle_down,
+                                        text: _textCircleAvatarWithdraw,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      flex: 2,
+                                      child: WidgetCircleAvatar(
+                                        function: () {
+                                          return controller
+                                              .finishAndPageTransition(
+                                                  route: Routes.TRANSACTIONS,
+                                                  context: context);
+                                        },
+                                        iconData: Icons.assessment_outlined,
+                                        text: _textCircleAvatarTransaction,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      flex: 2,
+                                      child: WidgetCircleAvatar(
+                                        function: () {
+                                          return controller
+                                              .finishAndPageTransition(
+                                                  route: Routes.FINANCIAL_RENT,
+                                                  context: context);
+                                        },
+                                        iconData: Icons.payments,
+                                        text: _textCircleAvatarPayment,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Expanded(
+                                      flex: 2,
+                                      child: WidgetCircleAvatar(
+                                        function: () {
+                                          return controller
+                                              .finishAndPageTransition(
+                                                  route: Routes.ANNOTATIONS,
+                                                  context: context);
+                                        },
+                                        iconData: Icons.wysiwyg_outlined,
+                                        text: _textCircleAvatarAnnotation,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                flex: 2,
-                                child: WidgetCircleAvatar(
-                                  function: () {
-                                    return controller.finishAndPageTransition(
-                                        route: Routes.DECREMENT_MONEY,
-                                        context: context);
-                                  },
-                                  iconData: Icons.arrow_circle_down,
-                                  text: _textCircleAvatarWithdraw,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: WidgetCircleAvatar(
-                                  function: () {
-                                    return controller.finishAndPageTransition(
-                                        route: Routes.TRANSACTIONS,
-                                        context: context);
-                                  },
-                                  iconData: Icons.assessment_outlined,
-                                  text: _textCircleAvatarTransaction,
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: WidgetCircleAvatar(
-                                  function: () {
-                                    return controller.finishAndPageTransition(
-                                        route: Routes.ANNOTATIONS,
-                                        context: context);
-                                  },
-                                  iconData: Icons.wysiwyg_outlined,
-                                  text: _textCircleAvatarAnnotation,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ],
                       ),
@@ -299,23 +335,31 @@ Widget _cardLastModifications({
                                   ),
                                 ),
                                 Card(
-                                  child: ListTile(
-                                    title: Text(snapshot.data!['${position}a']
-                                            [columnDescription]
-                                        .toString()),
-                                    subtitle: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Text(
-                                        '${homeController.formatMoney(snapshot.data!['${position}a'][columnMoney])}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color:
-                                                snapshot.data!['${position}a']
-                                                        [columnIsDeposit]
-                                                    ? Colors.green
-                                                    : Colors.red),
+                                  child: Column(
+                                    children: [
+                                      ListTile(
+                                        title: Text(snapshot.data!['${position}a']
+                                                [columnDescription]
+                                            .toString()),
+                                        subtitle: Padding(
+                                          padding: const EdgeInsets.only(top: 10.0),
+                                          child: Text(
+                                            '${homeController.formatMoney(snapshot.data!['${position}a'][columnMoney])}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color:
+                                                    snapshot.data!['${position}a']
+                                                            [columnIsDeposit]
+                                                        ? Colors.green
+                                                        : Colors.red),
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      ListTile(
+                                        title: const Text('Conta:'),
+                                        subtitle: Text(snapshot.data!['${position}a'][columnRent]),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ],
@@ -344,8 +388,8 @@ Widget _cardCircleButtons({
   required BoxConstraints constraints,
 }) {
   return GetBuilder<HomeController>(builder: (_) {
-    if (_.moneyValueFormatted() != null) {
-      return _widgetCircularCard(
+    if (_.moneyValueFormatted(value: HomeController.moneyValue) != null) {
+      return WidgetCircularCard(
         homeController: _,
         constraints: constraints,
       );
@@ -358,7 +402,7 @@ Widget _cardCircleButtons({
               case ConnectionState.waiting:
                 return WidgetProgress();
               case ConnectionState.done:
-                return _widgetCircularCard(
+                return WidgetCircularCard(
                   snapshot: snapshot,
                   homeController: _,
                   constraints: constraints,
@@ -376,17 +420,46 @@ Widget _cardCircleButtons({
   });
 }
 
-Widget _widgetCircularCard({
-  required HomeController homeController,
-  required BoxConstraints constraints,
-  AsyncSnapshot<String>? snapshot,
-}) {
-  return WidgetTextInformative(
-      text: homeController.moneyValueFormatted() ?? snapshot!.data,
-      fontSize: 27.0,
-      constraints: constraints,
-      backgroundColor:
-          homeController.moneyVisible ? Colors.white : Colors.black26,
-      textColor: homeController.moneyVisible ? null : Colors.transparent,
-      fontWeight: FontWeight.w400);
+class WidgetCircularCard extends StatefulWidget {
+  const WidgetCircularCard({
+    Key? key,
+    required this.homeController,
+    required this.constraints,
+    this.snapshot,
+  }) : super(key: key);
+
+  final HomeController homeController;
+  final BoxConstraints constraints;
+  final AsyncSnapshot<String>? snapshot;
+
+  @override
+  State<WidgetCircularCard> createState() => _WidgetCircularCardState();
+}
+
+class _WidgetCircularCardState extends State<WidgetCircularCard> {
+  @override
+  Widget build(BuildContext context) {
+    return WidgetTextInformative(
+        text: widget.homeController
+                .moneyValueFormatted(value: HomeController.moneyValue) ??
+            widget.snapshot!.data,
+        fontSize: 27.0,
+        constraints: widget.constraints,
+        backgroundColor:
+            widget.homeController.moneyVisible ? Colors.white : Colors.black26,
+        textColor:
+            widget.homeController.moneyVisible ? null : Colors.transparent,
+        fontWeight: FontWeight.w400);
+  }
+  @override
+  void initState() {
+    super.initState();
+    TransactionController transactionController = getIt.get<TransactionController>();
+    transactionController.getTodoRent();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

@@ -1,13 +1,14 @@
 import 'package:app_financeiro/controller/annotation_controller.dart';
 import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../injection/injection.dart';
 import '../../../utils/form_validation.dart';
 
 class CreateAnnotations extends StatefulWidget {
-  static BuildContext? context;
   final Function()? function;
   final AnnotationsController annotationsController;
+  final BoxConstraints constraints;
   static final GlobalKey<FormState> formKeyAnnotationTitle =
       GlobalKey<FormState>();
   static final GlobalKey<FormState> formKeyAnnotation = GlobalKey<FormState>();
@@ -15,6 +16,7 @@ class CreateAnnotations extends StatefulWidget {
   CreateAnnotations({
     required this.function,
     required this.annotationsController,
+    required this.constraints,
   });
 
   @override
@@ -26,48 +28,50 @@ class _CreateAnnotationsState extends State<CreateAnnotations> {
 
   @override
   Widget build(BuildContext context) {
-    CreateAnnotations.context = context;
     AnnotationsController annotationsController =
-        getIt.get<AnnotationsController>();
+        Get.put(getIt.get<AnnotationsController>());
     return AlertDialog(
-      title: const Text('Criar anotação'),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
-              child: Form(
-                key: CreateAnnotations.formKeyAnnotationTitle,
-                child: ValidateForm(
-                    label: 'Título',
-                    icon: Icons.wysiwyg,
-                    globalKey: CreateAnnotations.formKeyAnnotationTitle,
-                    controller:
-                        annotationsController.textEditingControllerTitle,
-                    function: (String text) {
-                      return validateFieldFormTextTitle(text: text);
-                    }),
+      title: const Text('Adicionar anotação'),
+      content: SizedBox(
+        width: widget.constraints.maxWidth * 0.80,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+                child: Form(
+                  key: CreateAnnotations.formKeyAnnotationTitle,
+                  child: ValidateForm(
+                      label: 'Título',
+                      icon: Icons.wysiwyg,
+                      globalKey: CreateAnnotations.formKeyAnnotationTitle,
+                      controller:
+                          annotationsController.textEditingControllerTitle,
+                      function: (String text) {
+                        return validateFieldFormTextTitle(text: text);
+                      }),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
-              child: Form(
-                key: CreateAnnotations.formKeyAnnotation,
-                child: ValidateForm(
-                    label: 'Anotação',
-                    icon: Icons.chat,
-                    globalKey: CreateAnnotations.formKeyAnnotation,
-                    controller:
-                        annotationsController.textEditingControllerAnnotation,
-                    function: (String text) {
-                      return validateFieldFormTextAnnotation(text: text);
-                    }),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0, top: 16.0),
+                child: Form(
+                  key: CreateAnnotations.formKeyAnnotation,
+                  child: ValidateForm(
+                      label: 'Anotação',
+                      icon: Icons.chat,
+                      globalKey: CreateAnnotations.formKeyAnnotation,
+                      controller:
+                          annotationsController.textEditingControllerAnnotation,
+                      function: (String text) {
+                        return validateFieldFormTextAnnotation(text: text);
+                      }),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
@@ -108,6 +112,7 @@ class _CreateAnnotationsState extends State<CreateAnnotations> {
 
 alertDialogCreateAnnotation({
   required BuildContext context,
+  required BoxConstraints constraints,
   required AnnotationsController annotationsController,
   String? initialValueAnnotation,
   String? initialValueTitle,
@@ -123,6 +128,7 @@ alertDialogCreateAnnotation({
       return CreateAnnotations(
         function: function,
         annotationsController: annotationsController,
+        constraints: constraints,
       );
     },
   );

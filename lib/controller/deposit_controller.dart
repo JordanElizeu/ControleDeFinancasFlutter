@@ -1,10 +1,11 @@
-import 'package:app_financeiro/controller/home_controller.dart';
-import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
-import 'package:app_financeiro/data/repository/firebase/repository_deposit.dart';
+import 'package:app_financeiro/data/model/transaction_model/transaction_model.dart';
 import 'package:app_financeiro/injection/injection.dart';
+import 'package:app_financeiro/injection/injection_depedencies.dart';
 import 'package:app_financeiro/router/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import '../string_i18n.dart';
+import '../utils/form_validation.dart';
 import '../utils/transition_page.dart';
 
 class DepositMoneyController extends GetxController {
@@ -14,10 +15,14 @@ class DepositMoneyController extends GetxController {
       TextEditingController();
   final TextEditingController textEditingControllerDepositDesc =
       TextEditingController();
-
   final RepositoryDeposit _repositoryDeposit = getIt.get<RepositoryDeposit>();
-  final TransitionPage _transitionController =
-      getIt.get<TransitionPage>();
+  final TransitionPage _transitionController = getIt.get<TransitionPage>();
+  static String? valueSelectedButton;
+
+  void changeSelectedButton({required String value}) {
+    valueSelectedButton = value;
+    update();
+  }
 
   Future<void> confirmDeposit({
     required BuildContext context,
@@ -34,16 +39,23 @@ class DepositMoneyController extends GetxController {
       double valueAvailable;
       double newValue;
       bool result = await _repositoryDeposit.repositoryAddDeposit(
-        modelTransaction: ModelTransaction(
-            textEditingControllerDepositTitle.text,
-            textEditingControllerDepositDesc.text,
-            context,
-            double.parse(_formatValueMoney()),
-            isDeposit: true),
+        modelTransaction: TransactionModel(
+            isDeposit: true,
+            title: textEditingControllerDepositTitle.text,
+            context: context,
+            description: textEditingControllerDepositDesc.text,
+            textSelectRent: valueSelectedButton ?? generalAccount,
+            quantityMoney: double.parse(formatValueMoney(
+                textValue: textEditingControllerDepositMoney.text))),
       );
       if (result) {
-        valueAvailable = double.parse(HomeController.moneyValue);
-        newValue = double.parse(_formatValueMoney());
+        if (HomeController.moneyValue != null) {
+          valueAvailable = double.parse(HomeController.moneyValue!);
+        } else {
+          valueAvailable = 0;
+        }
+        newValue = double.parse(formatValueMoney(
+            textValue: textEditingControllerDepositMoney.text));
         HomeController.moneyValue = (valueAvailable + newValue).toString();
         clearAllFields();
         await _transitionController.finishAndPageTransition(
@@ -57,30 +69,6 @@ class DepositMoneyController extends GetxController {
     textEditingControllerDepositDesc.text = '';
     textEditingControllerDepositMoney.text = '';
     update();
-  }
-
-  bool _validateValueMoney(text) {
-    String formatToString = _formatValueMoney();
-    final double formatToDouble = double.parse(formatToString);
-    if (formatToDouble <= 0.0) {
-      return false;
-    }
-    return true;
-  }
-
-  String? validateFieldFormTextMoney(text) {
-    if (!_validateValueMoney(text)) {
-      return 'Preencha um valor correto';
-    }
-    return null;
-  }
-
-  String _formatValueMoney() {
-    return textEditingControllerDepositMoney.text
-        .replaceAll(' ', '')
-        .replaceAll('R\$', '')
-        .replaceAll('.', '')
-        .replaceAll(',', '.');
   }
 
   @override

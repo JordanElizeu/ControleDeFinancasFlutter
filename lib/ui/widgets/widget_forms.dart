@@ -1,35 +1,44 @@
+import 'package:app_financeiro/ui/widgets/widget_dropdown_button.dart';
 import 'package:app_financeiro/ui/widgets/widget_validateform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 
 class FormsToWithdrawAndDeposit extends StatelessWidget {
-  const FormsToWithdrawAndDeposit(
-      {Key? key,
-      required this.globalKeyTitle,
-      required this.globalKeyDesc,
-      required this.globalKeyMoney,
-      required this.textEditingControllerTitle,
-      required this.textEditingControllerDesc,
-      required this.textEditingControllerMoney,
-      required this.functionValidateTitle,
-      required this.functionValidateDesc,
-      required this.functionValidateMoney,
-      required this.functionButtonConfirm,
-      required this.labelFieldMoney})
-      : super(key: key);
+  const FormsToWithdrawAndDeposit({
+    Key? key,
+    required this.globalKeyTitle,
+    required this.globalKeyDesc,
+    required this.globalKeyMoney,
+    required this.textEditingControllerTitle,
+    required this.textEditingControllerDesc,
+    required this.textEditingControllerMoney,
+    required this.functionValidateTitle,
+    required this.functionValidateDesc,
+    required this.functionValidateMoney,
+    required this.functionButtonConfirm,
+    required this.labelFieldMoney,
+    required this.constraints,
+    required this.listRent,
+    required this.selectedButton,
+    required this.functionSelectedButton,
+  }) : super(key: key);
 
   final GlobalKey<FormState> globalKeyTitle;
   final GlobalKey<FormState> globalKeyDesc;
   final GlobalKey<FormState> globalKeyMoney;
+  final BoxConstraints constraints;
   final TextEditingController textEditingControllerTitle;
   final TextEditingController textEditingControllerDesc;
   final TextEditingController textEditingControllerMoney;
+  final List<String> listRent;
   final Function(String text) functionValidateTitle;
   final Function(String text) functionValidateDesc;
   final Function(String text) functionValidateMoney;
   final Future<void> Function() functionButtonConfirm;
   final String labelFieldMoney;
+  final String? selectedButton;
+  final Function(dynamic) functionSelectedButton;
 
   final String _textButtonConfirm = 'Confirmar';
   final String _textLabelDescription = 'Descrição';
@@ -55,13 +64,20 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
                       function: functionValidateTitle),
                 ),
                 Form(
-                    key: globalKeyDesc,
-                    child: ValidateForm(
-                        icon: Icons.chat,
-                        label: _textLabelDescription,
-                        controller: textEditingControllerDesc,
-                        globalKey: globalKeyDesc,
-                        function: functionValidateDesc)),
+                  key: globalKeyDesc,
+                  child: ValidateForm(
+                      icon: Icons.chat,
+                      label: _textLabelDescription,
+                      controller: textEditingControllerDesc,
+                      globalKey: globalKeyDesc,
+                      function: functionValidateDesc),
+                ),
+                WidgetMenuButton(
+                  constraints: constraints,
+                  items: listRent,
+                  selectedValueMenuButton: selectedButton,
+                  functionSelectedMenuButton: functionSelectedButton,
+                ),
                 Form(
                   key: globalKeyMoney,
                   child: ValidateForm(
@@ -74,7 +90,7 @@ class FormsToWithdrawAndDeposit extends StatelessWidget {
                         thousandSeparator: ThousandSeparator.Period,
                       ),
                       icon: Icons.monetization_on,
-                      fontSize: 20.0,
+                      fontSize: 18.0,
                       controller: textEditingControllerMoney,
                       globalKey: globalKeyMoney,
                       function: functionValidateMoney),

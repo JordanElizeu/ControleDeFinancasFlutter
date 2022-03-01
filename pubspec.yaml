@@ -30,17 +30,18 @@ dependencies:
   cupertino_icons: ^1.0.4
   get: ^4.5.1
   intl: ^0.17.0
-  flutter_multi_formatter: ^2.4.4
-  firebase_auth: ^3.3.3
+  flutter_multi_formatter:
+  firebase_auth:
   firebase_database:
   firebase_core:
   firebase:
-  animated_text_kit: ^4.2.1
-  flutter_login: ^3.0.0
-  font_awesome_flutter: ^9.2.0
-  google_sign_in: ^5.2.1
-  circular_menu: ^1.2.3
-  get_it: ^7.2.0
+  animated_text_kit:
+  flutter_login:
+  font_awesome_flutter:
+  google_sign_in:
+  dropdown_button2:
+  circular_menu:
+  get_it:
 
 dev_dependencies:
   flutter_test:

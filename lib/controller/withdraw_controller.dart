@@ -1,7 +1,8 @@
-import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
+import 'package:app_financeiro/data/model/transaction_model/transaction_model.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_withdraw.dart';
 import 'package:app_financeiro/injection/injection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
+import 'package:app_financeiro/string_i18n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../utils/transition_page.dart';
@@ -16,8 +17,13 @@ class WithdrawMoneyController extends GetxController {
       TextEditingController();
   final RepositoryWithdraw _repositoryWithdraw =
       getIt.get<RepositoryWithdraw>();
-  final TransitionPage _transitionController =
-      getIt.get<TransitionPage>();
+  final TransitionPage _transitionController = getIt.get<TransitionPage>();
+  static String? valueSelectedButton;
+
+  void changeSelectedButton({required String value}) {
+    valueSelectedButton = value;
+    update();
+  }
 
   Future<void> confirmMoneyWithdraw({
     required BuildContext context,
@@ -34,15 +40,21 @@ class WithdrawMoneyController extends GetxController {
         formValidateMoney!.validate()) {
       double moneyWithdraw = double.parse(_formatMoneyValueInField());
       bool success = await _repositoryWithdraw.repositoryMoneyWithdraw(
-        modelTransaction: ModelTransaction(
-            textEditingControllerWithdrawTitle.text,
-            textEditingControllerWithdrawDesc.text,
-            context,
-            moneyWithdraw,
-            isDeposit: false),
+        modelTransaction: TransactionModel(
+            isDeposit: false,
+            textSelectRent: valueSelectedButton ?? generalAccount,
+            quantityMoney: moneyWithdraw,
+            context: context,
+            description: textEditingControllerWithdrawDesc.text,
+            title: textEditingControllerWithdrawTitle.text),
       );
       if (success) {
-        double valueAvailable = double.parse(HomeController.moneyValue);
+        double valueAvailable;
+        if (HomeController.moneyValue != null) {
+          valueAvailable = double.parse(HomeController.moneyValue!);
+        } else {
+          valueAvailable = 0;
+        }
         double newValue = double.parse(_formatMoneyValueInField());
         HomeController.moneyValue = (valueAvailable - newValue).toString();
         clearAllFields();

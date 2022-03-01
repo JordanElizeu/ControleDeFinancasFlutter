@@ -1,7 +1,9 @@
-import 'package:app_financeiro/data/model/model_transaction/model_transaction.dart';
+import 'package:app_financeiro/controller/withdraw_controller.dart';
+import 'package:app_financeiro/data/model/transaction_model/transaction_model.dart';
 import 'package:app_financeiro/data/provider/firebase/provider_transaction.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/ui/widgets/widget_failure.dart';
+import '../../../controller/transaction_controller.dart';
 import '../../../string_i18n.dart';
 
 class ProviderWithdraw extends ProviderTransactions {
@@ -9,7 +11,7 @@ class ProviderWithdraw extends ProviderTransactions {
       : super(repositoryConnection: repositoryConnection);
 
   Future<bool> providerMoneyWithdraw(
-      {required ModelTransaction modelTransaction}) async {
+      {required TransactionModel modelTransaction}) async {
     double availableMoney = 0;
     await getAvailableMoney().then((value) => {
           if (value![columnMoney] != null)
@@ -25,15 +27,30 @@ class ProviderWithdraw extends ProviderTransactions {
       return false;
     } else {
       try {
-        repositoryConnection.connectionDatabase()
+        await repositoryConnection
+            .connectionDatabase()
             .child(pathAppFinances)
-            .child(repositoryConnection.connectionFirebaseAuth().currentUser!.uid)
+            .child(
+                repositoryConnection.connectionFirebaseAuth().currentUser!.uid)
             .child(pathAccount)
             .child(pathFinances)
             .child(columnMoney)
             .set(availableMoney - modelTransaction.quantityMoney);
-        await addTransaction(
-            modelAddTransaction: modelTransaction);
+        int? index;
+        if (WithdrawMoneyController.valueSelectedButton != generalAccount) {
+          for (int x = 0; x < TransactionController.listRent.length; x++) {
+            if (TransactionController.listRent[x] ==
+                WithdrawMoneyController.valueSelectedButton) {
+              index = x;
+            }
+          }
+          await updateValueMoneyRent(
+            valueMoney: modelTransaction.quantityMoney,
+            index: index!,
+            isDeposit: false,
+          );
+        }
+        await addTransaction(modelAddTransaction: modelTransaction);
         return true;
       } catch (exception) {
         alertDialogViewFailure(

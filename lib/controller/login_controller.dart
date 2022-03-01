@@ -1,5 +1,5 @@
-import 'package:app_financeiro/data/model/model_login/model_createuser.dart';
-import 'package:app_financeiro/data/model/model_login/model_login.dart';
+import 'package:app_financeiro/data/model/login_model/create_user_model.dart';
+import 'package:app_financeiro/data/model/login_model/model_login.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_createuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_googleconnection.dart';
@@ -12,9 +12,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
 import '../utils/transition_page.dart';
+import 'home_controller.dart';
 
 class LoginController extends GetxController {
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => Duration(seconds: 2);
 
   final RepositoryInformationOfUser _repositoryInformationOfUser =
       getIt.get<RepositoryInformationOfUser>();
@@ -27,24 +28,17 @@ class LoginController extends GetxController {
       getIt.get<RepositoryFirebaseLogin>();
   bool pageIsLoading = false;
 
-  bool userIsOn({required FirebaseAuth auth}) {
-    if (auth.currentUser != null) {
-      print(auth.currentUser!.displayName);
-      return true;
-    }
-    return false;
-  }
-
   void pageLoadingState() async {
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(Duration(seconds: 3));
     pageIsLoading = true;
     update();
   }
 
   Future<bool> logoutAccount({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
-    _transitionController.finishAndPageTransition(
+    await _transitionController.finishAndPageTransition(
         route: Routes.INITIAL, context: context);
+    HomeController.moneyValue = null;
     return true;
   }
 
@@ -52,18 +46,16 @@ class LoginController extends GetxController {
     return await _repositoryGoogleConnection.repositorySignInGoogle(context);
   }
 
-  Future<String?> signInFirebase(LoginData data) {
-    return Future.delayed(loginTime).then((_) async {
-      return await _repositoryFirebaseLogin.repositorySignInFirebase(
-          modelLogin: ModelLogin(
-              email: data.name, password: data.password, context: Get.context));
-    });
+  Future<String?> signInFirebase(LoginData data) async {
+    return await _repositoryFirebaseLogin.repositorySignInFirebase(
+        loginModel: LoginModel(
+            email: data.name, password: data.password, context: Get.context));
   }
 
   Future<String?> signUpFirebase(SignupData data) {
     return Future.delayed(loginTime).then((_) {
       return _repositoryCreateUser.repositorySignUpFirebase(
-          modelCreateUser: ModelCreateUser(data.password!, data.name!,
+          modelCreateUser: CreateUserModel(data.password!, data.name!,
               Get.context!, data.additionalSignupData![columnName].toString()));
     });
   }

@@ -1,5 +1,5 @@
-import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
-import 'package:app_financeiro/data/model/model_annotation/model_editannotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/annotation_model.dart';
+import 'package:app_financeiro/data/model/model_annotation/edit_annotation_model.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -11,7 +11,7 @@ class ProviderAnnotations {
   ProviderAnnotations({required this.repositoryConnection});
 
   Future<void> providerSendAnnotation(
-      {required ModelAnnotation modelAnnotation}) async {
+      {required AnnotationModel modelAnnotation}) async {
     final String id = await _getLengthAnnotation();
     final DatabaseReference databaseReference =
         repositoryConnection.connectionDatabase();
@@ -44,13 +44,18 @@ class ProviderAnnotations {
 
   Future<String> _getLengthAnnotation() async {
     String lengthAnnotation = '';
-    await providerGetAllAnnotations()
-        .then((value) => {lengthAnnotation = "${value.length.toString()}a"});
+    int length;
+    await providerGetAllAnnotations().then(
+      (value) => {
+        length = value.length + 1,
+        lengthAnnotation = "${length.toString()}a",
+      },
+    );
     return lengthAnnotation;
   }
 
   Future<void> providerEditAnnotation(
-      {required ModelEditAnnotation modelEditAnnotation}) async {
+      {required EditAnnotationModel editAnnotationModel}) async {
     final DatabaseReference databaseReference =
         repositoryConnection.connectionDatabase();
     final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
@@ -59,25 +64,25 @@ class ProviderAnnotations {
         .child(auth.currentUser!.uid)
         .child(pathAccount)
         .child(pathAnnotation)
-        .child(modelEditAnnotation.id)
+        .child(editAnnotationModel.id)
         .child(columnAnnotation)
-        .set(modelEditAnnotation.annotation);
+        .set(editAnnotationModel.annotation);
     await databaseReference
         .child(pathAppFinances)
         .child(auth.currentUser!.uid)
         .child(pathAccount)
         .child(pathAnnotation)
-        .child(modelEditAnnotation.id)
+        .child(editAnnotationModel.id)
         .child(columnTitle)
-        .set(modelEditAnnotation.titleAnnotation);
+        .set(editAnnotationModel.titleAnnotation);
     await databaseReference
         .child(pathAppFinances)
         .child(auth.currentUser!.uid)
         .child(pathAccount)
         .child(pathAnnotation)
-        .child(modelEditAnnotation.id)
+        .child(editAnnotationModel.id)
         .child(columnUid)
-        .set(modelEditAnnotation.id);
+        .set(editAnnotationModel.id);
   }
 
   Future<void> providerRemoveAnnotation({required String uid}) async {

@@ -1,4 +1,4 @@
-import 'package:app_financeiro/data/model/model_login/model_login.dart';
+import 'package:app_financeiro/data/model/login_model/model_login.dart';
 import 'package:app_financeiro/data/provider/firebase_exceptions/firebase_exceptions.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/router/app_routes.dart';
@@ -11,14 +11,14 @@ class ProviderLoginFirebase {
   ProviderLoginFirebase({required this.repositoryConnection});
 
   Future<String?> providerSignInWithFirebase(
-      {required ModelLogin modelLogin}) async {
+      {required LoginModel loginModel}) async {
     try {
       await repositoryConnection
           .connectionFirebaseAuth()
           .signInWithEmailAndPassword(
-              email: modelLogin.email, password: modelLogin.password)
+              email: loginModel.email, password: loginModel.password)
           .then((value) => TransitionPage().finishAndPageTransition(
-              route: Routes.HOME, context: modelLogin.context));
+              route: Routes.HOME, context: loginModel.context));
     } on FirebaseAuthException catch (exception) {
       return ProviderFirebaseExceptions()
           .handleFirebaseLoginWithCredentialsException(

@@ -1,10 +1,10 @@
-import 'package:app_financeiro/data/model/model_annotation/model_annotation.dart';
+import 'package:app_financeiro/data/model/model_annotation/annotation_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class ModelEditAnnotation extends ModelAnnotation {
+class EditAnnotationModel extends AnnotationModel {
   final String _id;
 
-  ModelEditAnnotation(
+  EditAnnotationModel(
       String annotation, String titleAnnotation, BuildContext context, this._id)
       : super(annotation, titleAnnotation, context);
 

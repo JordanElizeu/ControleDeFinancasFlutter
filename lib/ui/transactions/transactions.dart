@@ -122,19 +122,27 @@ class Transactions extends StatelessWidget {
                   ),
                 ),
                 Card(
-                  child: ListTile(
-                    title: Text(snapshot.data!['${index}a'][columnDescription]),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        '${getIt.get<HomeController>().formatMoney(snapshot.data!['${index}a'][columnMoney])}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: snapshot.data!['${index}a'][columnIsDeposit]
-                                ? Colors.green
-                                : Colors.red),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(snapshot.data!['${index}a'][columnDescription]),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            '${getIt.get<HomeController>().formatMoney(snapshot.data!['${index}a'][columnMoney])}',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: snapshot.data!['${index}a'][columnIsDeposit]
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        ),
                       ),
-                    ),
+                      ListTile(
+                        title: const Text('Conta:'),
+                        subtitle: Text(snapshot.data!['${index}a'][columnRent]),
+                      )
+                    ],
                   ),
                 ),
               ],

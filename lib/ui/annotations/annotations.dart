@@ -6,9 +6,7 @@ import 'package:app_financeiro/ui/annotations/widgets/widget_createannotations.d
 import 'package:app_financeiro/ui/widgets/widget_error404.dart';
 import 'package:app_financeiro/ui/widgets/widget_progress.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get.dart';
 import '../../string_i18n.dart';
 import '../../utils/transition_page.dart';
 
@@ -24,76 +22,85 @@ class Annotations extends StatelessWidget {
   Widget build(BuildContext context) {
     AnnotationsController annotationController =
         Get.put(getIt.get<AnnotationsController>());
-    TransitionPage transitionController =
-        getIt.get<TransitionPage>();
+    TransitionPage transitionController = getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => transitionController.finishAndPageTransition(
           route: Routes.HOME, context: context),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(_appBarTitle),
-          actions: [
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(buttonColor),
-              ),
-              onPressed: () {
-                alertDialogCreateAnnotation(
-                    context: context,
-                    function: () async {
-                      await annotationController.sendAnnotation(
-                        context: context,
-                        annotation: annotationController
-                            .textEditingControllerAnnotation.text,
-                        title: annotationController
-                            .textEditingControllerTitle.text,
-                        formKeyAnnotation: CreateAnnotations.formKeyAnnotation,
-                        formKeyTitle: CreateAnnotations.formKeyAnnotationTitle,
-                      );
-                      Navigator.pop(CreateAnnotations.context!);
-                    },
-                    annotationsController: annotationController);
-              },
-              child: Icon(
-                Icons.message,
-                color: Colors.white,
-              ),
-            )
-          ],
-        ),
-        body: GetBuilder<AnnotationsController>(
-          builder: (controller) => FutureBuilder(
-            future: controller.getAllAnnotations(),
-            builder: (BuildContext context,
-                AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.data != null &&
-                  snapshot.data!.length > 0) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    return Error404();
-                  case ConnectionState.waiting:
-                    return WidgetProgress();
-                  case ConnectionState.active:
-                    return WidgetProgress();
-                  case ConnectionState.done:
-                    return _widgetFutureBuilder(snapshot, controller);
-                }
-              } else if (snapshot.hasError) {
-                return Error404(title: _error404);
-              } else if (snapshot.data != null && snapshot.data!.isEmpty) {
-                return Error404(title: _error404);
-              }
-              return WidgetProgress();
-            },
+      child: LayoutBuilder(builder: (context, constraints) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(_appBarTitle),
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(buttonColor),
+                ),
+                onPressed: () {
+                  alertDialogCreateAnnotation(
+                      context: context,
+                      function: () async {
+                        await annotationController.sendAnnotation(
+                          context: context,
+                          annotation: annotationController
+                              .textEditingControllerAnnotation.text,
+                          title: annotationController
+                              .textEditingControllerTitle.text,
+                          formKeyAnnotation:
+                              CreateAnnotations.formKeyAnnotation,
+                          formKeyTitle:
+                              CreateAnnotations.formKeyAnnotationTitle,
+                        );
+                        Navigator.pop(Get.context!);
+                      },
+                      annotationsController: annotationController,
+                      constraints: constraints);
+                },
+                child: Icon(
+                  Icons.message,
+                  color: Colors.white,
+                ),
+              )
+            ],
           ),
-        ),
-      ),
+          body: GetBuilder<AnnotationsController>(
+            builder: (controller) => FutureBuilder(
+              future: controller.getAllAnnotations(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<Map<dynamic, dynamic>> snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data != null &&
+                    snapshot.data!.length > 0) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return Error404();
+                    case ConnectionState.waiting:
+                      return WidgetProgress();
+                    case ConnectionState.active:
+                      return WidgetProgress();
+                    case ConnectionState.done:
+                      return _widgetFutureBuilder(
+                        snapshot,
+                        controller,
+                        constraints: constraints,
+                      );
+                  }
+                } else if (snapshot.hasError) {
+                  return Error404(title: _error404);
+                } else if (snapshot.data != null && snapshot.data!.isEmpty) {
+                  return Error404(title: _error404);
+                }
+                return WidgetProgress();
+              },
+            ),
+          ),
+        );
+      }),
     );
   }
 
   Widget _widgetFutureBuilder(AsyncSnapshot<Map<dynamic, dynamic>> snapshot,
-      AnnotationsController annotationController) {
+      AnnotationsController annotationController,
+      {required BoxConstraints constraints}) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowIndicator();
@@ -105,6 +112,7 @@ class Annotations extends StatelessWidget {
         shrinkWrap: true,
         itemCount: annotationController.map.length,
         itemBuilder: (BuildContext context, index) {
+          index++;
           bool cancelRemove = false;
           return Dismissible(
             onDismissed: (DismissDirection dismissDirection) {
@@ -123,7 +131,7 @@ class Annotations extends StatelessWidget {
               annotationController.map.remove(index);
               final snackBar = SnackBar(
                 padding: EdgeInsets.all(10),
-                backgroundColor: Colors.purple,
+                backgroundColor: primaryColor,
                 content: Text(
                   _removingAnnotation,
                   style: TextStyle(
@@ -221,9 +229,10 @@ class Annotations extends StatelessWidget {
                                             [columnUid],
                                         context: context,
                                         index: index);
-                                    Navigator.pop(CreateAnnotations.context!);
+                                    Navigator.pop(Get.context!);
                                   },
-                                  annotationsController: annotationController);
+                                  annotationsController: annotationController,
+                                  constraints: constraints);
                             },
                             child: Icon(Icons.edit),
                           ),

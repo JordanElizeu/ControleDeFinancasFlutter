@@ -13,14 +13,10 @@ class InitialController extends GetxController {
     final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
     final TransitionPage transitionController =
         getIt.get<TransitionPage>();
-    Future.delayed(Duration(seconds: 5)).then(
-      (value) => {
-        auth.currentUser != null
-            ? transitionController.finishAndPageTransition(
-                route: Routes.HOME, context: context)
-            : transitionController.finishAndPageTransition(
-                route: Routes.INITIAL, context: context)
-      },
-    );
+    auth.currentUser != null
+        ? await transitionController.finishAndPageTransition(
+        route: Routes.HOME, context: context)
+        : await transitionController.finishAndPageTransition(
+        route: Routes.LOGIN, context: context);
   }
 }

@@ -5,7 +5,7 @@ TypewriterAnimatedText animatedText({required String title}) {
   return TypewriterAnimatedText(
     title,
     textStyle: const TextStyle(
-      fontSize: 32.0,
+      fontSize: 18,
       fontWeight: FontWeight.bold,
     ),
     speed: const Duration(milliseconds: 200),
