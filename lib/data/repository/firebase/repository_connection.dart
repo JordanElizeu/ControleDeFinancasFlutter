@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 
 class RepositoryConnection {
   DatabaseReference? _databaseReference;
-  FirebaseAuth? _auth;
 
   DatabaseReference connectionDatabase() {
     if (_databaseReference != null) {
@@ -14,10 +13,11 @@ class RepositoryConnection {
   }
 
   FirebaseAuth connectionFirebaseAuth() {
-    if (_auth != null) {
-      return _auth!;
-    }
-    _auth = FirebaseAuth.instance;
-    return _auth!;
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    return _auth;
+  }
+
+  void repositoryConnectionLogout() {
+    _databaseReference = null;
   }
 }

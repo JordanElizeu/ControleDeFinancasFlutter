@@ -1,5 +1,6 @@
 import 'package:app_financeiro/data/model/login_model/create_user_model.dart';
 import 'package:app_financeiro/data/model/login_model/model_login.dart';
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_createuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_firebaselogin.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_googleconnection.dart';
@@ -26,16 +27,19 @@ class LoginController extends GetxController {
       getIt.get<RepositoryCreateUser>();
   final RepositoryFirebaseLogin _repositoryFirebaseLogin =
       getIt.get<RepositoryFirebaseLogin>();
+  final RepositoryConnection _repositoryConnection =
+  getIt.get<RepositoryConnection>();
   bool pageIsLoading = false;
 
   void pageLoadingState() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 4));
     pageIsLoading = true;
     update();
   }
 
   Future<bool> logoutAccount({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut();
+    _repositoryConnection.repositoryConnectionLogout();
     await _transitionController.finishAndPageTransition(
         route: Routes.INITIAL, context: context);
     HomeController.moneyValue = null;

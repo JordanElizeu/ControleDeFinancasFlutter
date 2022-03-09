@@ -28,7 +28,7 @@ class PageHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(getIt.get<TransactionController>());
-    Get.put(getIt.get<HomeController>());
+    HomeController homeController = Get.put(getIt.get<HomeController>());
     TransitionPage controller = getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => alertDialogViewSuccess(context: context),
@@ -166,9 +166,9 @@ Widget _containerWithInformationOfAccount(
   final LoginController loginController = getIt.get<LoginController>();
 
   return GetBuilder<HomeController>(
-    builder: (_) => FutureBuilder(
+    builder: (homeController) => FutureBuilder<String?>(
       initialData: _loading,
-      future: _.getUserName(),
+      future: homeController.getUserName(),
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         return Container(
           color: primaryColor,
@@ -197,9 +197,9 @@ Widget _containerWithInformationOfAccount(
                     Expanded(
                       flex: 1,
                       child: WidgetInkwellIcon(
-                        icon: _.iconData,
+                        icon: homeController.iconData,
                         function: () {
-                          return _.changeIconDataEyeOfMoney();
+                          return homeController.changeIconDataEyeOfMoney();
                         },
                       ),
                     ),
@@ -338,26 +338,29 @@ Widget _cardLastModifications({
                                   child: Column(
                                     children: [
                                       ListTile(
-                                        title: Text(snapshot.data!['${position}a']
+                                        title: Text(snapshot
+                                            .data!['${position}a']
                                                 [columnDescription]
                                             .toString()),
                                         subtitle: Padding(
-                                          padding: const EdgeInsets.only(top: 10.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
                                           child: Text(
                                             '${homeController.formatMoney(snapshot.data!['${position}a'][columnMoney])}',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700,
-                                                color:
-                                                    snapshot.data!['${position}a']
-                                                            [columnIsDeposit]
-                                                        ? Colors.green
-                                                        : Colors.red),
+                                                color: snapshot.data![
+                                                            '${position}a']
+                                                        [columnIsDeposit]
+                                                    ? Colors.green
+                                                    : Colors.red),
                                           ),
                                         ),
                                       ),
                                       ListTile(
                                         title: const Text('Conta:'),
-                                        subtitle: Text(snapshot.data!['${position}a'][columnRent]),
+                                        subtitle: Text(snapshot
+                                            .data!['${position}a'][columnRent]),
                                       )
                                     ],
                                   ),
@@ -451,10 +454,12 @@ class _WidgetCircularCardState extends State<WidgetCircularCard> {
             widget.homeController.moneyVisible ? null : Colors.transparent,
         fontWeight: FontWeight.w400);
   }
+
   @override
   void initState() {
     super.initState();
-    TransactionController transactionController = getIt.get<TransactionController>();
+    TransactionController transactionController =
+        getIt.get<TransactionController>();
     transactionController.getTodoRent();
   }
 

@@ -22,8 +22,7 @@ class Transactions extends StatelessWidget {
   Widget build(BuildContext context) {
     final TransactionController transactionController =
         Get.put(getIt.get<TransactionController>());
-    final TransitionPage transitionController =
-        getIt.get<TransitionPage>();
+    final TransitionPage transitionController = getIt.get<TransitionPage>();
     return WillPopScope(
       onWillPop: () => transitionController.finishAndPageTransition(
           route: Routes.HOME, context: context),
@@ -125,16 +124,19 @@ class Transactions extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        title: Text(snapshot.data!['${index}a'][columnDescription]),
+                        title: Text(
+                            snapshot.data!['${index}a'][columnDescription]),
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 10.0),
                           child: Text(
                             '${getIt.get<HomeController>().formatMoney(snapshot.data!['${index}a'][columnMoney])}',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: snapshot.data!['${index}a'][columnIsDeposit]
-                                    ? Colors.green
-                                    : Colors.red),
+                              fontWeight: FontWeight.w700,
+                              color: snapshot.data!['${index}a']
+                                      [columnIsDeposit]
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
                           ),
                         ),
                       ),

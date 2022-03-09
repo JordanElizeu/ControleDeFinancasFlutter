@@ -10,13 +10,10 @@ class ProviderInformationOfUser {
 
   Future<String?> providerGetNameIfUserIsFromFirebase() async {
     final FirebaseAuth auth = repositoryConnection.connectionFirebaseAuth();
-    if (auth.currentUser != null) {
-      DatabaseReference _databaseReference = FirebaseDatabase.instance
-          .ref('$pathAppFinances/${auth.currentUser!.uid}/$pathAccount');
-      DatabaseEvent event = await _databaseReference.once();
-      final String name = event.snapshot.child(columnName).value.toString();
-      return name;
-    }
-    return null;
+    DatabaseReference _databaseReference = FirebaseDatabase.instance
+        .ref('$pathAppFinances/${auth.currentUser!.uid}/$pathAccount');
+    DatabaseEvent event = await _databaseReference.once();
+    final String name = event.snapshot.child(columnName).value.toString();
+    return name;
   }
 }

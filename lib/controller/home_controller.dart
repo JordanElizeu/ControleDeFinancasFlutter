@@ -1,3 +1,4 @@
+import 'package:app_financeiro/data/repository/firebase/repository_connection.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_informationofuser.dart';
 import 'package:app_financeiro/data/repository/firebase/repository_transactions.dart';
 import 'package:app_financeiro/injection/injection.dart';
@@ -18,6 +19,8 @@ class HomeController extends GetxController {
       getIt.get<RepositoryTransactions>();
   final RepositoryInformationOfUser _repositoryInformationOfUser =
       getIt.get<RepositoryInformationOfUser>();
+  final RepositoryConnection _repositoryConnection =
+      getIt.get<RepositoryConnection>();
 
   String? moneyValueFormatted({required String? value}) {
     if (value != null) {
@@ -41,14 +44,15 @@ class HomeController extends GetxController {
   }
 
   Future<String?> getUserName() async {
-    if (FirebaseAuth.instance.currentUser!.displayName!.isNotEmpty) {
+    if (_repositoryConnection
+            .connectionFirebaseAuth()
+            .currentUser
+            ?.displayName !=
+        null) {
       return FirebaseAuth.instance.currentUser!.displayName;
     }
-    return await getNameIfUserIsFromFirebase();
-  }
-
-  Future<String?> getNameIfUserIsFromFirebase() {
-    return _repositoryInformationOfUser.repositoryGetNameIfUserIsFromFirebase();
+    return await _repositoryInformationOfUser
+        .repositoryGetNameIfUserIsFromFirebase();
   }
 
   void changeIconDataEyeOfMoney() {
